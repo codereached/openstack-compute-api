@@ -1,4 +1,6 @@
-# A Proposed Next Version of the OpenStack Compute API
+FORMAT: 1A
+
+# OpenStack Compute API
 
 This repository contains a single document (this one) describing a proposed new
 OpenStack Compute API. I've used [API Blueprint](http://apiblueprint.org/)
@@ -280,7 +282,7 @@ A collection of servers.
 
 ### GET /project/{project\_id}/servers{?limit}
 
-Retrive a collection of servers in a specific *project*.
+Retrieve a collection of servers in a specific *project*.
 
 + Parameters
     + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
