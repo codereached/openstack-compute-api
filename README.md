@@ -299,9 +299,9 @@ Retrieve a server by its *project* and *hostname*.
 
 ### PUT /servers/{id}
 
-#### GET /servers/{server}/tasks
+### GET /servers/{server}/tasks
 
-#### POST /servers/{server}/tasks
+### POST /servers/{server}/tasks
 
 Starts a task against a *server*.
 
