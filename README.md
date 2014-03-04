@@ -1,7 +1,7 @@
 # A Proposed Next Version of the OpenStack Compute API
 
 This repository contains a single document (this one) describing a proposed new
-OpenStack Compute API. I've used (http://apiblueprint.org/)[API Blueprint]
+OpenStack Compute API. I've used [API Blueprint](http://apiblueprint.org/)
 for formatting and describing the proposed API.
 
 # Project [/projects/{id}]
