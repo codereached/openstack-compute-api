@@ -277,10 +277,48 @@ Retrieve a server by its *project* and *hostname*.
     }
     ```
 
-# Servers [project/{project\_id}/servers]
+# Servers [project/{project\_id}/servers{?limit}]
 
 A collection of servers in a specific *project*.
 
 ## Retrieve a list of Servers [GET]
+
++ Parameters
+    + limit = `20` (optional, number) ... Maximum number of results to return
+
++ Response 200 (application/json)
+    + Body
+    ```json
+    {
+        "servers": [
+            {
+                "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+                "hostname": "example-server-1",
+                "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+                "launched_at": "2014-03-02T23:20:19",
+                "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+                "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+                "state": "ACTIVE",
+                "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+                "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
+            },
+            {
+                "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+                "hostname": "example-server-2",
+                "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0"
+                "launched_at": "2014-03-03T03:20:19",
+                "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+                "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+                "state": "ACTIVE",
+                "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+                "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
+            }
+        ],
+        "links": {
+            "self": "/project/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2",
+            "next": "/project/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2&marker=3699f74d-af95-406d-b38e-d2b86f84a9d0"
+        }
+    }
+    ```
 
 ## Create One or More Servers [POST]
