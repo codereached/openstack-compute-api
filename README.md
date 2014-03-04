@@ -149,19 +149,42 @@ Retrieve a server group within a *project* by its *slug*.
     }
     ```
 
+# Group Server Task
+
+A server task is a related set of actions that are or have been executed
+against a server.
+
+## GET /server\_tasks/{id}
+
+Retrieve a server task by its *id*.
+
++ Parameters
+    + id (string, `85fc465a-8809-4b7a-bce2-4c6ff5b78763`) ... A UUID identifier
+      for the server task
+
++ Response 200 (application/json)
+    + Body
+    ```json
+    {
+        "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
+        "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+        "state": "RUNNING",
+        "action": "BUILD_SERVER",
+        "subtasks": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/subtasks"
+    }
+```
+
 # Group Servers
-
-The server is the main resource exposed by the OpenStack Compute API. There
-are a number of subresources and collections of subresources that are
-attached to a server resource. This group describes operations on the server
-and these subresources.
-
-## Server
 
 A server is a virtual machine that runs in an OpenStack cloud. It is owned by
 a single *project*, has a single *server type* that describes its capabilities
 and capacity, and is launched from a *server template* that is a base disk
 image, a bootable volume, or a snapshot of another server.
+
+The server is the main resource exposed by the OpenStack Compute API. There
+are a number of subresources and collections of subresources that are
+attached to a server resource. This group describes operations on the server
+and these subresources.
 
 ### GET /servers/{id}
 
@@ -275,6 +298,24 @@ Retrieve a server by its *project* and *hostname*.
 ### DELETE /servers/{id}
 
 ### PUT /servers/{id}
+
+#### GET /servers/{server}/tasks
+
+#### POST /servers/{server}/tasks
+
+Starts a task against a *server*.
+
++ Parameters
+    + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server.
++ Request (application/json)
+    + Body
+    ```json
+    {
+        "action": "BUILD_SERVER",
+        "timeout": 120
+    }
+    ```
 
 ## Group Servers 
 
