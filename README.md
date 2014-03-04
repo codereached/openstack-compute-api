@@ -4,17 +4,17 @@ This repository contains a single document (this one) describing a proposed new
 OpenStack Compute API. I've used [API Blueprint](http://apiblueprint.org/)
 for formatting and describing the proposed API.
 
-# Project [/projects/{id}]
+# Group Project
 
 A project is a grouping of related server resources.
+
+## GET /projects/{id}
+
+Retrieve links to project resource by a project's *id*.
 
 + Parameters
     + id (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the project.
-
-## Retrieve Project [GET]
-
-Retrieve links to project resource by a project's *id*.
 
 + Response 200 (application/json)
     + Body
@@ -24,17 +24,17 @@ Retrieve links to project resource by a project's *id*.
     }
     ```
 
-# Server Type [/server\_types/{id}]
+# Group Server Type
 
 A server type describes the capacity and capabilities of a class of servers.
+
+## GET /server\_types/{id}
+
+Retrieve a server type by its *id*.
 
 + Parameters
     + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server type
-
-## Retrieve Server Type [GET]
-
-Retrieve a server type by its *id*.
 
 + Response 200 (application/json)
     + Body
@@ -55,18 +55,18 @@ Retrieve a server type by its *id*.
     }
     ```
 
-# Server Template [/server\_templates/{id}]
+# Group Server Template
 
 A server template is a base disk image, a bootable volume, or a snapshot of
 a server instance that is used as the basis of a server when it is launched.
 
+## GET /server\_templates/{id}
+
+Retrieve a server template by its *id*.
+
 + Parameters
     + id (string, `fe48b370-a352-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server template
-
-## Retrieve Server Template [GET]
-
-Retrieve a server template by its *id*.
 
 + Response 200 (application/json)
     + Body
@@ -85,18 +85,18 @@ Retrieve a server template by its *id*.
     }
     ```
 
-# Server Group [/server\_groups/{id}]
+# Group Server Group
 
 A server group is a user-defined collection of servers that provides defaults
 for servers launched in the group.
 
+## GET /server\_groups/{id}
+
+Retrieve a server group by its *id*.
+
 + Parameters
     + id (string, `5f634509-ee40-4406-9c45-e5f343f01f62`) ... A UUID identifier
       for the server group
-
-## Retrieve Server Group [GET]
-
-Retrieve a server group by its *id*.
 
 + Response 200 (application/json)
     + Body
@@ -118,19 +118,14 @@ Retrieve a server group by its *id*.
     }
     ```
 
-# Server Group (Variant) [/projects/{project}/server\_groups/{slug}]
+## GET /projects/{project}/server\_groups/{slug}
 
-An alternate way for a project to access one of its server groups using a slug
-instead of an ID value.
+Retrieve a server group within a *project* by its *slug*.
 
 + Parameters
     + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the project.
     + slug (string, `windows-app-servers`) ... A slugified name of the server group
-
-## Retrieve Server Group (Variant) [GET]
-
-Retrieve a server group within a *project* by its *slug*.
 
 + Response 200 (application/json)
     + Body
@@ -159,20 +154,20 @@ are a number of subresources and collections of subresources that are
 attached to a server resource. This group describes operations on the server
 and these subresources.
 
-## Server [/servers/{id}]
+## Server
 
 A server is a virtual machine that runs in an OpenStack cloud. It is owned by
 a single *project*, has a single *server type* that describes its capabilities
 and capacity, and is launched from a *server template* that is a base disk
 image, a bootable volume, or a snapshot of another server.
 
+### GET /servers/{id}
+
+Retrieve a server by its *id*.
+
 + Parameters
     + id (string, `53626cb0-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server
-
-### Retrieve Server [GET]
-
-Retrieve a server by its *id*.
 
 + Response 200 (application/json)
     + Body
@@ -219,26 +214,15 @@ Retrieve a server by its *id*.
     }
     ```
 
-### Update Server [PATCH]
+## GET /projects/{project}/servers/{hostname}
 
-### Delete Server [DELETE]
-
-### Create Server [PUT]
-
-## Server (Variation) [/projects/{project}/servers/{hostname}]
-
-An alternate way for a project to access one of its servers using a hostname
-instead of an ID value.
+Retrieve a server by its *project* and *hostname*.
 
 + Parameters
     + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the project.
     + hostname (string, `app-server-1`) ... A hostname of a server in the project.
 
-### Retrieve Server (Variant) [GET]
-
-Retrieve a server by its *project* and *hostname*.
-
 + Response 200 (application/json)
     + Body
     ```json
@@ -284,13 +268,23 @@ Retrieve a server by its *project* and *hostname*.
     }
     ```
 
-## Servers [project/{project\_id}/servers{?limit}]
+### PATCH /servers/{id}
 
-A collection of servers in a specific *project*.
+### DELETE /servers/{id}
 
-### Retrieve a list of Servers [GET]
+### PUT /servers/{id}
+
+## Group Servers 
+
+A collection of servers.
+
+### GET /project/{project\_id}/servers{?limit}
+
+Retrive a collection of servers in a specific *project*.
 
 + Parameters
+    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the project.
     + limit = `20` (optional, number) ... Maximum number of results to return
 
 + Response 200 (application/json)
@@ -328,4 +322,4 @@ A collection of servers in a specific *project*.
     }
     ```
 
-### Create One or More Servers [POST]
+### POST /project/{project}/servers
