@@ -152,7 +152,14 @@ Retrieve a server group within a *project* by its *slug*.
     }
     ```
 
-# Server [/servers/{id}]
+# Group Servers
+
+The server is the main resource exposed by the OpenStack Compute API. There
+are a number of subresources and collections of subresources that are
+attached to a server resource. This group describes operations on the server
+and these subresources.
+
+## Server [/servers/{id}]
 
 A server is a virtual machine that runs in an OpenStack cloud. It is owned by
 a single *project*, has a single *server type* that describes its capabilities
@@ -163,7 +170,7 @@ image, a bootable volume, or a snapshot of another server.
     + id (string, `53626cb0-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server
 
-## Retrieve Server [GET]
+### Retrieve Server [GET]
 
 Retrieve a server by its *id*.
 
@@ -212,13 +219,13 @@ Retrieve a server by its *id*.
     }
     ```
 
-## Update Server [PATCH]
+### Update Server [PATCH]
 
-## Delete Server [DELETE]
+### Delete Server [DELETE]
 
-## Create Server [PUT]
+### Create Server [PUT]
 
-# Server (Variation) [/projects/{project}/servers/{hostname}]
+## Server (Variation) [/projects/{project}/servers/{hostname}]
 
 An alternate way for a project to access one of its servers using a hostname
 instead of an ID value.
@@ -228,7 +235,7 @@ instead of an ID value.
       for the project.
     + hostname (string, `app-server-1`) ... A hostname of a server in the project.
 
-## Retrieve Server (Variant) [GET]
+### Retrieve Server (Variant) [GET]
 
 Retrieve a server by its *project* and *hostname*.
 
@@ -277,11 +284,11 @@ Retrieve a server by its *project* and *hostname*.
     }
     ```
 
-# Servers [project/{project\_id}/servers{?limit}]
+## Servers [project/{project\_id}/servers{?limit}]
 
 A collection of servers in a specific *project*.
 
-## Retrieve a list of Servers [GET]
+### Retrieve a list of Servers [GET]
 
 + Parameters
     + limit = `20` (optional, number) ... Maximum number of results to return
@@ -321,4 +328,4 @@ A collection of servers in a specific *project*.
     }
     ```
 
-## Create One or More Servers [POST]
+### Create One or More Servers [POST]
