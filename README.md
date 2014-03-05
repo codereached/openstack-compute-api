@@ -17,110 +17,111 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
 
 + Response 200 (application/json-home)
     + Body
-    ```json
-    {
-        "resources": {
-            "rel/project": {
-                "href-template": "/projects/{project_id}",
-                "href-vars": {
-                    "project_id": "param/project_id"
-                },
-                "hints": {
-                    "allow": ["GET"],
-                    "formats": {
-                        "application/json": {}
-                    }
-                }
+
+```json
+{
+    "resources": {
+        "rel/project": {
+            "href-template": "/projects/{project_id}",
+            "href-vars": {
+                "project_id": "param/project_id"
             },
-            "rel/server_type": {
-                "href-template": "/server_types/{server_type_id}",
-                "href-vars": {
-                    "server_type_id": "param/server_type_id"
-                },
-                "hints": {
-                    "allow": ["GET"],
-                    "formats": {
-                        "application/json": {}
-                    }
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
                 }
+            }
+        },
+        "rel/server_type": {
+            "href-template": "/server_types/{server_type_id}",
+            "href-vars": {
+                "server_type_id": "param/server_type_id"
             },
-            "rel/server_template": {
-                "href-template": "/server_templates/{server_template_id}",
-                "href-vars": {
-                    "server_template_id": "param/server_template_id"
-                },
-                "hints": {
-                    "allow": ["GET"],
-                    "formats": {
-                        "application/json": {}
-                    }
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
                 }
+            }
+        },
+        "rel/server_template": {
+            "href-template": "/server_templates/{server_template_id}",
+            "href-vars": {
+                "server_template_id": "param/server_template_id"
             },
-            "rel/server_group": {
-                "href-group": "/server_groups/{server_group_id}",
-                "href-vars": {
-                    "server_group_id": "param/server_group_id"
-                },
-                "hints": {
-                    "allow": ["GET"],
-                    "formats": {
-                        "application/json": {}
-                    }
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
                 }
+            }
+        },
+        "rel/server_group": {
+            "href-group": "/server_groups/{server_group_id}",
+            "href-vars": {
+                "server_group_id": "param/server_group_id"
             },
-            "rel/project_server_group": {
-                "href-group": "/project/{project_id}/server_groups/{server_group_slug}",
-                "href-vars": {
-                    "project_id": "param/project_id",
-                    "server_group_slug": "param/server_group_slug"
-                },
-                "hints": {
-                    "allow": ["GET"],
-                    "formats": {
-                        "application/json": {}
-                    }
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
                 }
+            }
+        },
+        "rel/project_server_group": {
+            "href-group": "/project/{project_id}/server_groups/{server_group_slug}",
+            "href-vars": {
+                "project_id": "param/project_id",
+                "server_group_slug": "param/server_group_slug"
             },
-            "rel/server": {
-                "href-group": "/servers/{server_id}",
-                "href-vars": {
-                    "server_id": "param/server_id"
-                },
-                "hints": {
-                    "allow": ["GET"],
-                    "formats": {
-                        "application/json": {}
-                    }
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
                 }
+            }
+        },
+        "rel/server": {
+            "href-group": "/servers/{server_id}",
+            "href-vars": {
+                "server_id": "param/server_id"
             },
-            "rel/project_server": {
-                "href-group": "/project/{project_id}/servers/{server_hostname}",
-                "href-vars": {
-                    "project_id": "param/project_id",
-                    "server_hostname": "param/server_hostname"
-                },
-                "hints": {
-                    "allow": ["GET"],
-                    "formats": {
-                        "application/json": {}
-                    }
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
                 }
+            }
+        },
+        "rel/project_server": {
+            "href-group": "/project/{project_id}/servers/{server_hostname}",
+            "href-vars": {
+                "project_id": "param/project_id",
+                "server_hostname": "param/server_hostname"
             },
-            "rel/project_servers": {
-                "href-group": "/project/{project_id}/servers/",
-                "href-vars": {
-                    "project_id": "param/project_id"
-                },
-                "hints": {
-                    "allow": ["GET"],
-                    "formats": {
-                        "application/json": {}
-                    }
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
+                }
+            }
+        },
+        "rel/project_servers": {
+            "href-group": "/project/{project_id}/servers/",
+            "href-vars": {
+                "project_id": "param/project_id"
+            },
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
                 }
             }
         }
     }
-    ```
+}
+```
 
 # Project
 
@@ -128,15 +129,15 @@ A project is a grouping of related server resources.
 
 + Model (application/hal+json)
 
-    ```json
-    {
-        "_links": {
-            "rel/project_servers": {
-                "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers"
-            }
+```json
+{
+    "_links": {
+        "rel/project_servers": {
+            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers"
         }
     }
-    ```
+}
+```
 
 ## GET /projects/{id}
 
@@ -155,27 +156,27 @@ A server type describes the capacity and capabilities of a class of servers.
 
 + Model (application/hal+json)
 
-    ```json
-    {
-        "description": "General purpose low-CPU, low-memory, "
-                       "small-root-disk type of server.",
-        "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
-        "name": "m1.micro",
-        "size": {
-            "memory_mb": 128,
-            "root_disk_gb": 8,
-            "cpu_units": 1
-        },
-        "tags": [
-            "general-purpose"
-        ],
-        "_links":  {
-            "self": {
-                "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
-            }
+```json
+{
+    "description": "General purpose low-CPU, low-memory, "
+                   "small-root-disk type of server.",
+    "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
+    "name": "m1.micro",
+    "size": {
+        "memory_mb": 128,
+        "root_disk_gb": 8,
+        "cpu_units": 1
+    },
+    "tags": [
+        "general-purpose"
+    ],
+    "_links":  {
+        "self": {
+            "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
         }
     }
-    ```
+}
+```
 
 ## GET /server\_types/{id}
 
@@ -194,25 +195,26 @@ A server template is a base disk image, a bootable volume, or a snapshot of
 a server instance that is used as the basis of a server when it is launched.
 
 + Model (application/hal+json)
-    ```json
-    {
-        "description": "Windows Server 2008 R2 disk image",
-        "id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-        "requirements": {
-            "min_disk_gb": 80,
-            "min_memory_mb": 2048,
-            "min_cpu_units": 2
-        },
-        "tags": [
-            "windows"
-        ],
-        "_links":  {
-            "self": {
-                "href": "/server_templates/fe48b370-a352-11e3-a5e2-0800200c9a66"
-            }
+
+```json
+{
+    "description": "Windows Server 2008 R2 disk image",
+    "id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+    "requirements": {
+        "min_disk_gb": 80,
+        "min_memory_mb": 2048,
+        "min_cpu_units": 2
+    },
+    "tags": [
+        "windows"
+    ],
+    "_links":  {
+        "self": {
+            "href": "/server_templates/fe48b370-a352-11e3-a5e2-0800200c9a66"
         }
     }
-    ```
+}
+```
 
 ## GET /server\_templates/{id}
 
@@ -231,28 +233,29 @@ A server group is a user-defined collection of servers that provides defaults
 for servers launched in the group.
 
 + Model (application/hal+json)
-    ```json
-    {
-        "description": "Application servers running Windows Server 2008 R2",
-        "defaults": {
-            "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-            "type_id": "96d639b0-a3ca-11e3-a5e2-0800200c9a66",
-            "hostname_pattern": "win-app-%(rand_num)5d"
-        },
-        "id": "5f634509-ee40-4406-9c45-e5f343f01f62",
-        "name": "Windows App servers",
-        "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-        "slug": "windows-app-servers",
-        "tags": [
-            "windows"
-        ],
-        "_links":  {
-            "self": {
-                "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
-            }
+
+```json
+{
+    "description": "Application servers running Windows Server 2008 R2",
+    "defaults": {
+        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+        "type_id": "96d639b0-a3ca-11e3-a5e2-0800200c9a66",
+        "hostname_pattern": "win-app-%(rand_num)5d"
+    },
+    "id": "5f634509-ee40-4406-9c45-e5f343f01f62",
+    "name": "Windows App servers",
+    "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+    "slug": "windows-app-servers",
+    "tags": [
+        "windows"
+    ],
+    "_links":  {
+        "self": {
+            "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
         }
     }
-    ```
+}
+```
 
 ## GET /server\_groups/{id}
 
@@ -283,22 +286,23 @@ A server task is a related set of actions that are or have been executed
 against a server.
 
 + Model (application/hal+json)
-    ```json
-    {
-        "action": "BUILD_SERVER",
-        "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
-        "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-        "state": "RUNNING",
-        "_links":  {
-            "self": {
-                "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66"
-            },
-            "rel/server_task_subtasks": {
-                "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/subtasks"
-            }
+
+```json
+{
+    "action": "BUILD_SERVER",
+    "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
+    "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+    "state": "RUNNING",
+    "_links":  {
+        "self": {
+            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+        },
+        "rel/server_task_subtasks": {
+            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/subtasks"
         }
     }
-    ```
+}
+```
 
 ## GET /server\_tasks/{id}
 
@@ -324,56 +328,57 @@ attached to a server resource. This group describes operations on the server
 and these subresources.
 
 + Model (application/hal+json)
-    ```json
-    {
-        "block_devices": [
-            {
-                "id": "50795ce0-a357-11e3-a5e2-0800200c9a66",
-                "type": "ephemeral",
-                "device": "/dev/sda"
-            },
-            {
-                "id": "b502f900-a357-11e3-a5e2-0800200c9a66",
-                "type": "persistent",
-                "device": "/dev/sdb"
-            }
-        ],
-        "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
-        "hostname": "example-server-1",
-        "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-        "launched_at": "2014-03-02T23:20:19",
-        "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
-        "networking": {
-            "access": [
-                "65.6.29.230",
-                "::babe:65.6.29.230"
-            ],
-            "interfaces": {
-                "eth0": "10.0.1.4",
-                "eth1": "65.6.29.230"
-            }
+
+```json
+{
+    "block_devices": [
+        {
+            "id": "50795ce0-a357-11e3-a5e2-0800200c9a66",
+            "type": "ephemeral",
+            "device": "/dev/sda"
         },
-        "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-        "properties": {
-            "role": "appserver",
-        },
-        "state": "ACTIVE",
-        "tags": [
-            "linux",
-            "ubuntu"
+        {
+            "id": "b502f900-a357-11e3-a5e2-0800200c9a66",
+            "type": "persistent",
+            "device": "/dev/sdb"
+        }
+    ],
+    "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+    "hostname": "example-server-1",
+    "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+    "launched_at": "2014-03-02T23:20:19",
+    "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+    "networking": {
+        "access": [
+            "65.6.29.230",
+            "::babe:65.6.29.230"
         ],
-        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-        "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
-        "_links": {
-            "self": {
-                "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
-            },
-            "rel/server_tasks": {
-                "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
-            }
+        "interfaces": {
+            "eth0": "10.0.1.4",
+            "eth1": "65.6.29.230"
+        }
+    },
+    "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+    "properties": {
+        "role": "appserver",
+    },
+    "state": "ACTIVE",
+    "tags": [
+        "linux",
+        "ubuntu"
+    ],
+    "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+    "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+    "_links": {
+        "self": {
+            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+        },
+        "rel/server_tasks": {
+            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
         }
     }
-    ```
+}
+```
 
 ## GET /servers/{id}
 
@@ -415,54 +420,56 @@ Starts a task against a *server*.
       for the server.
 + Request (application/json)
     + Body
-    ```json
-    {
-        "action": "BUILD_SERVER",
-        "timeout": 120
-    }
-    ```
+
+```json
+{
+    "action": "BUILD_SERVER",
+    "timeout": 120
+}
+```
 
 ## Servers 
 
 A collection of servers.
 
 + Model (application/hal+json)
-    ```json
-    {
-        "servers": [
-            {
-                "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
-                "hostname": "example-server-1",
-                "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-                "launched_at": "2014-03-02T23:20:19",
-                "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
-                "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-                "state": "ACTIVE",
-                "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-                "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
-            },
-            {
-                "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
-                "hostname": "example-server-2",
-                "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0"
-                "launched_at": "2014-03-03T03:20:19",
-                "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
-                "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-                "state": "ACTIVE",
-                "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-                "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
-            }
-        ],
-        "_links": {
-            "self": {
-                "href": "/project/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2"
-            },
-            "next": {
-                "href": "/project/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2&marker=3699f74d-af95-406d-b38e-d2b86f84a9d0"
-            }
+
+```json
+{
+    "servers": [
+        {
+            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+            "hostname": "example-server-1",
+            "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+            "launched_at": "2014-03-02T23:20:19",
+            "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+            "state": "ACTIVE",
+            "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
+        },
+        {
+            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+            "hostname": "example-server-2",
+            "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0"
+            "launched_at": "2014-03-03T03:20:19",
+            "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+            "state": "ACTIVE",
+            "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
+        }
+    ],
+    "_links": {
+        "self": {
+            "href": "/project/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2"
+        },
+        "next": {
+            "href": "/project/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2&marker=3699f74d-af95-406d-b38e-d2b86f84a9d0"
         }
     }
-    ```
+}
+```
 
 ### GET /project/{project\_id}/servers{?limit}
 
