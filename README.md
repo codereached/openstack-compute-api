@@ -127,6 +127,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
 A project is a grouping of related server resources.
 
 + Model (application/hal+json)
+
     ```json
     {
         "_links": {
@@ -153,6 +154,7 @@ Retrieve links to project resource by a project's *id*.
 A server type describes the capacity and capabilities of a class of servers.
 
 + Model (application/hal+json)
+
     ```json
     {
         "description": "General purpose low-CPU, low-memory, "
