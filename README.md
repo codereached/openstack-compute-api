@@ -58,7 +58,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
             }
         },
         "rel/server_group": {
-            "href-group": "/server_groups/{server_group_id}",
+            "href-template": "/server_groups/{server_group_id}",
             "href-vars": {
                 "server_group_id": "param/server_group_id"
             },
@@ -70,13 +70,37 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
             }
         },
         "rel/project_server_group": {
-            "href-group": "/project/{project_id}/server_groups/{server_group_slug}",
+            "href-template": "/project/{project_id}/server_groups/{server_group_slug}",
             "href-vars": {
                 "project_id": "param/project_id",
                 "server_group_slug": "param/server_group_slug"
             },
             "hints": {
                 "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
+                }
+            }
+        },
+        "rel/server_task": {
+            "href-template": "/server_tasks/{server_task_id}",
+            "href-vars": {
+                "server_task_id": "param/server_task_id"
+            },
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
+                }
+            }
+        },
+        "rel/project_server_tasks": {
+            "href-template": "/project/{project_id}/server_tasks",
+            "href-vars": {
+                "project_id": "param/project_id"
+            },
+            "hints": {
+                "allow": ["GET", "POST"],
                 "formats": {
                     "application/json": {}
                 }
@@ -148,6 +172,7 @@ Retrieve links to project resource by a project's *id*.
       for the project.
 
 + Response 200 (application/json)
+    
     [Project][]
 
 # Server Type
@@ -187,6 +212,7 @@ Retrieve a server type by its *id*.
       for the server type
 
 + Response 200 (application/json)
+    
     [Server Type][]
 
 # Server Template
@@ -225,6 +251,7 @@ Retrieve a server template by its *id*.
       for the server template
 
 + Response 200 (application/json)
+    
     [Server Template][]
 
 # Server Group
@@ -266,6 +293,7 @@ Retrieve a server group by its *id*.
       for the server group
 
 + Response 200 (application/json)
+    
     [Server Group][]
 
 ## GET /projects/{project}/server\_groups/{slug}
@@ -278,6 +306,7 @@ Retrieve a server group within a *project* by its *slug*.
     + slug (string, `windows-app-servers`) ... A slugified name of the server group
 
 + Response 200 (application/json)
+    
     [Server Group][]
 
 # Server Task
@@ -290,6 +319,8 @@ against a server.
 ```json
 {
     "action": "BUILD_SERVER",
+    "created_at": "2014-04-14T02:15:15Z",
+    "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
     "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
     "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
     "state": "RUNNING",
@@ -304,6 +335,43 @@ against a server.
 }
 ```
 
+# Server Tasks
+
+A collection of server tasks.
+
++ Model (application/hal+json)
+
+```json
+{
+    "tasks": [
+        {
+            "action": "BUILD_SERVER",
+            "created_at": "2014-04-14T02:15:15Z",
+            "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
+            "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+            "state": "RUNNING",
+        },
+        {
+            "action": "RESIZE_SERVER",
+            "created_at": "2013-12-23T10:02:42Z",
+            "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "id": "3759ef44-2b7d-4981-b286-418ca50fe005",
+            "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+            "state": "ABORTED",
+        }
+    ],
+    "_links": {
+        "self": {
+            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2"
+        },
+        "next": {
+            "href": "/project/a7728150-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2&marker=3759ef44-2b7d-4981-b286-418ca50fe005"
+        }
+    }
+}
+```
+
 ## GET /server\_tasks/{id}
 
 Retrieve a server task by its *id*.
@@ -313,6 +381,7 @@ Retrieve a server task by its *id*.
       for the server task
 
 + Response 200 (application/json)
+    
     [Server Task][]
 
 # Server
@@ -389,6 +458,7 @@ Retrieve a server by its *id*.
       for the server
 
 + Response 200 (application/json)
+    
     [Server][]
 
 ## GET /projects/{project}/servers/{hostname}
@@ -401,6 +471,7 @@ Retrieve a server by its *project* and *hostname*.
     + hostname (string, `app-server-1`) ... A hostname of a server in the project.
 
 + Response 200 (application/json)
+
     [Server][]
 
 ### PATCH /servers/{id}
@@ -409,7 +480,20 @@ Retrieve a server by its *project* and *hostname*.
 
 ### PUT /servers/{id}
 
-### GET /servers/{server}/tasks
+### GET /servers/{server}/tasks{?limit,marker}
+
+Retrieve a collection of servers in a specific *project*.
+
++ Parameters
+    + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the project.
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
+      identifier of the last record on the previous page of results.
+
++ Response 200 (application/json)
+
+    [Server Tasks][]
 
 ### POST /servers/{server}/tasks
 
@@ -418,6 +502,7 @@ Starts a task against a *server*.
 + Parameters
     + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server.
+
 + Request (application/json)
     + Body
 
@@ -427,6 +512,10 @@ Starts a task against a *server*.
     "timeout": 120
 }
 ```
+
++ Response 202 (application/json)
+
+    [Server Task][]
 
 ## Servers 
 
@@ -471,7 +560,7 @@ A collection of servers.
 }
 ```
 
-### GET /project/{project\_id}/servers{?limit}
+### GET /project/{project}/servers{?limit,marker}
 
 Retrieve a collection of servers in a specific *project*.
 
@@ -483,6 +572,7 @@ Retrieve a collection of servers in a specific *project*.
       identifier of the last record on the previous page of results.
 
 + Response 200 (application/json)
+
     [Servers][]
 
 ### POST /project/{project}/servers
