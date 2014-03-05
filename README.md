@@ -314,11 +314,45 @@ Retrieve a server group within a *project* by its *slug*.
 A server task is a related set of actions that are or have been executed
 against a server.
 
+Each server task has a *state* attribute. This attribute is a string with
+one of the following values:
+
+ - `RUNNING`
+ - `ABORTED`
+ - `COMPLETED`
+ - `TIMED_OUT`
+
+Each server task contains an *action* attribute. This attribute is a string
+with one of the following values:
+
+ - `CREATE`
+ - `SNAPSHOT`
+ - `BACKUP`
+ - `UPDATE_PASSWORD`
+ - `RESIZE`
+ - `REBOOT`
+ - `HARD_REBOOT`
+ - `PAUSE`
+ - `UNPAUSE`
+ - `SUSPEND`
+ - `RESUME`
+ - `POWER_OFF`
+ - `POWER_ON`
+ - `RESCUE`
+ - `UNRESCUE`
+ - `REBUILD`
+ - `MOVE`
+ - `TERMINATE`
+ - `RESTORE`
+ - `SHELVE`
+ - `SHELVE_OFFLOAD`
+ - `UNSHELVE`
+
 + Model (application/hal+json)
 
 ```json
 {
-    "action": "BUILD_SERVER",
+    "action": "CREATE",
     "created_at": "2014-04-14T02:15:15Z",
     "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
     "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
@@ -337,7 +371,9 @@ against a server.
 
 # Server Tasks
 
-A collection of server tasks.
+A collection of server tasks. The entire collection of tasks for a server
+represents the history of actions taken against the server through the
+OpenStack Compute API.
 
 + Model (application/hal+json)
 
@@ -345,7 +381,7 @@ A collection of server tasks.
 {
     "tasks": [
         {
-            "action": "BUILD_SERVER",
+            "action": "CREATE",
             "created_at": "2014-04-14T02:15:15Z",
             "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
             "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
@@ -353,7 +389,7 @@ A collection of server tasks.
             "state": "RUNNING",
         },
         {
-            "action": "RESIZE_SERVER",
+            "action": "RESIZE",
             "created_at": "2013-12-23T10:02:42Z",
             "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
             "id": "3759ef44-2b7d-4981-b286-418ca50fe005",
@@ -396,6 +432,30 @@ are a number of subresources and collections of subresources that are
 attached to a server resource. This group describes operations on the server
 and these subresources.
 
+Each server has a *power_state* attribute, which is a string with one of the
+following values:
+
+ - `RUNNING`
+ - `PAUSED`
+ - `SHUTDOWN`
+ - `CRASHED`
+ - `SUSPENDED`
+
+In addition to the power\_state, each server also has a *virt_state* attribute,
+which is a string with one of the following values:
+
+ - `ACTIVE`
+ - `BUILDING`
+ - `PAUSED`
+ - `SUSPENDED`
+ - `STOPPED`
+ - `RESCUED`
+ - `RESIZED`
+ - `TERMINATED`
+ - `ERROR`
+ - `SHELVED`
+ - `SHELVED_OFFLOADED`
+
 + Model (application/hal+json)
 
 ```json
@@ -431,7 +491,8 @@ and these subresources.
     "properties": {
         "role": "appserver",
     },
-    "state": "ACTIVE",
+    "virt_state": "ACTIVE",
+    "power_state": "RUNNING",
     "tags": [
         "linux",
         "ubuntu"
@@ -451,7 +512,7 @@ and these subresources.
 
 > **Note**: There is no DELETE operation against a server in the Compute API.
 > To terminate a server, you would POST /servers/{server}/tasks with a task
-> with action TERMINATE. Archival of terminated server information is outside
+> with action `TERMINATE`. Archival of terminated server information is outside
 > the scope of a public OpenStack Compute control API.
 
 ## GET /servers/{id}
@@ -511,7 +572,7 @@ Starts a task against a *server*.
 
 ```json
 {
-    "action": "BUILD_SERVER",
+    "action": "REBOOT",
     "timeout": 120
 }
 ```
