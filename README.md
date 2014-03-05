@@ -449,6 +449,11 @@ and these subresources.
 }
 ```
 
+> **Note**: There is no DELETE operation against a server in the Compute API.
+> To terminate a server, you would POST /servers/{server}/tasks with a task
+> with action TERMINATE. Archival of terminated server information is outside
+> the scope of a public OpenStack Compute control API.
+
 ## GET /servers/{id}
 
 Retrieve a server by its *id*.
@@ -474,13 +479,11 @@ Retrieve a server by its *project* and *hostname*.
 
     [Server][]
 
-### PATCH /servers/{id}
+## PATCH /servers/{id}
 
-### DELETE /servers/{id}
+## PUT /servers/{id}
 
-### PUT /servers/{id}
-
-### GET /servers/{server}/tasks{?limit,marker}
+## GET /servers/{server}/tasks{?limit,marker}
 
 Retrieve a collection of servers in a specific *project*.
 
@@ -495,7 +498,7 @@ Retrieve a collection of servers in a specific *project*.
 
     [Server Tasks][]
 
-### POST /servers/{server}/tasks
+## POST /servers/{server}/tasks
 
 Starts a task against a *server*.
 
@@ -517,7 +520,7 @@ Starts a task against a *server*.
 
     [Server Task][]
 
-## Servers 
+# Servers 
 
 A collection of servers.
 
@@ -560,7 +563,7 @@ A collection of servers.
 }
 ```
 
-### GET /project/{project}/servers{?limit,marker}
+## GET /project/{project}/servers{?limit,marker}
 
 Retrieve a collection of servers in a specific *project*.
 
@@ -575,4 +578,4 @@ Retrieve a collection of servers in a specific *project*.
 
     [Servers][]
 
-### POST /project/{project}/servers
+## POST /project/{project}/servers
