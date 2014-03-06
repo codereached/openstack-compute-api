@@ -107,7 +107,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
             }
         },
         "rel/server": {
-            "href-group": "/servers/{server_id}",
+            "href-template": "/servers/{server_id}",
             "href-vars": {
                 "server_id": "param/server_id"
             },
@@ -119,7 +119,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
             }
         },
         "rel/project_server": {
-            "href-group": "/project/{project_id}/servers/{server_hostname}",
+            "href-template": "/project/{project_id}/servers/{server_hostname}",
             "href-vars": {
                 "project_id": "param/project_id",
                 "server_hostname": "param/server_hostname"
@@ -132,7 +132,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
             }
         },
         "rel/project_servers": {
-            "href-group": "/project/{project_id}/servers/",
+            "href-template": "/project/{project_id}/servers/",
             "href-vars": {
                 "project_id": "param/project_id"
             },
