@@ -58,7 +58,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
             }
         },
         "rel/server_types": {
-            "href-template": "/server_types/"
+            "href-template": "/server_types"
                              "?{limit,marker,tag}",
             "href-vars": {
                 "limit": "param/limit",
@@ -76,6 +76,21 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
             "href-template": "/server_templates/{server_template_id}",
             "href-vars": {
                 "server_template_id": "param/server_template_id"
+            },
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
+                }
+            }
+        },
+        "rel/server_templates": {
+            "href-template": "/server_templates"
+                             "?{limit,marker,tag}",
+            "href-vars": {
+                "limit": "param/limit",
+                "marker": "param/marker",
+                "tag": "param/tag"
             },
             "hints": {
                 "allow": ["GET"],
@@ -159,7 +174,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
             }
         },
         "rel/project_servers": {
-            "href-template": "/project/{project_id}/servers/"
+            "href-template": "/project/{project_id}/servers"
                              "?{limit,marker}",
             "href-vars": {
                 "project_id": "param/project_id",
@@ -305,13 +320,13 @@ A collection of server types.
 }
 ```
 
-## GET /server\_types{?limit,marker}
+## GET /server\_types{?limit,marker,tag}
 
 Retrieve a collection of server types.
 
 + Parameters
     + limit = `20` (optional, number) ... Maximum number of results to return
-    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
+    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
       identifier of the last record on the previous page of results.
     + tag (optional, multiple string, `general-purpose`) ... Filters the results on
       server types with any matching tag.
@@ -358,6 +373,67 @@ Retrieve a server template by its *id*.
 + Response 200 (application/json)
     
     [Server Template][]
+
+# Server Templates
+
+A collection of server templates.
+
++ Model (application/hal+json)
+
+```json
+{
+    "server_templates": [
+        {
+            "description": "Windows Server 2008 R2 disk image",
+            "id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+            "requirements": {
+                "min_disk_gb": 80,
+                "min_memory_mb": 2048,
+                "min_cpu_units": 2
+            },
+            "tags": [
+                "windows"
+            ]
+        },
+        {
+            "description": "Ubuntu Server 14.04 LTS bootable volume",
+            "id": "abacdacc-0806-49dc-98a3-4a7c5a76f8e9",
+            "requirements": {
+                "min_disk_gb": 10,
+                "min_memory_mb": 256,
+                "min_cpu_units": 1
+            },
+            "tags": [
+                "linux",
+                "ubuntu"
+            ]
+        }
+    ]
+    "_links": {
+        "self": {
+            "href": "/server_templates?limit=2"
+        },
+        "next": {
+            "href": "/server_templates?limit=2&marker=abacdacc-0806-49dc-98a3-4a7c5a76f8e9"
+        }
+    }
+}
+```
+
+## GET /server\_templates{?limit,marker,tag}
+
+Retrieve a collection of server templates.
+
++ Parameters
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
+      identifier of the last record on the previous page of results.
+    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
+      server templates with any matching tag.
+
++ Response 200 (application/json)
+
+    [Server Templates][]
 
 # Server Group
 
