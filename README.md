@@ -112,7 +112,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 "server_id": "param/server_id"
             },
             "hints": {
-                "allow": ["GET"],
+                "allow": ["GET", "HEAD"],
                 "formats": {
                     "application/json": {}
                 }
@@ -137,7 +137,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 "project_id": "param/project_id"
             },
             "hints": {
-                "allow": ["GET"],
+                "allow": ["GET", "POST"],
                 "formats": {
                     "application/json": {}
                 }
@@ -452,9 +452,9 @@ which is a string with one of the following values:
  - `RESCUED`
  - `RESIZED`
  - `TERMINATED`
- - `ERROR`
  - `SHELVED`
  - `SHELVED_OFFLOADED`
+ - `ERROR`
 
 + Model (application/hal+json)
 
@@ -514,6 +514,20 @@ which is a string with one of the following values:
 > To terminate a server, you would POST /servers/{server}/tasks with a task
 > with action `TERMINATE`. Archival of terminated server information is outside
 > the scope of a public OpenStack Compute control API.
+
+## HEAD /servers/{id}
+
+Retrieve a server's state by its *id*.
+
++ Parameters
+    + id (string, `53626cb0-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server
+
++ Response 200
+    + Headers
+
+        X-OpenStack-Compute-Server-Virt-State: ACTIVE
+        X-OpenStack-Compute-Server-Power-State: RUNNING
 
 ## GET /servers/{id}
 
@@ -658,6 +672,22 @@ server's *hostname* attribute, can be set here, along with overrides for
 attribute values where the value specified in the defaults section is not
 wanted.
 
+The request for launching one or more servers is pre-validated before
+attempting to launch any of the servers. A failure response will indicate
+errors that were found in this pre-validation procedure. 
+
+> **Note**: Failure of any individual server to launch will *not* be returned
+> in a failure response to this API call. Instead, a user may check the status
+> of a server and a list of the server's latest task actions using calls to
+> `HEAD /servers/{id}` and `GET /servers/{id}/tasks`
+
+A success response will always be a list of dictionaries that contain
+attributes about each server that was launched:
+
+ - `id` (string) ... The UUID of the newly-created server resource.
+ - `launched_at` (datetime) ... The ISO9601 timestamp of when the launch
+   task for the server was started.
+
 + Request (application/json)
 
     ```json
@@ -682,16 +712,14 @@ wanted.
 + Response 202 (application/json)
 
     ```json
-    {
-        "servers": [
-            {
-                "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-                "launched_at": "2014-03-02T23:20:19"
-            },
-            {
-                "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0",
-                "launched_at": "2014-03-03T03:20:19"
-            }
-        ]
-    }
+    [
+        {
+            "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+            "launched_at": "2014-03-02T23:20:19"
+        },
+        {
+            "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0",
+            "launched_at": "2014-03-03T03:20:19"
+        }
+    ]
     ```
