@@ -57,6 +57,21 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 }
             }
         },
+        "rel/server_types": {
+            "href-template": "/server_types/"
+                             "?{limit,marker,tag}",
+            "href-vars": {
+                "limit": "param/limit",
+                "marker": "param/marker",
+                "tag": "param/tag"
+            },
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
+                }
+            }
+        },
         "rel/server_template": {
             "href-template": "/server_templates/{server_template_id}",
             "href-vars": {
@@ -144,9 +159,12 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
             }
         },
         "rel/project_servers": {
-            "href-template": "/project/{project_id}/servers/",
+            "href-template": "/project/{project_id}/servers/"
+                             "?{limit,marker}",
             "href-vars": {
-                "project_id": "param/project_id"
+                "project_id": "param/project_id",
+                "limit": "param/limit",
+                "marker": "param/marker"
             },
             "hints": {
                 "allow": ["GET", "POST"],
@@ -295,7 +313,7 @@ Retrieve a collection of server types.
     + limit = `20` (optional, number) ... Maximum number of results to return
     + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
       identifier of the last record on the previous page of results.
-    + tag (optional, multiple string, `general-purpos`) ... Filters the results on
+    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
       server types with any matching tag.
 
 + Response 200 (application/json)
