@@ -45,6 +45,18 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 }
             }
         },
+        "rel/server_type_by_name": {
+            "href-template": "/server_types/{server_type_name}",
+            "href-vars": {
+                "server_type_name": "param/server_type_name"
+            },
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
+                }
+            }
+        },
         "rel/server_template": {
             "href-template": "/server_templates/{server_template_id}",
             "href-vars": {
@@ -210,6 +222,17 @@ Retrieve a server type by its *id*.
 + Parameters
     + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server type
+
++ Response 200 (application/json)
+    
+    [Server Type][]
+
+## GET /server\_types/{name}
+
+Retrieve a server type by its *name*.
+
++ Parameters
+    + name (string, `m1.micro`) ... A unique name identifier of the server type
 
 + Response 200 (application/json)
     
