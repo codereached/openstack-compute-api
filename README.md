@@ -542,8 +542,6 @@ Retrieve a server by its *project* and *hostname*.
 
 ## PATCH /servers/{id}
 
-## PUT /servers/{id}
-
 ## GET /servers/{server}/tasks{?limit,marker}
 
 Retrieve a collection of servers in a specific *project*.
@@ -576,6 +574,10 @@ Starts a task against a *server*.
     "timeout": 120
 }
 ```
+
+> **Note**: Any action listed in [Server Task][] may be specified except `CREATE`.
+> When a server is launched with the POST /projects/{project}/servers call, Nova
+> will add a Server Task to the server for the `CREATE` action.
 
 + Response 202 (application/json)
 
@@ -615,10 +617,10 @@ A collection of servers.
     ],
     "_links": {
         "self": {
-            "href": "/project/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2"
+            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2"
         },
         "next": {
-            "href": "/project/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2&marker=3699f74d-af95-406d-b38e-d2b86f84a9d0"
+            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2&marker=3699f74d-af95-406d-b38e-d2b86f84a9d0"
         }
     }
 }
@@ -640,3 +642,56 @@ Retrieve a collection of servers in a specific *project*.
     [Servers][]
 
 ## POST /project/{project}/servers
+
+Create one or more servers in a project.
+
+There are two main sections to the request body: *defaults* and *servers*.
+
+The defaults section is used to set the default attributes of servers when
+creating more than one server. Instead of specifying the same server group
+or server type for each server you create, you can specify this once in the
+defaults section.
+
+The servers section is a list of dictionaries, one per server you want to
+create. Attributes that *must* be unique for each server -- such as the
+server's *hostname* attribute, can be set here, along with overrides for
+attribute values where the value specified in the defaults section is not
+wanted.
+
++ Request (application/json)
+
+    ```json
+    {
+        "defaults": {
+            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+            "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
+        },
+        "servers": [
+            {
+                "hostname": "app-server-1",
+            },
+            {
+                "hostname": "app-server-2",
+                "type_id": "98f5c367a-a354-11e3-a5e2-0800200c9a66"
+            },
+        ],
+    }
+    ```
+
++ Response 202 (application/json)
+
+    ```json
+    {
+        "servers": [
+            {
+                "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+                "launched_at": "2014-03-02T23:20:19"
+            },
+            {
+                "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0",
+                "launched_at": "2014-03-03T03:20:19"
+            }
+        ]
+    }
+    ```
