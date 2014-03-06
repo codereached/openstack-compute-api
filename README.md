@@ -238,6 +238,70 @@ Retrieve a server type by its *name*.
     
     [Server Type][]
 
+# Server Types
+
+A collection of server types.
+
++ Model (application/hal+json)
+
+```json
+{
+    "server_types": [
+        {
+            "description": "General purpose low-CPU, low-memory, "
+                           "small-root-disk type of server.",
+            "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
+            "name": "m1.micro",
+            "size": {
+                "memory_mb": 128,
+                "root_disk_gb": 8,
+                "cpu_units": 1
+            },
+            "tags": [
+                "general-purpose"
+            ]
+        },
+        {
+            "description": "CPU-intensive, high-memory, "
+                           "small-root-disk type of server.",
+            "id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+            "name": "c1.xlarge",
+            "size": {
+                "memory_mb": 32768,
+                "root_disk_gb": 8,
+                "cpu_units": 8
+            },
+            "tags": [
+                "hpc"
+            ]
+        }
+    ]
+    "_links": {
+        "self": {
+            "href": "/server_types?limit=2"
+        },
+        "next": {
+            "href": "/server_types?limit=2&marker=1593e080-a354-11e3-a5e2-0800200c9a66"
+        }
+    }
+}
+```
+
+## GET /server\_types{?limit,marker}
+
+Retrieve a collection of server types.
+
++ Parameters
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
+      identifier of the last record on the previous page of results.
+    + tag (optional, multiple string, `general-purpos`) ... Filters the results on
+      server types with any matching tag.
+
++ Response 200 (application/json)
+
+    [Server Types][]
+
 # Server Template
 
 A server template is a base disk image, a bootable volume, or a snapshot of
