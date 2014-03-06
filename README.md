@@ -6,6 +6,8 @@ This repository contains a single document (this one) describing a proposed new
 OpenStack Compute API. I've used [API Blueprint](http://apiblueprint.org/)
 for formatting and describing the proposed API.
 
+## HTTP Status Codes
+
 # OpenStack Compute API Root [/]
 
 ## GET /
@@ -292,7 +294,12 @@ A collection of server types.
             },
             "tags": [
                 "general-purpose"
-            ]
+            ],
+            "_links":  {
+                "self": {
+                    "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
+                }
+            }
         },
         {
             "description": "CPU-intensive, high-memory, "
@@ -306,7 +313,12 @@ A collection of server types.
             },
             "tags": [
                 "hpc"
-            ]
+            ],
+            "_links":  {
+                "self": {
+                    "href": "/server_types/1593e080-a354-11e3-a5e2-0800200c9a66"
+                }
+            }
         }
     ]
     "_links": {
@@ -393,7 +405,12 @@ A collection of server templates.
             },
             "tags": [
                 "windows"
-            ]
+            ],
+            "_links":  {
+                "self": {
+                    "href": "/server_templates/fe48b370-a352-11e3-a5e2-0800200c9a66"
+                }
+            }
         },
         {
             "description": "Ubuntu Server 14.04 LTS bootable volume",
@@ -406,7 +423,12 @@ A collection of server templates.
             "tags": [
                 "linux",
                 "ubuntu"
-            ]
+            ],
+            "_links":  {
+                "self": {
+                    "href": "/server_templates/abacdacc-0806-49dc-98a3-4a7c5a76f8e9"
+                }
+            }
         }
     ]
     "_links": {
@@ -568,6 +590,14 @@ OpenStack Compute API.
             "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
             "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
             "state": "RUNNING",
+            "_links":  {
+                "self": {
+                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763"
+                },
+                "rel/server_task_subtasks": {
+                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763/subtasks"
+                }
+            }
         },
         {
             "action": "RESIZE",
@@ -576,6 +606,14 @@ OpenStack Compute API.
             "id": "3759ef44-2b7d-4981-b286-418ca50fe005",
             "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
             "state": "ABORTED",
+            "_links":  {
+                "self": {
+                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005"
+                },
+                "rel/server_task_subtasks": {
+                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005/subtasks"
+                }
+            }
         }
     ],
     "_links": {
@@ -796,7 +834,15 @@ A collection of servers.
             "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
             "state": "ACTIVE",
             "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
+            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+            "_links": {
+                "self": {
+                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+                },
+                "rel/server_tasks": {
+                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
+                }
+            }
         },
         {
             "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
@@ -807,7 +853,15 @@ A collection of servers.
             "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
             "state": "ACTIVE",
             "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
+            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+            "_links": {
+                "self": {
+                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
+                },
+                "rel/server_tasks": {
+                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
+                }
+            }
         }
     ],
     "_links": {
@@ -866,7 +920,7 @@ A success response will always be a list of dictionaries that contain
 attributes about each server that was launched:
 
  - `id` (string) ... The UUID of the newly-created server resource.
- - `launched_at` (datetime) ... The ISO9601 timestamp of when the launch
+ - `launched_at` (datetime) ... The ISO8601 timestamp of when the launch
    task for the server was started.
 
 + Request (application/json)
@@ -896,11 +950,27 @@ attributes about each server that was launched:
     [
         {
             "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-            "launched_at": "2014-03-02T23:20:19"
+            "launched_at": "2014-03-02T23:20:19",
+            "_links": {
+                "self": {
+                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+                },
+                "rel/server_tasks": {
+                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
+                }
+            }
         },
         {
             "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0",
-            "launched_at": "2014-03-03T03:20:19"
+            "launched_at": "2014-03-03T03:20:19",
+            "_links": {
+                "self": {
+                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
+                },
+                "rel/server_tasks": {
+                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
+                }
+            }
         }
     ]
     ```
