@@ -269,6 +269,21 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 }
             }
         },
+        "rel/server_console_log": {
+            "href-template": "/servers/{server_id}/console_log"
+                             "?(offset,bytes)",
+            "href-vars": {
+                "server_id": "param/server_id",
+                "offset": "param/offset",
+                "bytes": "param/bytes"
+            },
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
+                }
+            }
+        },
         "rel/project_server": {
             "href-template": "/project/{project_id}/servers/{server_hostname}",
             "href-vars": {
@@ -329,7 +344,7 @@ Retrieve links to project resource by a project's *id*.
 
 A server type describes the capacity and capabilities of a class of servers.
 
-## GET /server\_types/{id}
+## GET /server_types/{id}
 
 Retrieve a server type by its *id*.
 
@@ -361,7 +376,7 @@ Retrieve a server type by its *id*.
 }
 ```
 
-## GET /server\_types/{name}
+## GET /server_types/{name}
 
 Retrieve a server type by its *name*.
 
@@ -396,7 +411,7 @@ Retrieve a server type by its *name*.
 
 A collection of server types.
 
-## GET /server\_types{?limit,marker,tag}
+## GET /server_types{?limit,marker,tag}
 
 Retrieve a collection of server types.
 
@@ -485,7 +500,7 @@ dictionary include:
    `%(rand_name)d` symbol is interpolated as a random number. You can limit the
    number of digits by specifying a length, like so: `%(rand_num)5d`.
 
-## GET /server\_groups/{id}
+## GET /server_groups/{id}
 
 Retrieve a server group by its *id*.
 
@@ -518,7 +533,7 @@ Retrieve a server group by its *id*.
 }
 ```
 
-## GET /projects/{project}/server\_groups/{slug}
+## GET /projects/{project}/server_groups/{slug}
 
 Retrieve a server group within a *project* by its *slug*.
 
@@ -556,7 +571,7 @@ Retrieve a server group within a *project* by its *slug*.
 
 A collection of server groups.
 
-## GET /projects/{project}/server\_groups{?limit,marker,tag}
+## GET /projects/{project}/server_groups{?limit,marker,tag}
 
 Retrieve a collection of server groups.
 
@@ -666,7 +681,7 @@ with one of the following values:
  - `SHELVE_OFFLOAD`
  - `UNSHELVE`
 
-## GET /server\_tasks/{id}
+## GET /server_tasks/{id}
 
 Retrieve a server task by its *id*.
 
@@ -724,7 +739,7 @@ following values:
  - `CRASHED`
  - `SUSPENDED`
 
-In addition to the power\_state, each server also has a *virt_state* attribute,
+In addition to the power_state, each server also has a *virt_state* attribute,
 which is a string with one of the following values:
 
  - `ACTIVE`
@@ -880,6 +895,29 @@ Retrieve a server by its *project* and *hostname*.
     }
 }
 ```
+## GET /servers/{server}/console_log?{bytes}
+
+Retrieve somee or part of a server console log.
+
++ Parameters
+    + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server.
+    + bytes = `65536` (optional, number) ... Maximum number of bytes to
+      return.
+
++ Response 200 (plain/text)
+    
+```
+Linux version 2.6.21.7-2.ec2.v1.2.fc8xen (root@domU-12-34-56-0A-78-01) (gcc version 4.1.2 20070925 (Red Hat 4.1.2-33)) #1 SMP Fri Nov 20 19:22:36 EST 2009
+BIOS-provided physical RAM map:
+sanitize start
+sanitize bail 0
+copy_e820_map() start: 0000000000000000 size: 000000006ac00000 end: 000000006ac00000 type: 1
+Xen: 0000000000000000 - 000000006ac00000 (usable)
+980MB HIGHMEM available.
+727MB LOWMEM available.
+NX (Execute Disable) protection: active
+```
 
 # Group Server Tasks
 
@@ -893,7 +931,7 @@ Retrieve a collection of servers in a specific *project*.
 
 + Parameters
     + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the project.
+      for the server.
     + limit = `20` (optional, number) ... Maximum number of results to return
     + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
       identifier of the last record on the previous page of results.
