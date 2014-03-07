@@ -362,10 +362,13 @@ Retrieve a server type by its *id*.
                    "small-root-disk type of server.",
     "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
     "name": "m1.micro",
-    "size": {
+    "share": {},
+    "spec": {
         "memory_mb": 128,
         "root_disk_gb": 8,
-        "cpu_units": 1
+        "cpu_units": 1,
+        "rxtx_factor": 1.0,
+        "swap_mb": 128
     },
     "tags": [
         "general-purpose"
@@ -395,10 +398,12 @@ Retrieve a server type by its *name*.
     "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
     "name": "m1.micro",
     "share": {},
-    "size": {
+    "spec": {
         "memory_mb": 128,
         "root_disk_gb": 8,
-        "cpu_units": 1
+        "cpu_units": 1,
+        "rxtx_factor": 1.0,
+        "swap_mb": 128
     },
     "tags": [
         "general-purpose"
@@ -422,12 +427,16 @@ When creating a server type, you can specify a number of attributes:
    server type.
  - `description` (optional, string, `My cool type`) ... Longer description
    of the server type.
- - `memory_mb` (required, number, `32768`) ... Number of megabytes memory
+ - `spec.memory_mb` (required, number, `32768`) ... Number of megabytes memory
    allocated to servers with this type.
- - `root_disk_gb` = `10` (optional, number, `100`) ... Number of gigabytes
+ - `spec.root_disk_gb` = `10` (optional, number, `100`) ... Number of gigabytes
    to allocate for the root disk.
- - `cpu_units` (required, number, `12`) ... Number of CPU units that
+ - `spec.cpu_units` (required, number, `12`) ... Number of CPU units that
    servers with this type will be allocated.
+ - `spec.rxtx_factor` (optional, number, `2.0` ... The throttling factor for
+   I/O on servers launched with this type.
+ - `spec.swap_mb` (optional, number, `32768`) ... Amount of swap space to
+   allocate for servers launched with this type.
  - `tags` (optional, list of strings) ... List of strings to tag the type
    with.
  - `visibility` = `PRIVATE` (optional, string) ... Indicates whether a
@@ -449,12 +458,8 @@ The *visibility* attribute can be one of the following:
 
 ```json
 {
-    "cpu_units": 2,
     "description": "A good enough server type",
-    "memory_mb": 4096,
     "name": "good.enough",
-    "root_disk_gb": 100,
-    "visibility": "PRIVATE",
     "share": {
         "user_id": [
             "781247cf-7bec-4e84-86ea-3cbcee48ae6d",
@@ -463,7 +468,15 @@ The *visibility* attribute can be one of the following:
         "project_id": [
             "fd2ab3c0-d822-437f-b956-9e60e7d0fb69"
         ]
-    }
+    },
+    "spec": {
+        "memory_mb": 1024,
+        "root_disk_gb": 8,
+        "cpu_units": 2,
+        "rxtx_factor": 1.0,
+        "swap_mb": 2048
+    },
+    "visibility": "PRIVATE"
 }
 ```
 
@@ -483,10 +496,12 @@ The *visibility* attribute can be one of the following:
             "fd2ab3c0-d822-437f-b956-9e60e7d0fb69"
         ]
     },
-    "size": {
-        "memory_mb": 128,
+    "spec": {
+        "memory_mb": 1024,
         "root_disk_gb": 8,
-        "cpu_units": 1
+        "cpu_units": 2,
+        "rxtx_factor": 1.0,
+        "swap_mb": 2048
     },
     "tags": [],
     "visibility": "PRIVATE",
@@ -528,10 +543,12 @@ Retrieve a collection of server types.
             "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
             "name": "m1.micro",
             "share": {},
-            "size": {
+            "spec": {
                 "memory_mb": 128,
                 "root_disk_gb": 8,
-                "cpu_units": 1
+                "cpu_units": 1,
+                "rxtx_factor": 1.0,
+                "swap_mb": 128
             },
             "tags": [
                 "general-purpose"
@@ -549,10 +566,12 @@ Retrieve a collection of server types.
             "id": "1593e080-a354-11e3-a5e2-0800200c9a66",
             "name": "c1.xlarge",
             "share": {},
-            "size": {
+            "spec": {
                 "memory_mb": 32768,
                 "root_disk_gb": 8,
-                "cpu_units": 8
+                "cpu_units": 8,
+                "rxtx_factor": 2.0,
+                "swap_mb": 32768
             },
             "tags": [
                 "hpc"
