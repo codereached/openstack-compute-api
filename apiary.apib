@@ -730,6 +730,14 @@ a server that is used as the basis of the server that is launched.
 > template resource. Server template resources are exposed by the OpenStack
 > Image and OpenStack Block Storage APIs (images/ and volumes/ respectively).
 
+Each server lives in a generic container signified by the *region_id*
+attribute. Unlike the old v2/v3 Compute API, there is no concept of an
+EC2 Availability Zone built into the vNext Compute API. Instead of the concept
+of an availability zone, the concept of a generic region container is
+introduced. Regions may or may not have other regions as children. What
+SLA or failure boundaries are defined for a region is left entirely up to
+the deployer of the OpenStack Compute service.
+
 Each server has a *power_state* attribute, which is a string with one of the
 following values:
 
@@ -810,18 +818,19 @@ Retrieve a server by its *id*.
             "eth1": "65.6.29.230"
         }
     },
+    "power_state": "RUNNING",
     "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
     "properties": {
         "role": "appserver",
     },
-    "virt_state": "ACTIVE",
-    "power_state": "RUNNING",
+    "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
     "tags": [
         "linux",
         "ubuntu"
     ],
     "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
     "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+    "virt_state": "ACTIVE",
     "_links": {
         "self": {
             "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
@@ -873,18 +882,19 @@ Retrieve a server by its *project* and *hostname*.
             "eth1": "65.6.29.230"
         }
     },
+    "power_state": "RUNNING",
     "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
     "properties": {
         "role": "appserver",
     },
-    "virt_state": "ACTIVE",
-    "power_state": "RUNNING",
+    "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
     "tags": [
         "linux",
         "ubuntu"
     ],
     "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
     "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+    "virt_state": "ACTIVE",
     "_links": {
         "self": {
             "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
@@ -895,6 +905,9 @@ Retrieve a server by its *project* and *hostname*.
     }
 }
 ```
+
+# Group Server Console Log
+
 ## GET /servers/{server}/console_log?{bytes}
 
 Retrieve somee or part of a server console log.
@@ -1055,10 +1068,12 @@ Retrieve a collection of servers in a specific *project*.
             "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
             "launched_at": "2014-03-02T23:20:19",
             "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "power_state": "RUNNING",
             "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-            "state": "ACTIVE",
+            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
             "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
             "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+            "virt_state": "ACTIVE",
             "_links": {
                 "self": {
                     "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
@@ -1074,10 +1089,12 @@ Retrieve a collection of servers in a specific *project*.
             "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0"
             "launched_at": "2014-03-03T03:20:19",
             "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "power_state": "RUNNING",
             "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-            "state": "ACTIVE",
+            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
             "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
             "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+            "virt_state": "ACTIVE",
             "_links": {
                 "self": {
                     "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
@@ -1139,7 +1156,8 @@ attributes about each server that was launched:
     "defaults": {
         "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
         "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-        "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
+        "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+        "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254"
     },
     "servers": [
         {
