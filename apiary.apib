@@ -412,84 +412,6 @@ Retrieve a server type by its *name*.
 }
 ```
 
-# Group Server Types
-
-A collection of server types.
-
-## GET /server_types{?limit,marker,tag}
-
-Retrieve a collection of server types.
-
-> **Note**: The server types returned by this call include all publicly-visible server
-> types, any server types created by the requesting user, and any server types
-> shared with the requesting user.
-
-+ Parameters
-    + limit = `20` (optional, number) ... Maximum number of results to return
-    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
-      identifier of the last record on the previous page of results.
-    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
-      server types with any matching tag.
-
-+ Response 200 (application/json)
-
-```json
-{
-    "server_types": [
-        {
-            "description": "General purpose low-CPU, low-memory, "
-                           "small-root-disk type of server.",
-            "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
-            "name": "m1.micro",
-            "share": {},
-            "size": {
-                "memory_mb": 128,
-                "root_disk_gb": 8,
-                "cpu_units": 1
-            },
-            "tags": [
-                "general-purpose"
-            ],
-            "visibility": "PUBLIC",
-            "_links":  {
-                "self": {
-                    "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
-                }
-            }
-        },
-        {
-            "description": "CPU-intensive, high-memory, "
-                           "small-root-disk type of server.",
-            "id": "1593e080-a354-11e3-a5e2-0800200c9a66",
-            "name": "c1.xlarge",
-            "share": {},
-            "size": {
-                "memory_mb": 32768,
-                "root_disk_gb": 8,
-                "cpu_units": 8
-            },
-            "tags": [
-                "hpc"
-            ],
-            "visibility": "PUBLIC",
-            "_links":  {
-                "self": {
-                    "href": "/server_types/1593e080-a354-11e3-a5e2-0800200c9a66"
-                }
-            }
-        }
-    ],
-    "_links": {
-        "self": {
-            "href": "/server_types?limit=2"
-        },
-        "next": {
-            "href": "/server_types?limit=2&marker=1593e080-a354-11e3-a5e2-0800200c9a66"
-        }
-    }
-}
-```
-
 ## POST /server_types
 
 Create a new server type.
@@ -571,6 +493,84 @@ The *visibility* attribute can be one of the following:
     "_links":  {
         "self": {
             "href": "/server_types/7220d0e6-b5c6-451e-b611-27254acf2a77"
+        }
+    }
+}
+```
+
+# Group Server Types
+
+A collection of server types.
+
+## GET /server_types{?limit,marker,tag}
+
+Retrieve a collection of server types.
+
+> **Note**: The server types returned by this call include all publicly-visible server
+> types, any server types created by the requesting user, and any server types
+> shared with the requesting user.
+
++ Parameters
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
+      identifier of the last record on the previous page of results.
+    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
+      server types with any matching tag.
+
++ Response 200 (application/json)
+
+```json
+{
+    "server_types": [
+        {
+            "description": "General purpose low-CPU, low-memory, "
+                           "small-root-disk type of server.",
+            "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
+            "name": "m1.micro",
+            "share": {},
+            "size": {
+                "memory_mb": 128,
+                "root_disk_gb": 8,
+                "cpu_units": 1
+            },
+            "tags": [
+                "general-purpose"
+            ],
+            "visibility": "PUBLIC",
+            "_links":  {
+                "self": {
+                    "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
+                }
+            }
+        },
+        {
+            "description": "CPU-intensive, high-memory, "
+                           "small-root-disk type of server.",
+            "id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+            "name": "c1.xlarge",
+            "share": {},
+            "size": {
+                "memory_mb": 32768,
+                "root_disk_gb": 8,
+                "cpu_units": 8
+            },
+            "tags": [
+                "hpc"
+            ],
+            "visibility": "PUBLIC",
+            "_links":  {
+                "self": {
+                    "href": "/server_types/1593e080-a354-11e3-a5e2-0800200c9a66"
+                }
+            }
+        }
+    ],
+    "_links": {
+        "self": {
+            "href": "/server_types?limit=2"
+        },
+        "next": {
+            "href": "/server_types?limit=2&marker=1593e080-a354-11e3-a5e2-0800200c9a66"
         }
     }
 }
