@@ -79,7 +79,9 @@ API for status information about the expensive operation.
 ### Compute and Compute-only
 
 As the OpenStack project has evolved, various parts of the original Nova API
-have been replaced by separate service endpoints in Glance, Nova, and Cinder.
+have been replaced by separate service endpoints in Keystone, Glance, Nova,
+and Cinder.
+
 The vNext Compute API does not expose **any** "translation" resources, where
 the Compute API is essentially being a proxy between Nova and these other
 endpoints.
@@ -680,6 +682,8 @@ with one of the following values:
  - `SHELVE`
  - `SHELVE_OFFLOAD`
  - `UNSHELVE`
+ - `ATTACH_BLOCK_DEVICE`
+ - `DETACH_BLOCK_DEVICE`
 
 ## GET /server_tasks/{id}
 
@@ -806,6 +810,7 @@ Retrieve a server by its *id*.
     "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
     "hostname": "example-server-1",
     "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+    "launch_keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567", 
     "launched_at": "2014-03-02T23:20:19",
     "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
     "networking": {
@@ -814,8 +819,14 @@ Retrieve a server by its *id*.
             "::babe:65.6.29.230"
         ],
         "interfaces": {
-            "eth0": "10.0.1.4",
-            "eth1": "65.6.29.230"
+            "eth0": {
+                "ip": "10.0.1.4",
+                "mac": "76:26:47:3d:9b:8a"
+            },
+            "eth1": {
+                "ip": "65.6.29.230",
+                "mac": "d1:39:55:04:ab:fb"
+            }
         }
     },
     "power_state": "RUNNING",
@@ -870,6 +881,7 @@ Retrieve a server by its *project* and *hostname*.
     "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
     "hostname": "example-server-1",
     "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+    "launch_keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567", 
     "launched_at": "2014-03-02T23:20:19",
     "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
     "networking": {
@@ -878,8 +890,14 @@ Retrieve a server by its *project* and *hostname*.
             "::babe:65.6.29.230"
         ],
         "interfaces": {
-            "eth0": "10.0.1.4",
-            "eth1": "65.6.29.230"
+            "eth0": {
+                "ip": "10.0.1.4",
+                "mac": "76:26:47:3d:9b:8a"
+            },
+            "eth1": {
+                "ip": "65.6.29.230",
+                "mac": "d1:39:55:04:ab:fb"
+            }
         }
     },
     "power_state": "RUNNING",
@@ -1157,11 +1175,13 @@ attributes about each server that was launched:
         "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
         "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
         "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
-        "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254"
+        "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+        "keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567"
     },
     "servers": [
         {
             "hostname": "app-server-1",
+            "keypair_id": "5b3866b9-77d7-4afc-a095-e400919ade97"
         },
         {
             "hostname": "app-server-2",
