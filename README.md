@@ -6,8 +6,6 @@ This repository contains a single document (this one) describing a proposed new
 OpenStack Compute API. I've used [API Blueprint](http://apiblueprint.org/)
 for formatting and describing the proposed API.
 
-## HTTP Status Codes
-
 # OpenStack Compute API Root [/]
 
 ## GET /
@@ -61,33 +59,6 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
         },
         "rel/server_types": {
             "href-template": "/server_types"
-                             "?{limit,marker,tag}",
-            "href-vars": {
-                "limit": "param/limit",
-                "marker": "param/marker",
-                "tag": "param/tag"
-            },
-            "hints": {
-                "allow": ["GET"],
-                "formats": {
-                    "application/json": {}
-                }
-            }
-        },
-        "rel/server_template": {
-            "href-template": "/server_templates/{server_template_id}",
-            "href-vars": {
-                "server_template_id": "param/server_template_id"
-            },
-            "hints": {
-                "allow": ["GET"],
-                "formats": {
-                    "application/json": {}
-                }
-            }
-        },
-        "rel/server_templates": {
-            "href-template": "/server_templates"
                              "?{limit,marker,tag}",
             "href-vars": {
                 "limit": "param/limit",
@@ -332,131 +303,6 @@ A collection of server types.
 }
 ```
 
-## GET /server\_types{?limit,marker,tag}
-
-Retrieve a collection of server types.
-
-+ Parameters
-    + limit = `20` (optional, number) ... Maximum number of results to return
-    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
-      identifier of the last record on the previous page of results.
-    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
-      server types with any matching tag.
-
-+ Response 200 (application/json)
-
-    [Server Types][]
-
-# Server Template
-
-A server template is a base disk image, a bootable volume, or a snapshot of
-a server instance that is used as the basis of a server when it is launched.
-
-+ Model (application/hal+json)
-
-```json
-{
-    "description": "Windows Server 2008 R2 disk image",
-    "id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-    "requirements": {
-        "min_disk_gb": 80,
-        "min_memory_mb": 2048,
-        "min_cpu_units": 2
-    },
-    "tags": [
-        "windows"
-    ],
-    "_links":  {
-        "self": {
-            "href": "/server_templates/fe48b370-a352-11e3-a5e2-0800200c9a66"
-        }
-    }
-}
-```
-
-## GET /server\_templates/{id}
-
-Retrieve a server template by its *id*.
-
-+ Parameters
-    + id (string, `fe48b370-a352-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server template
-
-+ Response 200 (application/json)
-    
-    [Server Template][]
-
-# Server Templates
-
-A collection of server templates.
-
-+ Model (application/hal+json)
-
-```json
-{
-    "server_templates": [
-        {
-            "description": "Windows Server 2008 R2 disk image",
-            "id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-            "requirements": {
-                "min_disk_gb": 80,
-                "min_memory_mb": 2048,
-                "min_cpu_units": 2
-            },
-            "tags": [
-                "windows"
-            ],
-            "_links":  {
-                "self": {
-                    "href": "/server_templates/fe48b370-a352-11e3-a5e2-0800200c9a66"
-                }
-            }
-        },
-        {
-            "description": "Ubuntu Server 14.04 LTS bootable volume",
-            "id": "abacdacc-0806-49dc-98a3-4a7c5a76f8e9",
-            "requirements": {
-                "min_disk_gb": 10,
-                "min_memory_mb": 256,
-                "min_cpu_units": 1
-            },
-            "tags": [
-                "linux",
-                "ubuntu"
-            ],
-            "_links":  {
-                "self": {
-                    "href": "/server_templates/abacdacc-0806-49dc-98a3-4a7c5a76f8e9"
-                }
-            }
-        }
-    ]
-    "_links": {
-        "self": {
-            "href": "/server_templates?limit=2"
-        },
-        "next": {
-            "href": "/server_templates?limit=2&marker=abacdacc-0806-49dc-98a3-4a7c5a76f8e9"
-        }
-    }
-}
-```
-
-## GET /server\_templates{?limit,marker,tag}
-
-Retrieve a collection of server templates.
-
-+ Parameters
-    + limit = `20` (optional, number) ... Maximum number of results to return
-    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
-      identifier of the last record on the previous page of results.
-    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
-      server templates with any matching tag.
-
-+ Response 200 (application/json)
-
-    [Server Templates][]
-
 # Server Group
 
 A server group is a user-defined collection of servers that provides defaults
@@ -621,7 +467,7 @@ OpenStack Compute API.
             "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2"
         },
         "next": {
-            "href": "/project/a7728150-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2&marker=3759ef44-2b7d-4981-b286-418ca50fe005"
+            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2&marker=3759ef44-2b7d-4981-b286-418ca50fe005"
         }
     }
 }
@@ -650,6 +496,14 @@ The server is the main resource exposed by the OpenStack Compute API. There
 are a number of subresources and collections of subresources that are
 attached to a server resource. This group describes operations on the server
 and these subresources.
+
+When launched, the ID of a server template is provided. This ID is the UUID
+identifier of a base disk image, a bootable volume, or a snapshot of
+a server that is used as the basis of the server that is launched.
+
+> **Note**: The OpenStack Compute API does not actually expose the server
+> template resource. Server template resources are exposed by the OpenStack
+> Image and OpenStack Block Storage APIs (images/ and volumes/ respectively).
 
 Each server has a *power_state* attribute, which is a string with one of the
 following values:
