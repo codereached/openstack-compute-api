@@ -45,17 +45,16 @@ A `404 Not Found` shall be returned when any of the following conditions occur:
 A `501 Not Implemented` shall be returned when the OpenStack Compute service
 does not provide the facility required.
 
-# OpenStack Compute API Root [/]
+# Group OpenStack Compute API Root
 
 ## GET /
 
 Retrieve a JSON Home document that describes the OpenStack Compute API.
 
 > **Note:** For information about JSON-Home, please see the
-  [online specification](http://tools.ietf.org/html/draft-nottingham-json-home-03)
+> [online specification](http://tools.ietf.org/html/draft-nottingham-json-home-03)
 
 + Response 200 (application/json-home)
-    + Body
 
 ```json
 {
@@ -220,21 +219,9 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
 }
 ```
 
-# Project
+# Group Project
 
 A project is a grouping of related server resources.
-
-+ Model (application/hal+json)
-
-```json
-{
-    "_links": {
-        "rel/project_servers": {
-            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers"
-        }
-    }
-}
-```
 
 ## GET /projects/{id}
 
@@ -246,14 +233,30 @@ Retrieve links to project resource by a project's *id*.
 
 + Response 200 (application/json)
     
-    [Project][]
+```json
+{
+    "_links": {
+        "rel/project_servers": {
+            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers"
+        }
+    }
+}
+```
 
-# Server Type
+# Group Server Type
 
 A server type describes the capacity and capabilities of a class of servers.
 
-+ Model (application/hal+json)
+## GET /server\_types/{id}
 
+Retrieve a server type by its *id*.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
+
++ Response 200 (application/json)
+    
 ```json
 {
     "description": "General purpose low-CPU, low-memory, "
@@ -276,18 +279,6 @@ A server type describes the capacity and capabilities of a class of servers.
 }
 ```
 
-## GET /server\_types/{id}
-
-Retrieve a server type by its *id*.
-
-+ Parameters
-    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server type
-
-+ Response 200 (application/json)
-    
-    [Server Type][]
-
 ## GET /server\_types/{name}
 
 Retrieve a server type by its *name*.
@@ -297,13 +288,44 @@ Retrieve a server type by its *name*.
 
 + Response 200 (application/json)
     
-    [Server Type][]
+```json
+{
+    "description": "General purpose low-CPU, low-memory, "
+                   "small-root-disk type of server.",
+    "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
+    "name": "m1.micro",
+    "size": {
+        "memory_mb": 128,
+        "root_disk_gb": 8,
+        "cpu_units": 1
+    },
+    "tags": [
+        "general-purpose"
+    ],
+    "_links":  {
+        "self": {
+            "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
+        }
+    }
+}
+```
 
-# Server Types
+# Group Server Types
 
 A collection of server types.
 
-+ Model (application/hal+json)
+## GET /server\_types{?limit,marker,tag}
+
+Retrieve a collection of server types.
+
++ Parameters
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
+      identifier of the last record on the previous page of results.
+    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
+      server types with any matching tag.
+
++ Response 200 (application/json)
 
 ```json
 {
@@ -346,7 +368,7 @@ A collection of server types.
                 }
             }
         }
-    ]
+    ],
     "_links": {
         "self": {
             "href": "/server_types?limit=2"
@@ -358,22 +380,7 @@ A collection of server types.
 }
 ```
 
-## GET /server\_types{?limit,marker,tag}
-
-Retrieve a collection of server types.
-
-+ Parameters
-    + limit = `20` (optional, number) ... Maximum number of results to return
-    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
-      identifier of the last record on the previous page of results.
-    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
-      server types with any matching tag.
-
-+ Response 200 (application/json)
-
-    [Server Types][]
-
-# Server Group
+# Group Server Group
 
 A server group is a user-defined collection of servers that provides defaults
 for servers launched in the group.
@@ -396,8 +403,16 @@ dictionary include:
    `%(rand_name)d` symbol is interpolated as a random number. You can limit the
    number of digits by specifying a length, like so: `%(rand_num)5d`.
 
-+ Model (application/hal+json)
+## GET /server\_groups/{id}
 
+Retrieve a server group by its *id*.
+
++ Parameters
+    + id (string, `5f634509-ee40-4406-9c45-e5f343f01f62`) ... A UUID identifier
+      for the server group
+
++ Response 200 (application/json)
+    
 ```json
 {
     "description": "Application servers running Windows Server 2008 R2",
@@ -421,18 +436,6 @@ dictionary include:
 }
 ```
 
-## GET /server\_groups/{id}
-
-Retrieve a server group by its *id*.
-
-+ Parameters
-    + id (string, `5f634509-ee40-4406-9c45-e5f343f01f62`) ... A UUID identifier
-      for the server group
-
-+ Response 200 (application/json)
-    
-    [Server Group][]
-
 ## GET /projects/{project}/server\_groups/{slug}
 
 Retrieve a server group within a *project* by its *slug*.
@@ -444,13 +447,47 @@ Retrieve a server group within a *project* by its *slug*.
 
 + Response 200 (application/json)
     
-    [Server Group][]
+```json
+{
+    "description": "Application servers running Windows Server 2008 R2",
+    "defaults": {
+        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+        "type_id": "96d639b0-a3ca-11e3-a5e2-0800200c9a66",
+        "hostname_pattern": "win-app-%(rand_num)5d"
+    },
+    "id": "5f634509-ee40-4406-9c45-e5f343f01f62",
+    "name": "Windows App servers",
+    "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+    "slug": "windows-app-servers",
+    "tags": [
+        "windows"
+    ],
+    "_links":  {
+        "self": {
+            "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
+        }
+    }
+}
+```
 
-# Server Groups
+# Group Server Groups
 
 A collection of server groups.
 
-+ Model (application/hal+json)
+## GET /projects/{project}/server\_groups{?limit,marker,tag}
+
+Retrieve a collection of server groups.
+
++ Parameters
+    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the project.
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
+      identifier of the last record on the previous page of results.
+    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
+      server groups with any matching tag.
+
++ Response 200 (application/json)
 
 ```json
 {
@@ -508,24 +545,7 @@ A collection of server groups.
 }
 ```
 
-## GET /projects/{project}/server\_groups{?limit,marker,tag}
-
-Retrieve a collection of server groups.
-
-+ Parameters
-    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the project.
-    + limit = `20` (optional, number) ... Maximum number of results to return
-    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
-      identifier of the last record on the previous page of results.
-    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
-      server groups with any matching tag.
-
-+ Response 200 (application/json)
-
-    [Server Groups][]
-
-# Server Task
+# Group Server Task
 
 A server task is a related set of actions that are or have been executed
 against a server.
@@ -564,8 +584,16 @@ with one of the following values:
  - `SHELVE_OFFLOAD`
  - `UNSHELVE`
 
-+ Model (application/hal+json)
+## GET /server\_tasks/{id}
 
+Retrieve a server task by its *id*.
+
++ Parameters
+    + id (string, `85fc465a-8809-4b7a-bce2-4c6ff5b78763`) ... A UUID identifier
+      for the server task
+
++ Response 200 (application/json)
+    
 ```json
 {
     "action": "CREATE",
@@ -585,74 +613,7 @@ with one of the following values:
 }
 ```
 
-# Server Tasks
-
-A collection of server tasks. The entire collection of tasks for a server
-represents the history of actions taken against the server through the
-OpenStack Compute API.
-
-+ Model (application/hal+json)
-
-```json
-{
-    "tasks": [
-        {
-            "action": "CREATE",
-            "created_at": "2014-04-14T02:15:15Z",
-            "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
-            "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
-            "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-            "state": "RUNNING",
-            "_links":  {
-                "self": {
-                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763"
-                },
-                "rel/server_task_subtasks": {
-                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763/subtasks"
-                }
-            }
-        },
-        {
-            "action": "RESIZE",
-            "created_at": "2013-12-23T10:02:42Z",
-            "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
-            "id": "3759ef44-2b7d-4981-b286-418ca50fe005",
-            "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-            "state": "ABORTED",
-            "_links":  {
-                "self": {
-                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005"
-                },
-                "rel/server_task_subtasks": {
-                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005/subtasks"
-                }
-            }
-        }
-    ],
-    "_links": {
-        "self": {
-            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2"
-        },
-        "next": {
-            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2&marker=3759ef44-2b7d-4981-b286-418ca50fe005"
-        }
-    }
-}
-```
-
-## GET /server\_tasks/{id}
-
-Retrieve a server task by its *id*.
-
-+ Parameters
-    + id (string, `85fc465a-8809-4b7a-bce2-4c6ff5b78763`) ... A UUID identifier
-      for the server task
-
-+ Response 200 (application/json)
-    
-    [Server Task][]
-
-# Server
+# Group Server
 
 A server is a virtual machine that runs in an OpenStack cloud. It is owned by
 a single *project*, has a single *server type* that describes its capabilities
@@ -696,7 +657,95 @@ which is a string with one of the following values:
  - `SHELVED_OFFLOADED`
  - `ERROR`
 
-+ Model (application/hal+json)
+> **Note**: There is no DELETE operation against a server in the Compute API.
+> To terminate a server, you would POST /servers/{server}/tasks with a task
+> with action `TERMINATE`. Archival of terminated server information is outside
+> the scope of a public OpenStack Compute control API.
+
+## /servers/{id}
+
++ Parameters
+    + id (string, `53626cb0-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server
+
+### HEAD
+
+Retrieve a server's state by its *id*.
+
++ Response 200
+    + Headers
+
+            X-OpenStack-Compute-Server-Virt-State: ACTIVE
+            X-OpenStack-Compute-Server-Power-State: RUNNING
+
+### GET
+
+Retrieve a server by its *id*.
+
++ Response 200 (application/json)
+    
+```json
+{
+    "block_devices": [
+        {
+            "id": "50795ce0-a357-11e3-a5e2-0800200c9a66",
+            "type": "ephemeral",
+            "device": "/dev/sda"
+        },
+        {
+            "id": "b502f900-a357-11e3-a5e2-0800200c9a66",
+            "type": "persistent",
+            "device": "/dev/sdb"
+        }
+    ],
+    "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+    "hostname": "example-server-1",
+    "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+    "launched_at": "2014-03-02T23:20:19",
+    "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+    "networking": {
+        "access": [
+            "65.6.29.230",
+            "::babe:65.6.29.230"
+        ],
+        "interfaces": {
+            "eth0": "10.0.1.4",
+            "eth1": "65.6.29.230"
+        }
+    },
+    "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+    "properties": {
+        "role": "appserver",
+    },
+    "virt_state": "ACTIVE",
+    "power_state": "RUNNING",
+    "tags": [
+        "linux",
+        "ubuntu"
+    ],
+    "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+    "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+    "_links": {
+        "self": {
+            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+        },
+        "rel/server_tasks": {
+            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
+        }
+    }
+}
+```
+
+## GET /projects/{project}/servers/{hostname}
+
+Retrieve a server by its *project* and *hostname*.
+
++ Parameters
+    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the project.
+    + hostname (string, `app-server-1`) ... A hostname of a server in the project.
+
++ Response 200 (application/json)
 
 ```json
 {
@@ -750,51 +799,11 @@ which is a string with one of the following values:
 }
 ```
 
-> **Note**: There is no DELETE operation against a server in the Compute API.
-> To terminate a server, you would POST /servers/{server}/tasks with a task
-> with action `TERMINATE`. Archival of terminated server information is outside
-> the scope of a public OpenStack Compute control API.
+# Group Server Tasks
 
-## HEAD /servers/{id}
-
-Retrieve a server's state by its *id*.
-
-+ Parameters
-    + id (string, `53626cb0-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server
-
-+ Response 200
-    + Headers
-
-        X-OpenStack-Compute-Server-Virt-State: ACTIVE
-        X-OpenStack-Compute-Server-Power-State: RUNNING
-
-## GET /servers/{id}
-
-Retrieve a server by its *id*.
-
-+ Parameters
-    + id (string, `53626cb0-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server
-
-+ Response 200 (application/json)
-    
-    [Server][]
-
-## GET /projects/{project}/servers/{hostname}
-
-Retrieve a server by its *project* and *hostname*.
-
-+ Parameters
-    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the project.
-    + hostname (string, `app-server-1`) ... A hostname of a server in the project.
-
-+ Response 200 (application/json)
-
-    [Server][]
-
-## PATCH /servers/{id}
+A collection of server tasks. The entire collection of tasks for a server
+represents the history of actions taken against the server through the
+OpenStack Compute API.
 
 ## GET /servers/{server}/tasks{?limit,marker}
 
@@ -809,18 +818,67 @@ Retrieve a collection of servers in a specific *project*.
 
 + Response 200 (application/json)
 
-    [Server Tasks][]
+```json
+{
+    "tasks": [
+        {
+            "action": "CREATE",
+            "created_at": "2014-04-14T02:15:15Z",
+            "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
+            "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+            "state": "RUNNING",
+            "_links":  {
+                "self": {
+                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763"
+                },
+                "rel/server_task_subtasks": {
+                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763/subtasks"
+                }
+            }
+        },
+        {
+            "action": "RESIZE",
+            "created_at": "2013-12-23T10:02:42Z",
+            "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "id": "3759ef44-2b7d-4981-b286-418ca50fe005",
+            "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+            "state": "ABORTED",
+            "_links":  {
+                "self": {
+                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005"
+                },
+                "rel/server_task_subtasks": {
+                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005/subtasks"
+                }
+            }
+        }
+    ],
+    "_links": {
+        "self": {
+            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2"
+        },
+        "next": {
+            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2&marker=3759ef44-2b7d-4981-b286-418ca50fe005"
+        }
+    }
+}
+```
 
 ## POST /servers/{server}/tasks
 
 Starts a task against a *server*.
+
+> **Note**: Any action listed in the Server Task section may be specified
+> except `CREATE`. When a server is launched with the 
+> `POST /projects/{project}/servers` call, Nova will add a Server Task to the
+> server for the `CREATE` action.
 
 + Parameters
     + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server.
 
 + Request (application/json)
-    + Body
 
 ```json
 {
@@ -829,19 +887,44 @@ Starts a task against a *server*.
 }
 ```
 
-> **Note**: Any action listed in [Server Task][] may be specified except `CREATE`.
-> When a server is launched with the POST /projects/{project}/servers call, Nova
-> will add a Server Task to the server for the `CREATE` action.
-
 + Response 202 (application/json)
 
-    [Server Task][]
+```json
+{
+    "action": "REBOOT",
+    "created_at": "2014-04-14T02:15:15Z",
+    "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+    "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
+    "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+    "state": "RUNNING",
+    "_links":  {
+        "self": {
+            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+        },
+        "rel/server_task_subtasks": {
+            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/subtasks"
+        }
+    }
+}
+```
 
-# Servers 
+# Group Servers
 
 A collection of servers.
 
-+ Model (application/hal+json)
+
+## GET /project/{project}/servers{?limit,marker}
+
+Retrieve a collection of servers in a specific *project*.
+
++ Parameters
+    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the project.
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
+      identifier of the last record on the previous page of results.
+
++ Response 200 (application/json)
 
 ```json
 {
@@ -896,21 +979,6 @@ A collection of servers.
 }
 ```
 
-## GET /project/{project}/servers{?limit,marker}
-
-Retrieve a collection of servers in a specific *project*.
-
-+ Parameters
-    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the project.
-    + limit = `20` (optional, number) ... Maximum number of results to return
-    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
-      identifier of the last record on the previous page of results.
-
-+ Response 200 (application/json)
-
-    [Servers][]
-
 ## POST /project/{project}/servers
 
 Create one or more servers in a project.
@@ -932,11 +1000,6 @@ The request for launching one or more servers is pre-validated before
 attempting to launch any of the servers. A failure response will indicate
 errors that were found in this pre-validation procedure. 
 
-> **Note**: Failure of any individual server to launch will *not* be returned
-> in a failure response to this API call. Instead, a user may check the status
-> of a server and a list of the server's latest task actions using calls to
-> `HEAD /servers/{id}` and `GET /servers/{id}/tasks`
-
 A success response will always be a list of dictionaries that contain
 attributes about each server that was launched:
 
@@ -944,54 +1007,59 @@ attributes about each server that was launched:
  - `launched_at` (datetime) ... The ISO8601 timestamp of when the launch
    task for the server was started.
 
+> **Note**: Failure of any individual server to launch will *not* be returned
+> in a failure response to this API call. Instead, a user may check the status
+> of a server and a list of the server's latest task actions using calls to
+> `HEAD /servers/{id}` and `GET /servers/{id}/tasks`
+
 + Request (application/json)
 
-    ```json
-    {
-        "defaults": {
-            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
-            "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
+```json
+{
+    "defaults": {
+        "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+        "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66"
+    },
+    "servers": [
+        {
+            "hostname": "app-server-1",
         },
-        "servers": [
-            {
-                "hostname": "app-server-1",
-            },
-            {
-                "hostname": "app-server-2",
-                "type_id": "98f5c367a-a354-11e3-a5e2-0800200c9a66"
-            },
-        ],
-    }
-    ```
+        {
+            "hostname": "app-server-2",
+            "type_id": "98f5c367a-a354-11e3-a5e2-0800200c9a66"
+        },
+    ],
+}
+```
 
 + Response 202 (application/json)
 
-    ```json
-    [
-        {
-            "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-            "launched_at": "2014-03-02T23:20:19",
-            "_links": {
-                "self": {
-                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
-                },
-                "rel/server_tasks": {
-                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
-                }
-            }
-        },
-        {
-            "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0",
-            "launched_at": "2014-03-03T03:20:19",
-            "_links": {
-                "self": {
-                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
-                },
-                "rel/server_tasks": {
-                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
-                }
+```json
+[
+    {
+        "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+        "launched_at": "2014-03-02T23:20:19",
+        "_links": {
+            "self": {
+                "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+            },
+            "rel/server_tasks": {
+                "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
             }
         }
-    ]
-    ```
+    },
+    {
+        "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0",
+        "launched_at": "2014-03-03T03:20:19",
+        "_links": {
+            "self": {
+                "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
+            },
+            "rel/server_tasks": {
+                "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
+            }
+        }
+    }
+]
+```
