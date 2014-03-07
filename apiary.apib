@@ -188,7 +188,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 "tag": "param/tag"
             },
             "hints": {
-                "allow": ["GET"],
+                "allow": ["GET", "POST"],
                 "formats": {
                     "application/json": {}
                 }
@@ -370,6 +370,7 @@ Retrieve a server type by its *id*.
     "tags": [
         "general-purpose"
     ],
+    "visibility": "PUBLIC",
     "_links":  {
         "self": {
             "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
@@ -393,6 +394,7 @@ Retrieve a server type by its *name*.
                    "small-root-disk type of server.",
     "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
     "name": "m1.micro",
+    "share": {},
     "size": {
         "memory_mb": 128,
         "root_disk_gb": 8,
@@ -401,6 +403,7 @@ Retrieve a server type by its *name*.
     "tags": [
         "general-purpose"
     ],
+    "visibility": "PUBLIC",
     "_links":  {
         "self": {
             "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
@@ -416,6 +419,10 @@ A collection of server types.
 ## GET /server_types{?limit,marker,tag}
 
 Retrieve a collection of server types.
+
+> **Note**: The server types returned by this call include all publicly-visible server
+> types, any server types created by the requesting user, and any server types
+> shared with the requesting user.
 
 + Parameters
     + limit = `20` (optional, number) ... Maximum number of results to return
@@ -434,6 +441,7 @@ Retrieve a collection of server types.
                            "small-root-disk type of server.",
             "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
             "name": "m1.micro",
+            "share": {},
             "size": {
                 "memory_mb": 128,
                 "root_disk_gb": 8,
@@ -442,6 +450,7 @@ Retrieve a collection of server types.
             "tags": [
                 "general-purpose"
             ],
+            "visibility": "PUBLIC",
             "_links":  {
                 "self": {
                     "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
@@ -453,6 +462,7 @@ Retrieve a collection of server types.
                            "small-root-disk type of server.",
             "id": "1593e080-a354-11e3-a5e2-0800200c9a66",
             "name": "c1.xlarge",
+            "share": {},
             "size": {
                 "memory_mb": 32768,
                 "root_disk_gb": 8,
@@ -461,6 +471,7 @@ Retrieve a collection of server types.
             "tags": [
                 "hpc"
             ],
+            "visibility": "PUBLIC",
             "_links":  {
                 "self": {
                     "href": "/server_types/1593e080-a354-11e3-a5e2-0800200c9a66"
@@ -474,6 +485,92 @@ Retrieve a collection of server types.
         },
         "next": {
             "href": "/server_types?limit=2&marker=1593e080-a354-11e3-a5e2-0800200c9a66"
+        }
+    }
+}
+```
+
+## POST /server_types
+
+Create a new server type.
+
+When creating a server type, you can specify a number of attributes:
+
+ - `name` (required, string, `custom.xlarge`) ... A short name for the
+   server type.
+ - `description` (optional, string, `My cool type`) ... Longer description
+   of the server type.
+ - `memory_mb` (required, number, `32768`) ... Number of megabytes memory
+   allocated to servers with this type.
+ - `root_disk_gb` = `10` (optional, number, `100`) ... Number of gigabytes
+   to allocate for the root disk.
+ - `cpu_units` (required, number, `12`) ... Number of CPU units that
+   servers with this type will be allocated.
+ - `tags` (optional, list of strings) ... List of strings to tag the type
+   with.
+ - `visibility` = `PRIVATE` (optional, string) ... Indicates whether a
+   server type is publicly visible or privately shared among a group
+   of users or projects. See discussion of visibility choices below.
+
+The *visibility* attribute can be one of the following:
+
+ - `PUBLIC` ... Anyone can see this type when listing server types.
+ - `PRIVATE` ... The creating user and any user or project they share the
+   type with can see this type when listing server types.
+
+> **Note**: Many deployments of OpenStack Compute will choose not to allow
+> regular users to create server types with a visibility of `PUBLIC`, and
+> if a regular user tries to issue a create of a publicly-visible server
+> type, the API shall return a `403 Forbidden`
+
++ Request (application/json)
+
+```json
+{
+    "cpu_units": 2,
+    "description": "A good enough server type",
+    "memory_mb": 4096,
+    "name": "good.enough",
+    "root_disk_gb": 100,
+    "visibility": "PRIVATE",
+    "share": {
+        "user_id": [
+            "781247cf-7bec-4e84-86ea-3cbcee48ae6d",
+            "60536efb-2e6e-4efc-9d39-fe8113292e52"
+        ],
+        "project_id": [
+            "fd2ab3c0-d822-437f-b956-9e60e7d0fb69"
+        ]
+    }
+}
+```
+
++ Response 201 (application/json)
+    
+```json
+{
+    "description": "A good enough server type"
+    "id": "7220d0e6-b5c6-451e-b611-27254acf2a77",
+    "name": "good.enough",
+    "share": {
+        "user_id": [
+            "781247cf-7bec-4e84-86ea-3cbcee48ae6d",
+            "60536efb-2e6e-4efc-9d39-fe8113292e52"
+        ],
+        "project_id": [
+            "fd2ab3c0-d822-437f-b956-9e60e7d0fb69"
+        ]
+    },
+    "size": {
+        "memory_mb": 128,
+        "root_disk_gb": 8,
+        "cpu_units": 1
+    },
+    "tags": [],
+    "visibility": "PRIVATE",
+    "_links":  {
+        "self": {
+            "href": "/server_types/7220d0e6-b5c6-451e-b611-27254acf2a77"
         }
     }
 }
@@ -835,12 +932,16 @@ Retrieve a server by its *id*.
         "role": "appserver",
     },
     "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+    "size": {
+        "memory_mb": 32768,
+        "root_disk_gb": 8,
+        "cpu_units": 8
+    },
     "tags": [
         "linux",
         "ubuntu"
     ],
     "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-    "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
     "virt_state": "ACTIVE",
     "_links": {
         "self": {
@@ -906,12 +1007,16 @@ Retrieve a server by its *project* and *hostname*.
         "role": "appserver",
     },
     "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+    "size": {
+        "memory_mb": 32768,
+        "root_disk_gb": 8,
+        "cpu_units": 8
+    },
     "tags": [
         "linux",
         "ubuntu"
     ],
     "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-    "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
     "virt_state": "ACTIVE",
     "_links": {
         "self": {
@@ -1062,7 +1167,6 @@ Starts a task against a *server*.
 # Group Servers
 
 A collection of servers.
-
 
 ## GET /project/{project}/servers{?limit,marker}
 
