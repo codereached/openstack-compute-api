@@ -6,6 +6,45 @@ This repository contains a single document (this one) describing a proposed new
 OpenStack Compute API. I've used [API Blueprint](http://apiblueprint.org/)
 for formatting and describing the proposed API.
 
+# API Conventions
+
+There are a number of common conventions used throughout the API documentation.
+We include them here to avoid having to repeat sections in the specification.
+
+## Common HTTP Return Codes
+
+### 400 Bad Request
+
+A `400 Bad Request` shall be returned under the following conditions:
+
+ - The payload of a request was malformed
+ - The payload of a request contained invalid or improper input
+ - The payload of a request contained references to non-existing entities
+
+### 401 Unauthorized
+
+A `401 Unauthorized` shall be returned when a requesting user was not
+authenticated by the authenticating service (typically, OpenStack Identity)
+
+### 403 Forbidden
+
+A `403 Forbidden` shall be returned when the requesting user does not
+have permission to perform the requested action.
+
+### 404 Not Found
+
+A `404 Not Found` shall be returned when any of the following conditions occur:
+
+ - The URL requested is not found in the API route map
+ - The requested URL was valid, but the entity does not exist
+ - The requested URL was valid, but the entity was not owned or shared with the
+   requesting user
+
+### 501 Not Implemented
+
+A `501 Not Implemented` shall be returned when the OpenStack Compute service
+does not provide the facility required.
+
 # OpenStack Compute API Root [/]
 
 ## GET /
@@ -338,6 +377,24 @@ Retrieve a collection of server types.
 
 A server group is a user-defined collection of servers that provides defaults
 for servers launched in the group.
+
+A server group has a required *name* and an optional *description*, both string
+values. The name attribute is "slugified" on creation and can be used to
+retrieve the server group by an easy-to-remember name instead of a UUID (see
+below for the `GET /projects/{project}/server_groups/{slug}` call signature.
+
+The *defaults* attribute is a dictionary of attributes that are used as default
+values when launching servers in the group. Possible keys in the defaults
+dictionary include:
+
+ - `defaults.template_id` (string, UUID) ... The UUID of the server template to
+   use as a default when launching servers in this group.
+ - `defaults.type_id` (string, UUID) ... The UUID of the server type to use
+   by default when launching servers in this group.
+ - `defaults.hostname_pattern` (string, regex) ... A regex expression that may
+   be used to define hostnames for multiple servers launched in this group. The
+   `%(rand_name)d` symbol is interpolated as a random number. You can limit the
+   number of digits by specifying a length, like so: `%(rand_num)5d`.
 
 + Model (application/hal+json)
 
