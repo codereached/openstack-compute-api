@@ -97,6 +97,22 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 }
             }
         },
+        "rel/project_server_groups": {
+            "href-template": "/project/{project_id}/server_groups"
+                             "?{limit,marker,tag}",
+            "href-vars": {
+                "project_id": "param/project_id",
+                "limit": "param/limit",
+                "marker": "param/marker",
+                "tag": "param/tag"
+            },
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
+                }
+            }
+        }
         "rel/server_task": {
             "href-template": "/server_tasks/{server_task_id}",
             "href-vars": {
@@ -303,6 +319,21 @@ A collection of server types.
 }
 ```
 
+## GET /server\_types{?limit,marker,tag}
+
+Retrieve a collection of server types.
+
++ Parameters
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
+      identifier of the last record on the previous page of results.
+    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
+      server types with any matching tag.
+
++ Response 200 (application/json)
+
+    [Server Types][]
+
 # Server Group
 
 A server group is a user-defined collection of servers that provides defaults
@@ -357,6 +388,85 @@ Retrieve a server group within a *project* by its *slug*.
 + Response 200 (application/json)
     
     [Server Group][]
+
+# Server Groups
+
+A collection of server groups.
+
++ Model (application/hal+json)
+
+```json
+{
+    "server_groups": [
+        {
+            "description": "Application servers running Windows Server 2008 R2",
+            "defaults": {
+                "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+                "type_id": "96d639b0-a3ca-11e3-a5e2-0800200c9a66",
+                "hostname_pattern": "win-app-%(rand_num)5d"
+            },
+            "id": "5f634509-ee40-4406-9c45-e5f343f01f62",
+            "name": "Windows App servers",
+            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+            "slug": "windows-app-servers",
+            "tags": [
+                "windows"
+            ],
+            "_links":  {
+                "self": {
+                    "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
+                }
+            }
+        },
+        {
+            "description": "Database servers running PostgreSQL 9.1",
+            "defaults": {
+                "template_id": "af2eda95-9a35-49c6-a90e-0fdd60686309",
+                "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+                "hostname_pattern": "pgdb-%(rand_num)1d"
+            },
+            "id": "b84cb239-e3a8-49c4-b601-90ed8423cb93",
+            "name": "PostgreSQL servers",
+            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+            "slug": "postgresql-servers",
+            "tags": [
+                "database",
+                "postgresql"
+            ],
+            "_links":  {
+                "self": {
+                    "href": "/server_groups/b84cb239-e3a8-49c4-b601-90ed8423cb93"
+                }
+            }
+        },
+    ]
+    "_links": {
+        "self": {
+            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/server_groups?limit=2"
+        },
+        "next": {
+            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/server_groups?limit=2&marker=1593e080-a354-11e3-a5e2-0800200c9a66"
+        }
+    }
+}
+```
+
+## GET /projects/{project}/server\_groups{?limit,marker,tag}
+
+Retrieve a collection of server groups.
+
++ Parameters
+    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the project.
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
+      identifier of the last record on the previous page of results.
+    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
+      server groups with any matching tag.
+
++ Response 200 (application/json)
+
+    [Server Groups][]
 
 # Server Task
 
