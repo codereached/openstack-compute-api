@@ -6,14 +6,96 @@ This repository contains a single document (this one) describing a proposed new
 OpenStack Compute API. I've used [API Blueprint](http://apiblueprint.org/)
 for formatting and describing the proposed API.
 
-# API Conventions
+## Philosophy and Style
+
+This proposed API follows a few guiding principles and style conventions:
+
+ - All API routes and allowed methods are discoverable
+ - All request and response payload schemas are discoverable
+ - No API extensions
+ - No driver implementation leaked into the API
+ - No XML
+ - Semantic versioning shall be enforced for any change to the vNext API
+   contract
+ - No use of a separate `GET /$resource/detail` route for "extra" information
+   about a resource
+ - Asynchronous creation and task callbacks for expensive resources
+ - Removal of any part of the V2 and V3 Compute APIs that doesn't involve
+   Compute functionality
+
+### API Route Discoverability
+
+Any route in the Compute API should be discoverable via a JSON-Home document
+that is returned on a GET of the root "/" URI. This JSON-Home document should
+describe the URI routes and route templates for the entire API, including
+a mapping of allowed parameters in the URI template and allowed HTTP methods
+for each route.
+
+### Request and Response Payload Schema Discoverability
+
+Each request and response payload should have a schema that is discoverable
+so that clients (machine and human) can determine what is expected for each
+API route.
+
+### No API Extensions
+
+There will be zero API extensions in the vNext Compute API.
+
+### No Implementation in API
+
+Under no circumstances should any underlying choice of hypervisor, network
+vendor or driver, or storage vendor or driver be exposed to the consumer
+of the Compute API.
+
+### No XML
+
+JSON shall be the only transport format for requests and responses in the
+vNext Compute API. This will dramatically reduce the overall footprint of
+the API controller and input validation layer in Nova.
+
+### Semantic Versioning
+
+Any code that introduces any change to the vNext API shall increment the
+semantic versioning of the API. Non-backwards-compatible changes shall
+force a new major version of the API. Backwards-compatible changes shall
+introduce a minor version increment of the current API. Clients should be
+able to incorporate new functionality using semver checks.
+
+### No Extraneous "detail" Non-resource
+
+There will be no separate `GET /$resource/detail` URIs that return "extra"
+information about a resource. Where appropriate, in order to accomodate
+tooling that needs to efficiently check for status or existence of a resource,
+and does not need all information about a resource, a `HEAD /$resource` method
+shall be provided.
+
+### Asynchronous Creation and Task Callbacks
+
+All expensive operations and resource creations shall be handled using
+asynchronous creation calls (returning a `202 Accepted`) that return a
+self-describing link that can be used by the client to call back to the
+API for status information about the expensive operation.
+
+### Compute and Compute-only
+
+As the OpenStack project has evolved, various parts of the original Nova API
+have been replaced by separate service endpoints in Glance, Nova, and Cinder.
+The vNext Compute API does not expose **any** "translation" resources, where
+the Compute API is essentially being a proxy between Nova and these other
+endpoints.
+
+This API strictly focuses on the resources and actions central to a Compute
+API. It is expected that clients directly call the other OpenStack API
+endpoints to request or perform actions related to those other services.
+
+## API Conventions
 
 There are a number of common conventions used throughout the API documentation.
 We include them here to avoid having to repeat sections in the specification.
 
-## Common HTTP Return Codes
+### Common HTTP Return Codes
 
-### 400 Bad Request
+#### 400 Bad Request
 
 A `400 Bad Request` shall be returned under the following conditions:
 
@@ -21,17 +103,17 @@ A `400 Bad Request` shall be returned under the following conditions:
  - The payload of a request contained invalid or improper input
  - The payload of a request contained references to non-existing entities
 
-### 401 Unauthorized
+#### 401 Unauthorized
 
 A `401 Unauthorized` shall be returned when a requesting user was not
 authenticated by the authenticating service (typically, OpenStack Identity)
 
-### 403 Forbidden
+#### 403 Forbidden
 
 A `403 Forbidden` shall be returned when the requesting user does not
 have permission to perform the requested action.
 
-### 404 Not Found
+#### 404 Not Found
 
 A `404 Not Found` shall be returned when any of the following conditions occur:
 
@@ -40,7 +122,7 @@ A `404 Not Found` shall be returned when any of the following conditions occur:
  - The requested URL was valid, but the entity was not owned or shared with the
    requesting user
 
-### 501 Not Implemented
+#### 501 Not Implemented
 
 A `501 Not Implemented` shall be returned when the OpenStack Compute service
 does not provide the facility required.
