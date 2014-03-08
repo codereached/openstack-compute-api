@@ -229,7 +229,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 "tag": "param/tag"
             },
             "hints": {
-                "allow": ["GET"],
+                "allow": ["GET", "POST"],
                 "formats": {
                     "application/json": {}
                 }
@@ -346,77 +346,6 @@ Retrieve links to project resource by a project's *id*.
 
 A server type describes the capacity and capabilities of a class of servers.
 
-## GET /server_types/{id}
-
-Retrieve a server type by its *id*.
-
-+ Parameters
-    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server type
-
-+ Response 200 (application/json)
-    
-```json
-{
-    "description": "General purpose low-CPU, low-memory, "
-                   "small-root-disk type of server.",
-    "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
-    "name": "m1.micro",
-    "share": {},
-    "spec": {
-        "memory_mb": 128,
-        "root_disk_gb": 8,
-        "cpu_units": 1,
-        "rxtx_factor": 1.0,
-        "swap_mb": 128
-    },
-    "tags": [
-        "general-purpose"
-    ],
-    "visibility": "PUBLIC",
-    "_links":  {
-        "self": {
-            "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
-        }
-    }
-}
-```
-
-## GET /server_types/{name}
-
-Retrieve a server type by its *name*.
-
-+ Parameters
-    + name (string, `m1.micro`) ... A unique name identifier of the server type
-
-+ Response 200 (application/json)
-    
-```json
-{
-    "description": "General purpose low-CPU, low-memory, "
-                   "small-root-disk type of server.",
-    "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
-    "name": "m1.micro",
-    "share": {},
-    "spec": {
-        "memory_mb": 128,
-        "root_disk_gb": 8,
-        "cpu_units": 1,
-        "rxtx_factor": 1.0,
-        "swap_mb": 128
-    },
-    "tags": [
-        "general-purpose"
-    ],
-    "visibility": "PUBLIC",
-    "_links":  {
-        "self": {
-            "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
-        }
-    }
-}
-```
-
 ## POST /server_types
 
 Create a new server type.
@@ -513,17 +442,84 @@ The *visibility* attribute can be one of the following:
 }
 ```
 
-# Group Server Types
+## GET /server_types/{id}
 
-A collection of server types.
+Retrieve a server type by its *id*.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
+
++ Response 200 (application/json)
+    
+```json
+{
+    "description": "General purpose low-CPU, low-memory, "
+                   "small-root-disk type of server.",
+    "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
+    "name": "m1.micro",
+    "share": {},
+    "spec": {
+        "memory_mb": 128,
+        "root_disk_gb": 8,
+        "cpu_units": 1,
+        "rxtx_factor": 1.0,
+        "swap_mb": 128
+    },
+    "tags": [
+        "general-purpose"
+    ],
+    "visibility": "PUBLIC",
+    "_links":  {
+        "self": {
+            "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
+        }
+    }
+}
+```
+
+## GET /server_types/{name}
+
+Retrieve a server type by its *name*.
+
++ Parameters
+    + name (string, `m1.micro`) ... A unique name identifier of the server type
+
++ Response 200 (application/json)
+    
+```json
+{
+    "description": "General purpose low-CPU, low-memory, "
+                   "small-root-disk type of server.",
+    "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
+    "name": "m1.micro",
+    "share": {},
+    "spec": {
+        "memory_mb": 128,
+        "root_disk_gb": 8,
+        "cpu_units": 1,
+        "rxtx_factor": 1.0,
+        "swap_mb": 128
+    },
+    "tags": [
+        "general-purpose"
+    ],
+    "visibility": "PUBLIC",
+    "_links":  {
+        "self": {
+            "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
+        }
+    }
+}
+```
 
 ## GET /server_types{?limit,marker,tag}
 
 Retrieve a collection of server types.
 
-> **Note**: The server types returned by this call include all publicly-visible server
-> types, any server types created by the requesting user, and any server types
-> shared with the requesting user.
+> **Note**: The server types returned by this call include all publicly-visible
+> server types, any server types created by the requesting user, and any server
+> types shared with the requesting user.
 
 + Parameters
     + limit = `20` (optional, number) ... Maximum number of results to return
@@ -597,13 +593,17 @@ Retrieve a collection of server types.
 
 # Group Server Group
 
-A server group is a user-defined collection of servers that provides defaults
+A server group is a *user-defined* collection of servers that provides defaults
 for servers launched in the group.
+
+## POST /projects/{project}/server_groups
+
+Create a new server group within a project.
 
 A server group has a required *name* and an optional *description*, both string
 values. The name attribute is "slugified" on creation and can be used to
 retrieve the server group by an easy-to-remember name instead of a UUID (see
-below for the `GET /projects/{project}/server_groups/{slug}` call signature.
+below for the `GET /projects/{project}/server_groups/{slug}` call signature).
 
 The *defaults* attribute is a dictionary of attributes that are used as default
 values when launching servers in the group. Possible keys in the defaults
@@ -617,6 +617,55 @@ dictionary include:
    be used to define hostnames for multiple servers launched in this group. The
    `%(rand_name)d` symbol is interpolated as a random number. You can limit the
    number of digits by specifying a length, like so: `%(rand_num)5d`.
+
+In addition to the above, a server group may be tagged with zero or more
+strings.
+
++ Parameters
+    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the project.
+
++ Request (application/json)
+
+```json
+{
+    "description": "Application servers running Windows Server 2008 R2",
+    "defaults": {
+        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+        "type_id": "96d639b0-a3ca-11e3-a5e2-0800200c9a66",
+        "hostname_pattern": "win-app-%(rand_num)5d"
+    },
+    "name": "Windows App servers",
+    "tags": [
+        "windows"
+    ]
+}
+```
+
++ Response 201 (application/json)
+
+```json
+{
+    "description": "Application servers running Windows Server 2008 R2",
+    "defaults": {
+        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+        "type_id": "96d639b0-a3ca-11e3-a5e2-0800200c9a66",
+        "hostname_pattern": "win-app-%(rand_num)5d"
+    },
+    "id": "5f634509-ee40-4406-9c45-e5f343f01f62",
+    "name": "Windows App servers",
+    "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+    "slug": "windows-app-servers",
+    "tags": [
+        "windows"
+    ],
+    "_links":  {
+        "self": {
+            "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
+        }
+    }
+}
+```
 
 ## GET /server_groups/{id}
 
@@ -684,10 +733,6 @@ Retrieve a server group within a *project* by its *slug*.
     }
 }
 ```
-
-# Group Server Groups
-
-A collection of server groups.
 
 ## GET /projects/{project}/server_groups{?limit,marker,tag}
 
