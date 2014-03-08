@@ -920,8 +920,8 @@ which is a string with one of the following values:
  - `PAUSED`
  - `SUSPENDED`
  - `STOPPED`
- - `RESCUED`
- - `RESIZED`
+ - `RESCUED` (TODO(jaypipes): Remove this. It is not an end state)
+ - `RESIZED` (TODO(jaypipes): Remove this. It is not an end state)
  - `TERMINATED`
  - `SHELVED`
  - `SHELVED_OFFLOADED`
@@ -931,6 +931,94 @@ which is a string with one of the following values:
 > To terminate a server, you would POST /servers/{server}/tasks with a task
 > with action `TERMINATE`. Archival of terminated server information is outside
 > the scope of a public OpenStack Compute control API.
+
+## POST /project/{project}/servers
+
+Create one or more servers in a project.
+
+There are two main sections to the request body: *defaults* and *servers*.
+
+The defaults section is used to set the default attributes of servers when
+creating more than one server. Instead of specifying the same server group
+or server type for each server you create, you can specify this once in the
+defaults section.
+
+The servers section is a list of dictionaries, one per server you want to
+create. Attributes that *must* be unique for each server -- such as the
+server's *hostname* attribute, can be set here, along with overrides for
+attribute values where the value specified in the defaults section is not
+wanted.
+
+The request for launching one or more servers is pre-validated before
+attempting to launch any of the servers. A failure response will indicate
+errors that were found in this pre-validation procedure. 
+
+A success response will always be a list of dictionaries that contain
+attributes about each server that was launched:
+
+ - `id` (string) ... The UUID of the newly-created server resource.
+ - `launched_at` (datetime) ... The ISO8601 timestamp of when the launch
+   task for the server was started.
+
+> **Note**: Failure of any individual server to launch will *not* be returned
+> in a failure response to this API call. Instead, a user may check the status
+> of a server and a list of the server's latest task actions using calls to
+> `HEAD /servers/{id}` and `GET /servers/{id}/tasks`
+
++ Request (application/json)
+
+```json
+{
+    "defaults": {
+        "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+        "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+        "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+        "keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567"
+    },
+    "servers": [
+        {
+            "hostname": "app-server-1",
+            "keypair_id": "5b3866b9-77d7-4afc-a095-e400919ade97"
+        },
+        {
+            "hostname": "app-server-2",
+            "type_id": "98f5c367a-a354-11e3-a5e2-0800200c9a66"
+        },
+    ],
+}
+```
+
++ Response 202 (application/json)
+
+```json
+[
+    {
+        "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+        "launched_at": "2014-03-02T23:20:19",
+        "_links": {
+            "self": {
+                "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+            },
+            "rel/server_tasks": {
+                "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
+            }
+        }
+    },
+    {
+        "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0",
+        "launched_at": "2014-03-03T03:20:19",
+        "_links": {
+            "self": {
+                "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
+            },
+            "rel/server_tasks": {
+                "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
+            }
+        }
+    }
+]
+```
 
 ## /servers/{id}
 
@@ -1093,6 +1181,76 @@ Retrieve a server by its *project* and *hostname*.
 }
 ```
 
+## GET /project/{project}/servers{?limit,marker}
+
+Retrieve a collection of servers in a specific *project*.
+
++ Parameters
+    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the project.
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
+      identifier of the last record on the previous page of results.
+
++ Response 200 (application/json)
+
+```json
+{
+    "servers": [
+        {
+            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+            "hostname": "example-server-1",
+            "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+            "launched_at": "2014-03-02T23:20:19",
+            "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "power_state": "RUNNING",
+            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+            "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+            "virt_state": "ACTIVE",
+            "_links": {
+                "self": {
+                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+                },
+                "rel/server_tasks": {
+                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
+                }
+            }
+        },
+        {
+            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+            "hostname": "example-server-2",
+            "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0"
+            "launched_at": "2014-03-03T03:20:19",
+            "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "power_state": "RUNNING",
+            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+            "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
+            "virt_state": "ACTIVE",
+            "_links": {
+                "self": {
+                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
+                },
+                "rel/server_tasks": {
+                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
+                }
+            }
+        }
+    ],
+    "_links": {
+        "self": {
+            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2"
+        },
+        "next": {
+            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2&marker=3699f74d-af95-406d-b38e-d2b86f84a9d0"
+        }
+    }
+}
+```
+
 # Group Server Console Log
 
 ## GET /servers/{server}/console_log?{bytes}
@@ -1226,166 +1384,4 @@ Starts a task against a *server*.
         }
     }
 }
-```
-
-# Group Servers
-
-A collection of servers.
-
-## GET /project/{project}/servers{?limit,marker}
-
-Retrieve a collection of servers in a specific *project*.
-
-+ Parameters
-    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the project.
-    + limit = `20` (optional, number) ... Maximum number of results to return
-    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
-      identifier of the last record on the previous page of results.
-
-+ Response 200 (application/json)
-
-```json
-{
-    "servers": [
-        {
-            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
-            "hostname": "example-server-1",
-            "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-            "launched_at": "2014-03-02T23:20:19",
-            "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
-            "power_state": "RUNNING",
-            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
-            "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
-            "virt_state": "ACTIVE",
-            "_links": {
-                "self": {
-                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
-                },
-                "rel/server_tasks": {
-                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
-                }
-            }
-        },
-        {
-            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
-            "hostname": "example-server-2",
-            "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0"
-            "launched_at": "2014-03-03T03:20:19",
-            "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
-            "power_state": "RUNNING",
-            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
-            "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
-            "virt_state": "ACTIVE",
-            "_links": {
-                "self": {
-                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
-                },
-                "rel/server_tasks": {
-                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
-                }
-            }
-        }
-    ],
-    "_links": {
-        "self": {
-            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2"
-        },
-        "next": {
-            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2&marker=3699f74d-af95-406d-b38e-d2b86f84a9d0"
-        }
-    }
-}
-```
-
-## POST /project/{project}/servers
-
-Create one or more servers in a project.
-
-There are two main sections to the request body: *defaults* and *servers*.
-
-The defaults section is used to set the default attributes of servers when
-creating more than one server. Instead of specifying the same server group
-or server type for each server you create, you can specify this once in the
-defaults section.
-
-The servers section is a list of dictionaries, one per server you want to
-create. Attributes that *must* be unique for each server -- such as the
-server's *hostname* attribute, can be set here, along with overrides for
-attribute values where the value specified in the defaults section is not
-wanted.
-
-The request for launching one or more servers is pre-validated before
-attempting to launch any of the servers. A failure response will indicate
-errors that were found in this pre-validation procedure. 
-
-A success response will always be a list of dictionaries that contain
-attributes about each server that was launched:
-
- - `id` (string) ... The UUID of the newly-created server resource.
- - `launched_at` (datetime) ... The ISO8601 timestamp of when the launch
-   task for the server was started.
-
-> **Note**: Failure of any individual server to launch will *not* be returned
-> in a failure response to this API call. Instead, a user may check the status
-> of a server and a list of the server's latest task actions using calls to
-> `HEAD /servers/{id}` and `GET /servers/{id}/tasks`
-
-+ Request (application/json)
-
-```json
-{
-    "defaults": {
-        "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
-        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-        "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
-        "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
-        "keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567"
-    },
-    "servers": [
-        {
-            "hostname": "app-server-1",
-            "keypair_id": "5b3866b9-77d7-4afc-a095-e400919ade97"
-        },
-        {
-            "hostname": "app-server-2",
-            "type_id": "98f5c367a-a354-11e3-a5e2-0800200c9a66"
-        },
-    ],
-}
-```
-
-+ Response 202 (application/json)
-
-```json
-[
-    {
-        "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-        "launched_at": "2014-03-02T23:20:19",
-        "_links": {
-            "self": {
-                "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
-            },
-            "rel/server_tasks": {
-                "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
-            }
-        }
-    },
-    {
-        "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0",
-        "launched_at": "2014-03-03T03:20:19",
-        "_links": {
-            "self": {
-                "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
-            },
-            "rel/server_tasks": {
-                "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
-            }
-        }
-    }
-]
 ```
