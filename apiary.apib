@@ -249,8 +249,12 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
         },
         "rel/project_server_tasks": {
             "href-template": "/project/{project_id}/server_tasks",
+                             "?(limit,marker,since}",
             "href-vars": {
-                "project_id": "param/project_id"
+                "project_id": "param/project_id",
+                "limit": "param/limit",
+                "marker": "param/marker",
+                "since": "param/since"
             },
             "hints": {
                 "allow": ["GET", "POST"],
@@ -918,13 +922,13 @@ Retrieve a server task by its *id*.
 }
 ```
 
-## GET /servers/{server}/tasks{?limit,marker}
+## GET /servers/{server}/tasks{?limit,marker,since}
 
 Retrieve a collection of servers in a specific *project*.
 
-A collection of server tasks. The entire collection of tasks for a server
-represents the history of actions taken against the server through the
-OpenStack Compute API.
+> **Note**: The entire collection of tasks for a server represents the full
+> history of actions taken against the server through the OpenStack Compute
+> API.
 
 + Parameters
     + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
@@ -932,6 +936,8 @@ OpenStack Compute API.
     + limit = `20` (optional, number) ... Maximum number of results to return
     + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
       identifier of the last record on the previous page of results.
+    + since (optional, datetime, `2013-12-23T10:02:42Z`) ... An ISO-8601 datetime
+      to filter tasks that were started after that time.
 
 + Response 200 (application/json)
 
