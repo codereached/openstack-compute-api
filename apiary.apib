@@ -846,6 +846,49 @@ with one of the following values:
  - `ATTACH_BLOCK_DEVICE`
  - `DETACH_BLOCK_DEVICE`
 
+## POST /servers/{server}/tasks
+
+Starts a task against a *server*.
+
+> **Note**: Any action listed in the Server Task section may be specified
+> except `CREATE`. When a server is launched with the 
+> `POST /projects/{project}/servers` call, Nova will add a Server Task to the
+> server for the `CREATE` action.
+
++ Parameters
+    + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server.
+
++ Request (application/json)
+
+```json
+{
+    "action": "REBOOT",
+    "timeout": 120
+}
+```
+
++ Response 202 (application/json)
+
+```json
+{
+    "action": "REBOOT",
+    "created_at": "2014-04-14T02:15:15Z",
+    "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+    "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
+    "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+    "state": "RUNNING",
+    "_links":  {
+        "self": {
+            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+        },
+        "rel/server_task_subtasks": {
+            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/subtasks"
+        }
+    }
+}
+```
+
 ## GET /server_tasks/{id}
 
 Retrieve a server task by its *id*.
@@ -870,6 +913,70 @@ Retrieve a server task by its *id*.
         },
         "rel/server_task_subtasks": {
             "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/subtasks"
+        }
+    }
+}
+```
+
+## GET /servers/{server}/tasks{?limit,marker}
+
+Retrieve a collection of servers in a specific *project*.
+
+A collection of server tasks. The entire collection of tasks for a server
+represents the history of actions taken against the server through the
+OpenStack Compute API.
+
++ Parameters
+    + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server.
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
+      identifier of the last record on the previous page of results.
+
++ Response 200 (application/json)
+
+```json
+{
+    "tasks": [
+        {
+            "action": "CREATE",
+            "created_at": "2014-04-14T02:15:15Z",
+            "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
+            "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+            "state": "RUNNING",
+            "_links":  {
+                "self": {
+                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763"
+                },
+                "rel/server_task_subtasks": {
+                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763/subtasks"
+                }
+            }
+        },
+        {
+            "action": "RESIZE",
+            "created_at": "2013-12-23T10:02:42Z",
+            "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "id": "3759ef44-2b7d-4981-b286-418ca50fe005",
+            "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+            "state": "ABORTED",
+            "_links":  {
+                "self": {
+                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005"
+                },
+                "rel/server_task_subtasks": {
+                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005/subtasks"
+                }
+            }
+        }
+    ],
+    "_links": {
+        "self": {
+            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2"
+        },
+        "next": {
+            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2&marker=3759ef44-2b7d-4981-b286-418ca50fe005"
         }
     }
 }
@@ -1277,111 +1384,3 @@ Xen: 0000000000000000 - 000000006ac00000 (usable)
 NX (Execute Disable) protection: active
 ```
 
-# Group Server Tasks
-
-A collection of server tasks. The entire collection of tasks for a server
-represents the history of actions taken against the server through the
-OpenStack Compute API.
-
-## GET /servers/{server}/tasks{?limit,marker}
-
-Retrieve a collection of servers in a specific *project*.
-
-+ Parameters
-    + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server.
-    + limit = `20` (optional, number) ... Maximum number of results to return
-    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
-      identifier of the last record on the previous page of results.
-
-+ Response 200 (application/json)
-
-```json
-{
-    "tasks": [
-        {
-            "action": "CREATE",
-            "created_at": "2014-04-14T02:15:15Z",
-            "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
-            "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
-            "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-            "state": "RUNNING",
-            "_links":  {
-                "self": {
-                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763"
-                },
-                "rel/server_task_subtasks": {
-                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763/subtasks"
-                }
-            }
-        },
-        {
-            "action": "RESIZE",
-            "created_at": "2013-12-23T10:02:42Z",
-            "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
-            "id": "3759ef44-2b7d-4981-b286-418ca50fe005",
-            "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-            "state": "ABORTED",
-            "_links":  {
-                "self": {
-                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005"
-                },
-                "rel/server_task_subtasks": {
-                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005/subtasks"
-                }
-            }
-        }
-    ],
-    "_links": {
-        "self": {
-            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2"
-        },
-        "next": {
-            "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2&marker=3759ef44-2b7d-4981-b286-418ca50fe005"
-        }
-    }
-}
-```
-
-## POST /servers/{server}/tasks
-
-Starts a task against a *server*.
-
-> **Note**: Any action listed in the Server Task section may be specified
-> except `CREATE`. When a server is launched with the 
-> `POST /projects/{project}/servers` call, Nova will add a Server Task to the
-> server for the `CREATE` action.
-
-+ Parameters
-    + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server.
-
-+ Request (application/json)
-
-```json
-{
-    "action": "REBOOT",
-    "timeout": 120
-}
-```
-
-+ Response 202 (application/json)
-
-```json
-{
-    "action": "REBOOT",
-    "created_at": "2014-04-14T02:15:15Z",
-    "created_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
-    "id": "85fc465a-8809-4b7a-bce2-4c6ff5b78763",
-    "server_id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
-    "state": "RUNNING",
-    "_links":  {
-        "self": {
-            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66"
-        },
-        "rel/server_task_subtasks": {
-            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/subtasks"
-        }
-    }
-}
-```
