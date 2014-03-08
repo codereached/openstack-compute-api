@@ -254,7 +254,8 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 "project_id": "param/project_id",
                 "limit": "param/limit",
                 "marker": "param/marker",
-                "since": "param/since"
+                "since": "param/since",
+                "state": "param/state"
             },
             "hints": {
                 "allow": ["GET", "POST"],
@@ -938,6 +939,8 @@ Retrieve a collection of servers in a specific *project*.
       identifier of the last record on the previous page of results.
     + since (optional, datetime, `2013-12-23T10:02:42Z`) ... An ISO-8601 datetime
       to filter tasks that were started after that time.
+    + state (optional, string, `RUNNING`) ... Filters results to only tasks in the
+      specified state.
 
 + Response 200 (application/json)
 
