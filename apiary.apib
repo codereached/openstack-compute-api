@@ -842,7 +842,8 @@ with one of the following values:
  - `RESCUE`
  - `UNRESCUE`
  - `REBUILD`
- - `MOVE`
+ - `MOVE` (These were actions previously called, variously, migrate,
+           live-migrate, and block-migrate)
  - `TERMINATE`
  - `RESTORE`
  - `SHELVE`
@@ -868,8 +869,7 @@ Starts a task against a *server*.
 
 ```json
 {
-    "action": "REBOOT",
-    "timeout": 120
+    "action": "REBOOT"
 }
 ```
 
@@ -887,8 +887,8 @@ Starts a task against a *server*.
         "self": {
             "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66"
         },
-        "rel/server_task_subtasks": {
-            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/subtasks"
+        "rel/server_task_items": {
+            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/items"
         }
     }
 }
@@ -916,16 +916,16 @@ Retrieve a server task by its *id*.
         "self": {
             "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66"
         },
-        "rel/server_task_subtasks": {
-            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/subtasks"
+        "rel/server_task_items": {
+            "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/items"
         }
     }
 }
 ```
 
-## GET /servers/{server}/tasks{?limit,marker,since}
+## GET /servers/{server}/tasks{?limit,marker,since,state}
 
-Retrieve a collection of servers in a specific *project*.
+Retrieve a collection of server tasks for a specific *server*.
 
 > **Note**: The entire collection of tasks for a server represents the full
 > history of actions taken against the server through the OpenStack Compute
@@ -958,8 +958,8 @@ Retrieve a collection of servers in a specific *project*.
                 "self": {
                     "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763"
                 },
-                "rel/server_task_subtasks": {
-                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763/subtasks"
+                "rel/server_task_items": {
+                    "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763/items"
                 }
             }
         },
@@ -974,8 +974,8 @@ Retrieve a collection of servers in a specific *project*.
                 "self": {
                     "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005"
                 },
-                "rel/server_task_subtasks": {
-                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005/subtasks"
+                "rel/server_task_items": {
+                    "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005/items"
                 }
             }
         }
@@ -986,6 +986,144 @@ Retrieve a collection of servers in a specific *project*.
         },
         "next": {
             "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks?limit=2&marker=3759ef44-2b7d-4981-b286-418ca50fe005"
+        }
+    }
+}
+```
+
+# Group Server Task Item
+
+A server task item is a single action that is executed or event that happens
+in the course of running a server task against a server.
+
+Each server task item has a *state* attribute. This attribute is a string with
+one of the following values:
+
+ - `WAITING`
+ - `RUNNING`
+ - `ABORTED`
+ - `COMPLETED`
+ - `TIMED_OUT`
+
+Depending on the action of the item's task, each item will have an action
+as well:
+
+ - For tasks with action `CREATE`
+   - `SCHEDULING`
+   - `BLOCK_DEVICE_MAPPING`
+   - `NETWORKING`
+   - `SPAWNING`
+ - For tasks with action `SNAPSHOT`
+   - `SNAPSHOTTING`
+   - `UPLOADING`
+ - For tasks with action `BACKUP` (TODO: Why/how is this different from snapshot?)
+   - `SNAPSHOTTING`
+   - `UPLOADING`
+ - For tasks with action `UPDATE_PASSWORD`
+   - `UPDATING_PASSWORD`
+ - For tasks with action `RESIZE`
+   - `PREPARING`
+   - `MIGRATING`
+   - `FINALIZING`
+ - For tasks with action `REBOOT`
+   - `REBOOTING`
+ - For tasks with action `HARD_REBOOT`
+   - `REBOOTING`
+ - For tasks with action `PAUSE`
+   - `PAUSING`
+ - For tasks with action `UNPAUSE`
+   - `UNPAUSING`
+ - For tasks with action `SUSPEND`
+   - `SUSPENDING`
+ - For tasks with action `RESUME`
+   - `RESUMING`
+ - For tasks with action `POWER_OFF`
+   - `POWERING_OFF`
+ - For tasks with action `POWER_ON`
+   - `POWERING_ON`
+ - For tasks with action `RESCUE`
+   - `RESCUING`
+ - For tasks with action `UNRESCUE`
+   - `UNRESCUING`
+ - For tasks with action `REBUILD`
+   - `REBUILDING`
+   - `REBUILDING_BLOCK_DEVICES`
+   - `SPAWNING`
+ - For tasks with action `MOVE`
+   - TODO(jaypipes): Unmuddy this from RESIZE...
+ - For tasks with action `TERMINATE`
+   - `TERMINATING`
+ - For tasks with action `RESTORE`
+   - `RESTORING`
+ - For tasks with action `SHELVE`
+   - `SHELVING`
+   - `PREPARING_UPLOAD`
+   - `UPLOADING`
+ - For tasks with action `SHELVE_OFFLOAD`
+   - `SHELVING_OFFLOADING`
+ - For tasks with action `UNSHELVE`
+   - `UNSHELVING`
+ - For tasks with action `ATTACH_BLOCK_DEVICE`
+   - `ATTACHING_BLOCK_DEVICE`
+ - For tasks with action `DETACH_BLOCK_DEVICE`
+   - `DETACHING_BLOCK_DEVICE`
+
+Each server task item has tmestamps indicating when the item was created,
+started and ended.
+
+> **Note**: A user of the Compute API has no ability to create a task item
+> through the Compute API itself. Nova components will create task items in
+> the course of running the task, and the task items API is readonly to
+> provide a glimpse into the progress of a running task.
+
+## GET /servers_tasks/{task}/items{?limit,marker,since,state}
+
+Retrieve a collection of server task items for a specific *task*.
+
+> **Note**: The entire collection of task items for a server task represents
+> the full history of events that occurred during the execution of a task.
+
++ Parameters
+    + task (string, `3759ef44-2b7d-4981-b286-418ca50fe005`) ... A UUID identifier
+      for the server task.
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
+      identifier of the last record on the previous page of results.
+    + since (optional, datetime, `2013-12-23T10:02:42Z`) ... An ISO-8601 datetime
+      to filter task items that were started after that time.
+    + state (optional, string, `WAITING`) ... Filters results to only task items
+      in the specified state.
+
++ Response 200 (application/json)
+
+```json
+{
+    "items": [
+        {
+            "action": "SCHEDULING",
+            "created_at": "2014-04-14T02:15:15.002111Z",
+            "ended_at": "2014-04-14T02:15:16.717219Z",
+            "id": "c7dc1acb-5c2f-488d-a3c0-145d3aeae582",
+            "task_id": "3759ef44-2b7d-4981-b286-418ca50fe005",
+            "started_at": "2014-04-14T02:15:15.004727Z",
+            "state": "COMPLETED",
+        },
+        {
+            "action": "BLOCK_DEVICE_MAPPING",
+            "created_at": "2014-04-14T02:15:15.002111Z",
+            "ended_at": null,
+            "id": "b41a43e4-3129-4a22-b9d9-3e75483b54ef",
+            "task_id": "3759ef44-2b7d-4981-b286-418ca50fe005",
+            "started_at": "2014-04-14T02:15:16.981721Z",
+            "state": "RUNNING",
+        }
+    ],
+    "_links": {
+        "self": {
+            "href": "/servers_tasks/3759ef44-2b7d-4981-b286-418ca50fe005/items?limit=2"
+        },
+        "next": {
+            "href": "/servers_tasks/3759ef44-2b7d-4981-b286-418ca50fe005/items?limit=2&marker=b41a43e4-3129-4a22-b9d9-3e75483b54ef"
         }
     }
 }
