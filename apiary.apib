@@ -1292,10 +1292,11 @@ attributes about each server that was launched:
 {
     "defaults": {
         "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+        "keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567",
+        "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
         "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
         "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
-        "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
-        "keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567"
+        "user_data": "IyEvYmluL3NoCmVjaG8gPT09PT09PT09IEhFTExPID09PT09"
     },
     "servers": [
         {
@@ -1503,6 +1504,7 @@ Retrieve a server by its *project* and *hostname*.
     }
 }
 ```
+
 ## GET /projects/{project}/servers{?limit,marker}
 
 Retrieve a collection of servers in a specific *project*. This is the
