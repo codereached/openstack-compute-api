@@ -1685,8 +1685,6 @@ all server records that meet the parameterized filter criteria.
 }
 ```
 
-# Group Server Console Log
-
 ## GET /servers/{server}/console_log?{bytes}
 
 Retrieve somee or part of a server console log.
@@ -1709,4 +1707,22 @@ Xen: 0000000000000000 - 000000006ac00000 (usable)
 980MB HIGHMEM available.
 727MB LOWMEM available.
 NX (Execute Disable) protection: active
+```
+
+## GET /servers/{server}/consoles/{type}
+
+Retrieve a URI where a VNC, RDP or Spice console can be connected to.
+
++ Parameters
+    + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server.
+    + type (string, one of `novnc`, `xvpvnc`, `rdp` or `spice`) ... The code for which
+      type of console to return a URI for.
+
++ Response 200 (application/json)
+    
+```json
+{
+    "uri": "http://cloud.example.com:6080/token=12fad949-b355-4f3b-983d-cbe5f59703e6"
+}
 ```
