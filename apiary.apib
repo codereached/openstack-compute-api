@@ -247,11 +247,11 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 }
             }
         },
-        "rel/project_server_tasks": {
-            "href-template": "/project/{project_id}/tasks",
+        "rel/server_tasks": {
+            "href-template": "/server/{server_id}/tasks",
                              "?(limit,marker,since}",
             "href-vars": {
-                "project_id": "param/project_id",
+                "server_id": "param/server_id",
                 "limit": "param/limit",
                 "marker": "param/marker",
                 "since": "param/since",
@@ -276,6 +276,27 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 }
             }
         },
+        "rel/servers": {
+            "href-template": "/servers"
+                             "?{limit,marker,since,"
+                             "power,virt_state,power_state,"
+                             "launched_by}"
+            },
+            "href-vars": {
+                "limit": "param/limit",
+                "marker": "param/marker",
+                "since": "param/since",
+                "project": "param/project",
+                "virt_state": "param/virt_state",
+                "power_state": "param/power_state"
+            },
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
+                }
+            }
+        }
         "rel/server_console_log": {
             "href-template": "/servers/{server_id}/console_log"
                              "?(offset,bytes)",
@@ -1131,31 +1152,61 @@ Retrieve a collection of server task items for a specific *task*.
 
 # Group Server
 
-A server is a virtual machine that runs in an OpenStack cloud. It is owned by
-a single *project*, has a single *server type* that describes its capabilities
-and capacity, and is launched from a *server template* that is a base disk
-image, a bootable volume, or a snapshot of another server.
-
 The server is the main resource exposed by the OpenStack Compute API. There
 are a number of subresources and collections of subresources that are
 attached to a server resource. This group describes operations on the server
 and these subresources.
 
-When launched, the ID of a server template is provided. This ID is the UUID
-identifier of a base disk image, a bootable volume, or a snapshot of
-a server that is used as the basis of the server that is launched.
+A server is a virtual machine that runs in an OpenStack cloud. It is owned by
+a single *project* and is launched from a *server template* that is a base disk
+image, a bootable volume, or a snapshot of another server.
 
-> **Note**: The OpenStack Compute API does not actually expose the server
-> template resource. Server template resources are exposed by the OpenStack
-> Image and OpenStack Block Storage APIs (images/ and volumes/ respectively).
+Each server has the following attributes that are readable through the
+OpenStack Compute API (TODO(jaypipes): All these go into JSON-Schema docs):
 
-Each server lives in a generic container signified by the *region_id*
-attribute. Unlike the old v2/v3 Compute API, there is no concept of an
-EC2 Availability Zone built into the vNext Compute API. Instead of the concept
-of an availability zone, the concept of a generic region container is
-introduced. Regions may or may not have other regions as children. What
-SLA or failure boundaries are defined for a region is left entirely up to
-the deployer of the OpenStack Compute service.
+ - `block_devices` (list of dicts) ... A list of dictionaries containing
+   information about the block devices attached to the server.
+ - `group_id` (string or null, `53626cb0-a34f-11e3-a5e2-0800200c9a66`) ... The
+   UUID of the server group this server belongs to, or null.
+ - `hostname` (string, `app-server-1`) ... This is the hostname of
+   the server. It must be unique among all servers within a project.
+ - `id` (string, `53626cb0-a34f-11e3-a5e2-0800200c9a66`) ... The UUID of the
+   server.
+ - `launch_keypair_id` (string, `0a677974-e122-4d71-ab95-4549058508ee`) ...
+   UUID of the keypair that was specified at launch time.
+ - `launched_at` (datetime, `2014-04-14T02:15:16Z`) ... The timestamp of when
+   the server was launched.
+ - `launched_by` (string, `fbed1cc7-2f7a-4ec3-af5b-6467a8712eb0`) ... The UUID
+   of the user that launched the server.
+ - `networking` (dict) ... A dictionary containing information about the
+   network interfaces on the server.
+ - `power_state` (string, `RUNNING`) ... The power state of the server. See
+   possible values below.
+ - `region_id` (string, `ecfadb0e-ac9d-483c-9ad0-c8d8f90654a9`) ... The UUID of
+   the generic region that contains this server.
+ - `spec.memory_mb` (number, `2048`) ... Amount of RAM in megabytes that the
+   server is allocated.
+ - `spec.root_disk_gb` (number, `8`) ... Amount of disk space in gigabytes
+   allocated for the server's root disk.
+ - `spec.cpu_units` (number, `4`) ... Number of CPU units allocated to the
+   server.
+ - `project_id` (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... The UUID
+   of the project that owns this server.
+ - `properties` (dict) ... Custom key/value properties tied to the server.
+ - `template_id` (string, `fe48b370-a352-11e3-a5e2-0800200c9a66`) ... The UUID
+   of the server template that was used when launching the server.
+ - `tags` (list of strings, `windows`) ... A list of strings that tag the server.
+ - `virt_state` (string, `RUNNING`) ... The virt state of the server. See
+   possible values below.
+
+In addition to normally returned attributes, there shall be an `_elevated` attribute
+returned in the server record response. For users with elevated permissions,
+the `_elevated` attribute would be populated with additional attributes:
+
+ - `compute_node_hostname` (string, `barenode1`) ... The hostname of the compute
+   node that this server is housed on.
+ - `properties` (dict) ... Custom properties of the server that should only be
+   readable by users with elevated privileges.
 
 Each server has a *power_state* attribute, which is a string with one of the
 following values:
@@ -1180,6 +1231,22 @@ which is a string with one of the following values:
  - `SHELVED`
  - `SHELVED_OFFLOADED`
  - `ERROR`
+
+> **A note about the server template**: When launched, the ID of a server
+> template is provided. This ID is the UUID identifier of a base disk image,
+> a bootable volume, or a snapshot of a server that is used as the basis of the
+> server that is launched. The OpenStack Compute API does not actually expose
+> the server template resource. Server template resources are exposed by the
+> OpenStack Image and OpenStack Block Storage APIs (images/ and volumes/
+> respectively).
+
+> **A note about the region**: Each server lives in a generic container signified
+> by the *region_id* attribute. Unlike the old v2/v3 Compute API, there is no
+> concept of an EC2 Availability Zone built into the vNext Compute API. Instead
+> of the concept of an availability zone, the concept of a generic region
+> container is introduced. Regions may or may not have other regions as children.
+> What SLA or failure boundaries are defined for a region is left entirely up to
+> the deployer of the OpenStack Compute service.
 
 > **Note**: There is no DELETE operation against a server in the Compute API.
 > To terminate a server, you would POST /servers/{server}/tasks with a task
@@ -1338,7 +1405,7 @@ Retrieve a server by its *id*.
         "role": "appserver",
     },
     "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
-    "size": {
+    "spec": {
         "memory_mb": 32768,
         "root_disk_gb": 8,
         "cpu_units": 8
@@ -1349,6 +1416,7 @@ Retrieve a server by its *id*.
     ],
     "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
     "virt_state": "ACTIVE",
+    "_elevated": {},
     "_links": {
         "self": {
             "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
@@ -1413,7 +1481,7 @@ Retrieve a server by its *project* and *hostname*.
         "role": "appserver",
     },
     "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
-    "size": {
+    "spec": {
         "memory_mb": 32768,
         "root_disk_gb": 8,
         "cpu_units": 8
@@ -1424,6 +1492,7 @@ Retrieve a server by its *project* and *hostname*.
     ],
     "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
     "virt_state": "ACTIVE",
+    "_elevated": {},
     "_links": {
         "self": {
             "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
@@ -1435,9 +1504,11 @@ Retrieve a server by its *project* and *hostname*.
 }
 ```
 
-## GET /project/{project}/servers{?limit,marker}
+## GET /projects/{project}/servers{?limit,marker}
 
-Retrieve a collection of servers in a specific *project*.
+Retrieve a collection of servers in a specific *project*. This is the
+GET call that normal users of the Compute API will use to return information
+about the servers in one of their projects.
 
 + Parameters
     + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
@@ -1460,9 +1531,14 @@ Retrieve a collection of servers in a specific *project*.
             "power_state": "RUNNING",
             "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
             "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+            "spec": {
+                "memory_mb": 32768,
+                "root_disk_gb": 8,
+                "cpu_units": 8
+            },
             "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
             "virt_state": "ACTIVE",
+            "_elevated": {},
             "_links": {
                 "self": {
                     "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
@@ -1481,9 +1557,112 @@ Retrieve a collection of servers in a specific *project*.
             "power_state": "RUNNING",
             "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
             "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+            "spec": {
+                "memory_mb": 32768,
+                "root_disk_gb": 8,
+                "cpu_units": 8
+            },
             "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-            "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
             "virt_state": "ACTIVE",
+            "_elevated": {},
+            "_links": {
+                "self": {
+                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
+                },
+                "rel/server_tasks": {
+                    "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
+                }
+            }
+        }
+    ],
+    "_links": {
+        "self": {
+            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2"
+        },
+        "next": {
+            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/servers?limit=2&marker=3699f74d-af95-406d-b38e-d2b86f84a9d0"
+        }
+    }
+}
+```
+
+## GET /servers{?limit,marker,since,project,virt_state,power_state}
+
+Retrieve a collection of servers. 
+
+For normal users of the Compute API, this call will return server records
+for any server that belongs to any project to which the user belongs.
+
+For users of the Compute API with elevated privileges, this call will return
+all server records that meet the parameterized filter criteria.
+
++ Parameters
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `3699f74d-af95-406d-b38e-d2b86f84a9d0`) ... A UUID
+      identifier of the last record on the previous page of results.
+    + since (optional, datetime, `2013-12-23T10:02:42Z`) ... An ISO-8601 datetime
+      to filter servers that were *launched* after that time.
+    + project (optional, list of strings, `a7728150-a34f-11e3-a5e2-0800200c9a66`)
+      ... One or more UUID identifiers for the project to filter server records by.
+    + virt_state = `ACTIVE` (optional, list of strings, `ACTIVE`) ... Filters results
+      to only servers in one of the specified virt states.
+    + power_state = `RUNNING` (optional, list of strings, `RUNNING`) ... Filters
+      results to only servers in one of the specified power states.
+    + launched_by (optional, list of strings, `a7728150-a34f-11e3-a5e2-0800200c9a66`)
+      ... Filters server records by UUIDs of users that launched the servers.
+
+> **Note**: For non-elevated users, specifying a project that the user does not
+> belong to or user IDs (launched_by parameter) that are not in one of those projects
+> shall lead to a response of `400 Bad Request`.
+
++ Response 200 (application/json)
+
+```json
+{
+    "servers": [
+        {
+            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+            "hostname": "example-server-1",
+            "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
+            "launched_at": "2014-03-02T23:20:19",
+            "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "power_state": "RUNNING",
+            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+            "spec": {
+                "memory_mb": 32768,
+                "root_disk_gb": 8,
+                "cpu_units": 8
+            },
+            "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+            "virt_state": "ACTIVE",
+            "_elevated": {},
+            "_links": {
+                "self": {
+                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+                },
+                "rel/server_tasks": {
+                    "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
+                }
+            }
+        },
+        {
+            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+            "hostname": "example-server-2",
+            "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0"
+            "launched_at": "2014-03-03T03:20:19",
+            "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
+            "power_state": "RUNNING",
+            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+            "spec": {
+                "memory_mb": 32768,
+                "root_disk_gb": 8,
+                "cpu_units": 8
+            },
+            "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
+            "virt_state": "ACTIVE",
+            "_elevated": {},
             "_links": {
                 "self": {
                     "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
@@ -1530,4 +1709,3 @@ Xen: 0000000000000000 - 000000006ac00000 (usable)
 727MB LOWMEM available.
 NX (Execute Disable) protection: active
 ```
-
