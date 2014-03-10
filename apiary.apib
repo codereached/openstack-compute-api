@@ -234,7 +234,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                     "application/json": {}
                 }
             }
-        }
+        },
         "rel/server_task": {
             "href-template": "/server_tasks/{server_task_id}",
             "href-vars": {
@@ -296,7 +296,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                     "application/json": {}
                 }
             }
-        }
+        },
         "rel/server_console_log": {
             "href-template": "/servers/{server_id}/console_log"
                              "?(offset,bytes)",
@@ -924,7 +924,7 @@ Retrieve a server task by its *id*.
       for the server task
 
 + Response 200 (application/json)
-    
+
 ```json
 {
     "action": "CREATE",
@@ -1503,7 +1503,6 @@ Retrieve a server by its *project* and *hostname*.
     }
 }
 ```
-
 ## GET /projects/{project}/servers{?limit,marker}
 
 Retrieve a collection of servers in a specific *project*. This is the
@@ -1586,7 +1585,7 @@ about the servers in one of their projects.
 }
 ```
 
-## GET /servers{?limit,marker,since,project,virt_state,power_state}
+## GET /servers{?limit,marker,since,project,virt_state,power_state,launched_by}
 
 Retrieve a collection of servers. 
 
@@ -1595,6 +1594,10 @@ for any server that belongs to any project to which the user belongs.
 
 For users of the Compute API with elevated privileges, this call will return
 all server records that meet the parameterized filter criteria.
+
+> **Note**: For non-elevated users, specifying a project that the user does not
+> belong to or user IDs (launched_by parameter) that are not in one of those projects
+> shall lead to a response of `400 Bad Request`.
 
 + Parameters
     + limit = `20` (optional, number) ... Maximum number of results to return
@@ -1610,10 +1613,6 @@ all server records that meet the parameterized filter criteria.
       results to only servers in one of the specified power states.
     + launched_by (optional, list of strings, `a7728150-a34f-11e3-a5e2-0800200c9a66`)
       ... Filters server records by UUIDs of users that launched the servers.
-
-> **Note**: For non-elevated users, specifying a project that the user does not
-> belong to or user IDs (launched_by parameter) that are not in one of those projects
-> shall lead to a response of `400 Bad Request`.
 
 + Response 200 (application/json)
 
