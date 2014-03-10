@@ -872,6 +872,8 @@ with one of the following values:
  - `UNSHELVE`
  - `ATTACH_BLOCK_DEVICE`
  - `DETACH_BLOCK_DEVICE`
+ - `ATTACH_NETWORK_INTERFACE`
+ - `DETACH_NETWORK_INTERFACE`
 
 ## POST /servers/{server}/tasks
 
@@ -1088,6 +1090,10 @@ as well:
    - `ATTACHING_BLOCK_DEVICE`
  - For tasks with action `DETACH_BLOCK_DEVICE`
    - `DETACHING_BLOCK_DEVICE`
+ - For tasks with action `ATTACH_NETWORK_INTERFACE`
+   - `ATTACHING_NETWORK_INTERFACE`
+ - For tasks with action `DETACH_NETWORK_INTERFACE`
+   - `DETACHING_NETWORK_INTERFACE`
 
 Each server task item has tmestamps indicating when the item was created,
 started and ended.
