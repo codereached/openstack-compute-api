@@ -143,6 +143,30 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
 ```json
 {
     "resources": {
+        "rel/schemas": {
+            "href-template": "/schemas",
+            "href-vars": {
+            },
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {}
+                }
+            }
+        },
+        "rel/schema": {
+            "href-template": "/schemas/{object}",
+            "href-vars": {
+                "object": "param/object"
+            },
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {},
+                    "application/json+schema": {}
+                }
+            }
+        },
         "rel/project": {
             "href-template": "/projects/{project_id}",
             "href-vars": {
@@ -152,6 +176,18 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 "allow": ["GET"],
                 "formats": {
                     "application/json": {}
+                }
+            }
+        },
+        "rel/server_type_schema": {
+            "href-template": "/schemas/server_type"
+            "href-vars": {
+            },
+            "hints": {
+                "allow": ["GET"],
+                "formats": {
+                    "application/json": {},
+                    "application/json+schema": {}
                 }
             }
         },
@@ -342,6 +378,78 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
         }
     }
 }
+```
+
+# Group Schema
+
+A schema provides a discoverable structure for both objects in the OpenStack
+Compute API as well as expected request and resource structures.
+
+## GET /schemas
+
+Returns a list of discoverable JSON-Schema documents for all objects in the
+API.
+
++ Response (application/json)
+
+```json
+[
+    {
+        "type": "server_type",
+        "description": "A server type describes the capacity and "
+                       "capabilities of a class of servers.",
+        "_links": {
+            "rel/schema": {
+                "href": "/schemas/server_type"
+            }
+        }
+    },
+    {
+        "type": "server_group",
+        "description": "A server group is a *user-defined* collection "
+                       "of servers that provides defaults for servers "
+                       "launched in the group.",
+        "_links": {
+            "rel/schema": {
+                "href": "/schemas/server_group"
+            }
+        }
+    },
+    {
+        "type": "server_task",
+        "description": "A server task is a related set of actions that "
+                       "are or have been executed against a server.",
+        "_links": {
+            "rel/schema": {
+                "href": "/schemas/server_task"
+            }
+        }
+    },
+    {
+        "type": "server_task_item",
+        "description": "A server task item is a single action that is "
+                       "executed or event that happens in the course of "
+                       "running a server task against a server.",
+        "_links": {
+            "rel/schema": {
+                "href": "/schemas/server_task_item"
+            }
+        }
+    },
+    {
+        "type": "server",
+        "description": "A server is a virtual machine that runs in an "
+                       "OpenStack cloud. It is owned by a single *project* "
+                       "and is launched from a *server template* that is a "
+                       "base disk image, a bootable volume, or a snapshot of "
+                       "another server.",
+        "_links": {
+            "rel/schema": {
+                "href": "/schemas/server"
+            }
+        }
+    }
+]
 ```
 
 # Group Project
@@ -1693,7 +1801,7 @@ all server records that meet the parameterized filter criteria.
 
 ## GET /servers/{server}/console_log?{bytes}
 
-Retrieve somee or part of a server console log.
+Retrieve some or part of a server console log.
 
 + Parameters
     + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
