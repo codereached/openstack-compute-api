@@ -452,6 +452,242 @@ API.
 ]
 ```
 
+## GET /schemas/server_type
+
+Returns a JSON-Schema document describing the server type object model and
+request/response contract.
+
++ Response (application/json)
+
+```json
+{
+    "type": "object",
+    "title": "Server Type",
+    "description": "A server type describes the capacity and "
+                   "capabilities of a class of servers.",
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "UUID identifier of the server type.",
+            "required": true,
+            "maxLength": "36",
+            "minLength": "32"
+        },
+        "name": {
+            "type": "string",
+            "description": "The short name for the server type.",
+            "required": true
+        },
+        "description": {
+            "type": "string"
+        },
+        "visibility": {
+            "type": "string",
+            "description": "String indicating whether the server "
+                           "type is publicly visible or shared "
+                           "among a group of private parties.",
+            "enum": [
+                "PUBLIC",
+                "PRIVATE"
+            ],
+            "required": true
+        },
+        "share": {
+            "type": "object",
+            "properties": {
+                "user_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Zero or more UUIDs of users that this "
+                                   "server type is shared with.",
+                },
+                "project_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Zero or more UUIDs of projects that this "
+                                   "server type is shared with.",
+                }
+            },
+            "additionalProperties": false
+        },
+        "spec": {
+            "type": "object",
+            "properties": {
+                "memory_mb": {
+                    "type": "integer",
+                    "description": "Amount of RAM allocated to servers "
+                                   "launched with this server type, in "
+                                   "megabytes.",
+                    "minimum": 0,
+                    "required": true
+                },
+                "root_disk_db": {
+                    "type": "integer",
+                    "description": "Amount of disk space allocated to the "
+                                   "root disk of servers launched with this "
+                                   "server type, in gigabytes.",
+                    "minimum": 0,
+                    "required": true
+                },
+                "cpu_units": {
+                    "type": "integer",
+                    "description": "Amount of relative CPU allocated to "
+                                   "servers launched with this server type.",
+                    "minimum": 1,
+                    "required": true
+                },
+                "rxtx_factor": {
+                    "type": "number",
+                    "description": "The throttling factor for I/O on servers "
+                                   "launched with this type.",
+                    "minimum": 0.1,
+                },
+                "swap_mb": {
+                    "type": "integer",
+                    "description": "Amount of swap space to allocate for "
+                                   "servers launched with this type in "
+                                   "megabytes.",
+                    "minimum": 0,
+                }
+            },
+            "tags": {
+                "type": "array",
+                "items": { "type": "string" }
+            }
+        },
+
+    },
+    "links": [
+        {
+           "title": "List server types",
+           "rel": "search",
+           "href": "/server_types",
+           "schema": {
+               "type": "object",
+               "properties": {
+                    "limit": {
+                        "type": "integer",
+                        "description": "Maximum Number of items to return."
+                    },
+                    "marker": {
+                        "type": "string",
+                        "description": "UUID of last record on previous page.",
+                        "maxLength": "36",
+                        "minLength": "32"
+                    },
+                    "tag": {
+                        "type": "array",
+                        "description": "Zero or more string tags to match "
+                                       "server types in an OR fashion.",
+                        "items": {"type": "string"}
+                    }
+               }
+           }
+        },
+        {
+           "title": "Create a new server type",
+           "rel": "create",
+           "href": "/server_types",
+           "method": "POST",
+           "schema": {
+               "type": "object",
+               "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "The short name for the server type.",
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "visibility": {
+                        "type": "string",
+                        "description": "String indicating whether the server "
+                                       "type is publicly visible or shared "
+                                       "among a group of private parties.",
+                        "enum": [
+                            "PUBLIC",
+                            "PRIVATE"
+                        ]
+                    },
+                    "share": {
+                        "type": "object",
+                        "properties": {
+                            "user_id": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Zero or more UUIDs of users that this "
+                                               "server type is shared with.",
+                            },
+                            "project_id": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Zero or more UUIDs of projects that this "
+                                               "server type is shared with.",
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "spec": {
+                        "type": "object",
+                        "properties": {
+                            "memory_mb": {
+                                "type": "integer",
+                                "description": "Amount of RAM allocated to servers "
+                                               "launched with this server type, in "
+                                               "megabytes.",
+                                "minimum": 0,
+                                "required": true
+                            },
+                            "root_disk_db": {
+                                "type": "integer",
+                                "description": "Amount of disk space allocated to the "
+                                               "root disk of servers launched with this "
+                                               "server type, in gigabytes.",
+                                "minimum": 0,
+                                "required": true
+                            },
+                            "cpu_units": {
+                                "type": "integer",
+                                "description": "Amount of relative CPU allocated to "
+                                               "servers launched with this server type.",
+                                "minimum": 1,
+                                "required": true
+                            },
+                            "rxtx_factor": {
+                                "type": "number",
+                                "description": "The throttling factor for I/O on servers "
+                                               "launched with this type.",
+                                "minimum": 0.1,
+                            },
+                            "swap_mb": {
+                                "type": "integer",
+                                "description": "Amount of swap space to allocate for "
+                                               "servers launched with this type in "
+                                               "megabytes.",
+                                "minimum": 0,
+                            }
+                        },
+                        "tags": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        }
+                    },
+               },
+               "required": ["name"]
+           }
+        }
+    ]
+}
+```
+
 # Group Project
 
 A project is a grouping of related server resources.
