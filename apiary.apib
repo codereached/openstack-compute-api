@@ -553,13 +553,12 @@ request/response contract.
                                    "megabytes.",
                     "minimum": 0,
                 }
-            },
-            "tags": {
-                "type": "array",
-                "items": { "type": "string" }
             }
         },
-
+        "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+        }
     },
     "links": [
         {
@@ -685,6 +684,183 @@ request/response contract.
            }
         }
     ]
+}
+```
+
+## GET /schemas/server_group
+
+Returns a JSON-Schema document describing the server group object model and
+request/response contract.
+
++ Response (application/json)
+
+```json
+{
+    "type": "object",
+    "title": "Server Group",
+    "description": "A server group is a *user-defined* collection of servers "
+                   "that provides defaults for servers launched in the group.",
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "UUID identifier of the server group.",
+            "required": true,
+            "maxLength": "36",
+            "minLength": "32"
+        },
+        "name": {
+            "type": "string",
+            "description": "The short name for the server group.",
+            "required": true
+        },
+        "description": {
+            "type": "string"
+        },
+        "project_id": {
+            "type": "string",
+            "description": "UUID identifier of project that owns the server "
+                           "group.",
+            "required": true,
+            "maxLength": "36",
+            "minLength": "32"
+        },
+        "defaults": {
+            "type": "object",
+            "properties": {
+                "template_id": {
+                    "type": "string",
+                    "description": "UUID identifier of the server template "
+                                   "that shall be used by default when "
+                                   "launching a server in the server group.",
+                    "required": true,
+                    "maxLength": "36",
+                    "minLength": "32"
+                },
+                "type_id": {
+                    "type": "string",
+                    "description": "UUID identifier of the server type "
+                                   "that shall be used by default when "
+                                   "launching a server in the server group.",
+                    "required": true,
+                    "maxLength": "36",
+                    "minLength": "32"
+                },
+                "hostname_pattern": {
+                    "type": "string",
+                    "description": "A regex expression that may be used to "
+                                   "define hostnames for multiple servers "
+                                   "launched in this group. The "
+                                   "`%(rand_name)d` symbol is interpolated "
+                                   "as a random number. You can limit the "
+                                   "number of digits by specifying a length, "
+                                   "like so: `%(rand_num)5d`."
+                }
+            }
+        },
+        "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+        }
+    },
+    "links": [
+        {
+           "title": "List server groups",
+           "rel": "search",
+           "href": "/projects/{project}/server_groups",
+           "schema": {
+               "type": "object",
+               "properties": {
+                    "project": {
+                        "type": "string",
+                        "description": "UUID identifier of project that owns "
+                                       "the server group.",
+                        "required": true,
+                        "maxLength": "36",
+                        "minLength": "32"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "description": "Maximum Number of items to return."
+                    },
+                    "marker": {
+                        "type": "string",
+                        "description": "UUID of last record on previous page.",
+                        "maxLength": "36",
+                        "minLength": "32"
+                    },
+                    "tag": {
+                        "type": "array",
+                        "description": "Zero or more string tags to match "
+                                       "server groups in an OR fashion.",
+                        "items": {"type": "string"}
+                    }
+               }
+           }
+        },
+        {
+           "title": "Create a new server group",
+           "rel": "create",
+           "href": "/projects/{project}/server_groups",
+           "method": "POST",
+           "schema": {
+               "type": "object",
+               "properties": {
+                    "project": {
+                        "type": "string",
+                        "description": "UUID identifier of project that owns "
+                                       "the server group.",
+                        "required": true,
+                        "maxLength": "36",
+                        "minLength": "32"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The short name for the server group.",
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "defaults": {
+                        "type": "object",
+                        "properties": {
+                            "template_id": {
+                                "type": "string",
+                                "description": "UUID identifier of the server template "
+                                               "that shall be used by default when "
+                                               "launching a server in the server group.",
+                                "required": true,
+                                "maxLength": "36",
+                                "minLength": "32"
+                            },
+                            "type_id": {
+                                "type": "string",
+                                "description": "UUID identifier of the server type "
+                                               "that shall be used by default when "
+                                               "launching a server in the server group.",
+                                "required": true,
+                                "maxLength": "36",
+                                "minLength": "32"
+                            },
+                            "hostname_pattern": {
+                                "type": "string",
+                                "description": "A regex expression that may be used to "
+                                               "define hostnames for multiple servers "
+                                               "launched in this group. The "
+                                               "`%(rand_name)d` symbol is interpolated "
+                                               "as a random number. You can limit the "
+                                               "number of digits by specifying a length, "
+                                               "like so: `%(rand_num)5d`."
+                            }
+                        }
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                    }
+               }
+           }
+        }
+    }
 }
 ```
 
