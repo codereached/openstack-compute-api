@@ -22,6 +22,7 @@ This proposed API follows a few guiding principles and style conventions:
  - Asynchronous creation and task callbacks for expensive resources
  - Removal of any part of the V2 and V3 Compute APIs that doesn't involve
    Compute functionality
+ - UUID identifiers for everything. No more sequential/autoincrement IDs.
 
 ### API Route Discoverability
 
@@ -89,6 +90,19 @@ endpoints.
 This API strictly focuses on the resources and actions central to a Compute
 API. It is expected that clients directly call the other OpenStack API
 endpoints to request or perform actions related to those other services.
+
+### UUID Identifiers Only
+
+UUIDs are used as identifiers for everything in the API, though some resources
+have GET API calls that allow retrieval by unique combination of project
+and name/slug value.
+
+> **Note**: The intent here is to move Nova away from the use of any
+> sequence-based/autoincrement identifiers for any objects in the API.
+> Sequence/autoincrement primary keys are a big (only?) cause of replication
+> and log shipping conflicts for underlying data storage. The first step to
+> ridding the underlying system of sequential primary keys is to remove the
+> concept of them from the public API.
 
 ## API Conventions
 
