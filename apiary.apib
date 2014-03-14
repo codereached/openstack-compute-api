@@ -716,6 +716,14 @@ request/response contract.
         "description": {
             "type": "string"
         },
+        "created_by": {
+            "type": "string",
+            "description": "UUID identifier of user that created the server "
+                           "group.",
+            "required": true,
+            "maxLength": "36",
+            "minLength": "32"
+        },
         "project_id": {
             "type": "string",
             "description": "UUID identifier of project that owns the server "
@@ -1192,6 +1200,7 @@ strings.
 
 ```json
 {
+    "created_by": "15383832-78c6-4bce-b491-e95de799d709",
     "description": "Application servers running Windows Server 2008 R2",
     "defaults": {
         "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
@@ -1225,6 +1234,7 @@ Retrieve a server group by its *id*.
     
 ```json
 {
+    "created_by": "15383832-78c6-4bce-b491-e95de799d709",
     "description": "Application servers running Windows Server 2008 R2",
     "defaults": {
         "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
@@ -1259,6 +1269,7 @@ Retrieve a server group within a *project* by its *slug*.
     
 ```json
 {
+    "created_by": "15383832-78c6-4bce-b491-e95de799d709",
     "description": "Application servers running Windows Server 2008 R2",
     "defaults": {
         "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
@@ -1299,6 +1310,7 @@ Retrieve a collection of server groups.
 {
     "server_groups": [
         {
+            "created_by": "15383832-78c6-4bce-b491-e95de799d709",
             "description": "Application servers running Windows Server 2008 R2",
             "defaults": {
                 "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
@@ -1319,6 +1331,7 @@ Retrieve a collection of server groups.
             }
         },
         {
+            "created_by": "15383832-78c6-4bce-b491-e95de799d709",
             "description": "Database servers running PostgreSQL 9.1",
             "defaults": {
                 "template_id": "af2eda95-9a35-49c6-a90e-0fdd60686309",
