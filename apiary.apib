@@ -1763,7 +1763,7 @@ The *visibility* attribute can be one of the following:
     
 ```json
 {
-    "description": "A good enough server type"
+    "description": "A good enough server type",
     "id": "7220d0e6-b5c6-451e-b611-27254acf2a77",
     "name": "good.enough",
     "share": {
@@ -1787,6 +1787,9 @@ The *visibility* attribute can be one of the following:
     "_links":  {
         "self": {
             "href": "/server_types/7220d0e6-b5c6-451e-b611-27254acf2a77"
+        },
+        "describedby": {
+            "href": "/schemas/server_type"
         }
     }
 }
@@ -1823,6 +1826,9 @@ Retrieve a server type by its *id*.
     "_links":  {
         "self": {
             "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
+        },
+        "describedby": {
+            "href": "/schemas/server_type"
         }
     }
 }
@@ -1858,6 +1864,9 @@ Retrieve a server type by its *name*.
     "_links":  {
         "self": {
             "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
+        },
+        "describedby": {
+            "href": "/schemas/server_type"
         }
     }
 }
@@ -1903,6 +1912,9 @@ Retrieve a collection of server types.
             "_links":  {
                 "self": {
                     "href": "/server_types/7a6aba30-a3c0-11e3-a5e2-0800200c9a66"
+                },
+                "describedby": {
+                    "href": "/schemas/server_type"
                 }
             }
         },
@@ -1926,6 +1938,9 @@ Retrieve a collection of server types.
             "_links":  {
                 "self": {
                     "href": "/server_types/1593e080-a354-11e3-a5e2-0800200c9a66"
+                },
+                "describedby": {
+                    "href": "/schemas/server_type"
                 }
             }
         }
@@ -2013,6 +2028,9 @@ strings.
     "_links":  {
         "self": {
             "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
+        },
+        "describedby": {
+            "href": "/schemas/server_group"
         }
     }
 }
@@ -2047,6 +2065,9 @@ Retrieve a server group by its *id*.
     "_links":  {
         "self": {
             "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
+        },
+        "describedby": {
+            "href": "/schemas/server_group"
         }
     }
 }
@@ -2082,6 +2103,9 @@ Retrieve a server group within a *project* by its *slug*.
     "_links":  {
         "self": {
             "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
+        },
+        "describedby": {
+            "href": "/schemas/server_group"
         }
     }
 }
@@ -2123,6 +2147,9 @@ Retrieve a collection of server groups.
             "_links":  {
                 "self": {
                     "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
+                },
+                "describedby": {
+                    "href": "/schemas/server_group"
                 }
             }
         },
@@ -2145,6 +2172,9 @@ Retrieve a collection of server groups.
             "_links":  {
                 "self": {
                     "href": "/server_groups/b84cb239-e3a8-49c4-b601-90ed8423cb93"
+                },
+                "describedby": {
+                    "href": "/schemas/server_group"
                 }
             }
         },
@@ -2239,6 +2269,9 @@ Starts a task against a *server*.
         "self": {
             "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66"
         },
+        "describedby": {
+            "href": "/schemas/server_task"
+        },
         "rel/server_task_items": {
             "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/items"
         }
@@ -2267,6 +2300,9 @@ Retrieve a server task by its *id*.
     "_links":  {
         "self": {
             "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66"
+        },
+        "describedby": {
+            "href": "/schemas/server_task"
         },
         "rel/server_task_items": {
             "href": "/server_tasks/53626cb0-a34f-11e3-a5e2-0800200c9a66/items"
@@ -2310,6 +2346,9 @@ Retrieve a collection of server tasks for a specific *server*.
                 "self": {
                     "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763"
                 },
+                "describedby": {
+                    "href": "/schemas/server_task"
+                },
                 "rel/server_task_items": {
                     "href": "/server_tasks/85fc465a-8809-4b7a-bce2-4c6ff5b78763/items"
                 }
@@ -2325,6 +2364,9 @@ Retrieve a collection of server tasks for a specific *server*.
             "_links":  {
                 "self": {
                     "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005"
+                },
+                "describedby": {
+                    "href": "/schemas/server_task"
                 },
                 "rel/server_task_items": {
                     "href": "/server_tasks/3759ef44-2b7d-4981-b286-418ca50fe005/items"
@@ -2657,6 +2699,9 @@ attributes about each server that was launched:
             "self": {
                 "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
             },
+            "describedby": {
+                "href": "/schemas/server"
+            },
             "rel/server_tasks": {
                 "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
             }
@@ -2668,6 +2713,9 @@ attributes about each server that was launched:
         "_links": {
             "self": {
                 "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
+            },
+            "describedby": {
+                "href": "/schemas/server"
             },
             "rel/server_tasks": {
                 "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
@@ -2760,6 +2808,9 @@ Retrieve a server by its *id*.
         "self": {
             "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
         },
+        "describedby": {
+            "href": "/schemas/server"
+        },
         "rel/server_tasks": {
             "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
         }
@@ -2839,6 +2890,9 @@ Retrieve a server by its *project* and *hostname*.
         "self": {
             "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
         },
+        "describedby": {
+            "href": "/schemas/server"
+        },
         "rel/server_tasks": {
             "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
         }
@@ -2893,6 +2947,9 @@ about the servers in one of their projects.
                 "self": {
                     "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
                 },
+                "describedby": {
+                    "href": "/schemas/server"
+                },
                 "rel/server_tasks": {
                     "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
                 }
@@ -2918,6 +2975,9 @@ about the servers in one of their projects.
             "_links": {
                 "self": {
                     "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
+                },
+                "describedby": {
+                    "href": "/schemas/server"
                 },
                 "rel/server_tasks": {
                     "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
@@ -2991,6 +3051,9 @@ all server records that meet the parameterized filter criteria.
                 "self": {
                     "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66"
                 },
+                "describedby": {
+                    "href": "/schemas/server"
+                },
                 "rel/server_tasks": {
                     "href": "/servers/53626cb0-a34f-11e3-a5e2-0800200c9a66/tasks"
                 }
@@ -3016,6 +3079,9 @@ all server records that meet the parameterized filter criteria.
             "_links": {
                 "self": {
                     "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0",
+                },
+                "describedby": {
+                    "href": "/schemas/server"
                 },
                 "rel/server_tasks": {
                     "href": "/servers/3699f74d-af95-406d-b38e-d2b86f84a9d0/tasks",
