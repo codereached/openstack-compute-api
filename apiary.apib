@@ -351,11 +351,10 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
         },
         "rel/server_console_log": {
             "href-template": "/servers/{server_id}/console_log"
-                             "?(offset,bytes)",
+                             "?(lines)",
             "href-vars": {
                 "server_id": "param/server_id",
-                "offset": "param/offset",
-                "bytes": "param/bytes"
+                "lines": "param/lines"
             },
             "hints": {
                 "allow": ["GET"],
@@ -3100,14 +3099,14 @@ all server records that meet the parameterized filter criteria.
 }
 ```
 
-## GET /servers/{server}/console_log?{bytes}
+## GET /servers/{server}/console_log?{lines}
 
 Retrieve some or part of a server console log.
 
 + Parameters
     + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server.
-    + bytes = `65536` (optional, number) ... Maximum number of bytes to
+    + lines = `65536` (optional, number) ... Maximum number of lines to
       return.
 
 + Response 200 (plain/text)
