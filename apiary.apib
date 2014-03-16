@@ -1365,6 +1365,55 @@ and request/response contract.
                 }
             }
         },
+        "networking": {
+            "type": "object",
+            "properties": {
+                "access": {
+                    "type": "object",
+                    "description": "A set of IP addresses that may be used "
+                                   "for accessing the server. These addresses "
+                                   "have commonly been called floating IP "
+                                   "addresses.",
+                    "properties": {
+                        "ip4": {
+                            "type": "array",
+                            "items": {"type": "string"}
+                        },
+                        "ip6": {
+                            "type": "string",
+                            "items": {"type": "string"}
+                        }
+                    }
+                },
+                "interfaces": {
+                    "type": "array",
+                    "description": "A list of a dictionaries describing the server's "
+                                   "network interfaces.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "The name of the interface (e.g. eth0)."
+                                "required": true
+                            },
+                            "ip4": {
+                                "type": "string",
+                                "description": "IPv4 address of the interface."
+                            },
+                            "ip6": {
+                                "type": "string",
+                                "description": "IPv6 address of the interface."
+                            },
+                            "mac": {
+                                "type": "string",
+                                "description": "Optional MAC address of the interface."
+                            }
+                        }
+                    }
+                },
+            }
+        },
         "properties": {
             "type": "array",
             "items": {
@@ -2649,17 +2698,22 @@ Retrieve a server by its *id*.
     "launched_at": "2014-03-02T23:20:19",
     "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
     "networking": {
-        "access": [
-            "65.6.29.230",
-            "::babe:65.6.29.230"
-        ],
+        "access": {
+            "ip4": [
+                "65.6.29.230"
+            ],
+            "ip6": [
+                "::babe:65.6.29.230"
+            ]
+        }
         "interfaces": {
             "eth0": {
-                "ip": "10.0.1.4",
+                "ip4": "10.0.1.4",
                 "mac": "76:26:47:3d:9b:8a"
             },
             "eth1": {
-                "ip": "65.6.29.230",
+                "ip4": "65.6.29.230",
+                "ip6": "::babe:65.6.29.230",
                 "mac": "d1:39:55:04:ab:fb"
             }
         }
@@ -2725,17 +2779,22 @@ Retrieve a server by its *project* and *hostname*.
     "launched_at": "2014-03-02T23:20:19",
     "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
     "networking": {
-        "access": [
-            "65.6.29.230",
-            "::babe:65.6.29.230"
-        ],
+        "access": {
+            "ip4": [
+                "65.6.29.230"
+            ],
+            "ip6": [
+                "::babe:65.6.29.230"
+            ]
+        }
         "interfaces": {
             "eth0": {
-                "ip": "10.0.1.4",
+                "ip4": "10.0.1.4",
                 "mac": "76:26:47:3d:9b:8a"
             },
             "eth1": {
-                "ip": "65.6.29.230",
+                "ip4": "65.6.29.230",
+                "ip6": "::babe:65.6.29.230",
                 "mac": "d1:39:55:04:ab:fb"
             }
         }
