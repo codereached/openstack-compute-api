@@ -1623,42 +1623,42 @@ and request/response contract.
                         "type": "array",
                         "items": {
                             "type": "object",
-                                "properties": {
-                                    "keypair_id": {
-                                        "type": "string",
-                                        "description": "Optional UUID identifier of the keypair to use for this server.",
-                                        "maxLength": "36",
-                                        "minLength": "32"
-                                    },
-                                    "group_id": {
-                                        "type": "string",
-                                        "description": "Optional UUID identifier of the server group this server should be in.",
-                                        "maxLength": "36",
-                                        "minLength": "32"
-                                    },
-                                    "region_id": {
-                                        "type": "string",
-                                        "description": "Optional UUID identifier of the region this server should be in.",
-                                        "maxLength": "36",
-                                        "minLength": "32"
-                                    },
-                                    "template_id": {
-                                        "type": "string",
-                                        "description": "Optional UUID identifier of the server template to use.",
-                                        "maxLength": "36",
-                                        "minLength": "32"
-                                    },
-                                    "type_id": {
-                                        "type": "string",
-                                        "description": "Optional UUID identifier of the server type to use."
-                                        "maxLength": "36",
-                                        "minLength": "32"
-                                    },
-                                    "user_data": {
-                                        "type": "string",
-                                        "description": "base64-encoded string of user data to use.",
-                                    }
+                            "properties": {
+                                "keypair_id": {
+                                    "type": "string",
+                                    "description": "Optional UUID identifier of the keypair to use for this server.",
+                                    "maxLength": "36",
+                                    "minLength": "32"
+                                },
+                                "group_id": {
+                                    "type": "string",
+                                    "description": "Optional UUID identifier of the server group this server should be in.",
+                                    "maxLength": "36",
+                                    "minLength": "32"
+                                },
+                                "region_id": {
+                                    "type": "string",
+                                    "description": "Optional UUID identifier of the region this server should be in.",
+                                    "maxLength": "36",
+                                    "minLength": "32"
+                                },
+                                "template_id": {
+                                    "type": "string",
+                                    "description": "Optional UUID identifier of the server template to use.",
+                                    "maxLength": "36",
+                                    "minLength": "32"
+                                },
+                                "type_id": {
+                                    "type": "string",
+                                    "description": "Optional UUID identifier of the server type to use."
+                                    "maxLength": "36",
+                                    "minLength": "32"
+                                },
+                                "user_data": {
+                                    "type": "string",
+                                    "description": "base64-encoded string of user data to use.",
                                 }
+                            }
                         }
                     }
                }
