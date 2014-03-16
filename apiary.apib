@@ -1327,6 +1327,27 @@ and request/response contract.
             "maxLength": "36",
             "minLength": "32"
         },
+        "block_devices": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "device": {
+                        "type": "string",
+                        "description": "The device name, in path form (e.g. /dev/sda)."
+                        "required": true
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The type of device this is.",
+                        "enum": {
+                            "EPHEMERAL",
+                            "PERSISTENT"
+                        }
+                    }
+                }
+            }
+        },
         "spec": {
             "type": "object",
             "properties": {
@@ -2681,13 +2702,11 @@ Retrieve a server by its *id*.
 {
     "block_devices": [
         {
-            "id": "50795ce0-a357-11e3-a5e2-0800200c9a66",
-            "type": "ephemeral",
+            "type": "EPHEMERAL",
             "device": "/dev/sda"
         },
         {
-            "id": "b502f900-a357-11e3-a5e2-0800200c9a66",
-            "type": "persistent",
+            "type": "PERSISTENT",
             "device": "/dev/sdb"
         }
     ],
@@ -2762,13 +2781,11 @@ Retrieve a server by its *project* and *hostname*.
 {
     "block_devices": [
         {
-            "id": "50795ce0-a357-11e3-a5e2-0800200c9a66",
-            "type": "ephemeral",
+            "type": "EPHEMERAL",
             "device": "/dev/sda"
         },
         {
-            "id": "b502f900-a357-11e3-a5e2-0800200c9a66",
-            "type": "persistent",
+            "type": "PERSISTENT",
             "device": "/dev/sdb"
         }
     ],
