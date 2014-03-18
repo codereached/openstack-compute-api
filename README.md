@@ -71,6 +71,6 @@ Retrieve a flavor | `GET /{project}/flavors/{id}` | `GET /server_types/{id}`
 Create a new flavor | `POST /{project}/flavors` ***Extension*** | `POST /server_types`
 Delete a flavor | `DELETE /{project}/flavors/{id}` ***Extension*** | *TODO:* `DELETE /server_types/{id}`
 List projects with access to a flavor | `GET /{project}/flavors/{id}/os-flavor-access`  ***Extension*** | `GET /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
-Add access to flavor | `POST /{project}/flavors/{id}/action`  ***Extension*** | `POST|PATCH /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)* *TODO:* `PATCH`
+Add access to flavor | `POST /{project}/flavors/{id}/action`  ***Extension*** | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)* *TODO:* `PATCH /server_types/{id} for changing shares`
 Delete access to flavor | `DELETE /{project}/flavors/{id}/action`  ***Extension*** | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
 List a flavor's extra specs | `GET /{project}/flavors/{id}/os-extra-specs` ***Extension*** | **N/A** *(Note: vNext server types do not have key/value pairs, but do have tags)*
