@@ -22,7 +22,8 @@ This proposed API follows a few guiding principles and style conventions:
  - Asynchronous creation and task callbacks for expensive resources
  - Removal of any part of the V2 and V3 Compute APIs that doesn't involve
    Compute functionality
- - UUID identifiers for everything. No more sequential/autoincrement IDs.
+ - UUID identifiers for everything
+ - API contains only operations that normal and elevated users can do
 
 ### API Route Discoverability
 
@@ -103,6 +104,38 @@ and name/slug value.
 > and log shipping conflicts for underlying data storage. The first step to
 > ridding the underlying system of sequential primary keys is to remove the
 > concept of them from the public API.
+
+### API Operations for Normal and Elevated Users Only
+
+The proposed API does not contain any operations that "operators" or "deployers"
+would use. Only operations that normal or "elevated" (admin) users would perform
+are exposed in the Compute API.
+
+This proposed Compute API is meant to focus on the end-user experience, not
+operations that people running bare-metal machines or installing OpenStack would
+need to execute.
+
+This means that the vNext OpenStack Compute API does *not* contain HTTP REST API
+commands for any of the following, which were added as API extensions to previous
+versions of the OpenStack Compute API:
+
+ * `agents` -- the entire concept of running guest agents is the purview of the
+   cloud operator, not a user or even administrator of a cloud.
+ * `cells` and `cells_capabilities` -- these are implementation details, and
+   not anything that an admin of a cloud would care about; in fact, the design
+   of cells should mean specifically that an admin should *not* know about them.
+ * `hypervisors`
+ * `hosts`
+ * `instance_usage_audit_log`
+ * `services`
+ * `baremetal_nodes`
+ * `baremetal_ext_status`
+
+It is fully expected that APIs (not necessarily REST-based ones) can and should
+be provided for operators to perform actions on the above things. They just don't
+belong in the same API that regular users and administrative users use. It's the
+same reason that there isn't a RESTful API for executing database schema
+migrations. It just doesn't make sense to expose that functionality in that way.
 
 ## API Conventions
 
