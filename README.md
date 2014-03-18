@@ -27,6 +27,7 @@ Retrieve a server's details | `GET /{project}/servers/{id}/detail` | N/A
 Launch one or more servers | `POST /{project}/servers` | `POST /projects/{project/servers`
 Update a server | `PUT /{project}/servers/{id}` | *TODO:* `PATCH /servers/{id}`
 Terminate a server | `DELETE /{project}/servers/{id}` | `POST /servers/{id}/tasks`
+Get a server's diagnostics | `GET /{project}/servers/{id}` ***Extension*** | *TODO:* `GET /servers/{id}/diagnostics`
 
 ## Server Actions (Tasks in vNext)
 
@@ -41,6 +42,8 @@ Resize a server | `POST /{project}/servers/{id}/action` | `POST /servers/{id}/ta
 Confirm resize of a server | `POST /{project}/servers/{id}/action` | **N/A** *(No separate confirmation step is necessary in the vNext API)*
 Revert resize of a server | `POST /{project}/servers/{id}/action` | `POST /servers/{id}/tasks`
 Create a snapshot (image) of a server | `POST /{project}/servers/{id}/action` | `POST /servers/{id}/tasks`
+Stop a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
+Start a (stopped) server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
 Pause a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
 Unpause a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
 Suspend a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
@@ -71,6 +74,6 @@ Retrieve a flavor | `GET /{project}/flavors/{id}` | `GET /server_types/{id}`
 Create a new flavor | `POST /{project}/flavors` ***Extension*** | `POST /server_types`
 Delete a flavor | `DELETE /{project}/flavors/{id}` ***Extension*** | *TODO:* `DELETE /server_types/{id}`
 List projects with access to a flavor | `GET /{project}/flavors/{id}/os-flavor-access`  ***Extension*** | `GET /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
-Add access to flavor | `POST /{project}/flavors/{id}/action`  ***Extension*** | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)* *TODO:* `PATCH /server_types/{id} for changing shares`
+Add access to flavor | `POST /{project}/flavors/{id}/action`  ***Extension*** | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)* *TODO:* `PATCH /server_types/{id}` for changing shares
 Delete access to flavor | `DELETE /{project}/flavors/{id}/action`  ***Extension*** | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
 List a flavor's extra specs | `GET /{project}/flavors/{id}/os-extra-specs` ***Extension*** | **N/A** *(Note: vNext server types do not have key/value pairs, but do have tags)*
