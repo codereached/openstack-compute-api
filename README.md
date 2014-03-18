@@ -40,6 +40,27 @@ Rebuild a server | `POST /{project}/servers/{id}/action` | `POST /servers/{id}/t
 Resize a server | `POST /{project}/servers/{id}/action` | `POST /servers/{id}/tasks`
 Confirm resize of a server | `POST /{project}/servers/{id}/action` | **N/A** *(No separate confirmation step is necessary in the vNext API)*
 Revert resize of a server | `POST /{project}/servers/{id}/action` | `POST /servers/{id}/tasks`
+Create a snapshot (image) of a server | `POST /{project}/servers/{id}/action` | `POST /servers/{id}/tasks`
+Pause a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
+Unpause a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
+Suspend a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
+Resume a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
+Migrate a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks` *(Note: vNext task action is called `MOVE`)*
+Reset networking on a server | `POST /{project}/servers/{id}/action` ***Extension*** | **N/A**
+Inject networking info into a server | `POST /{project}/servers/{id}/action` ***Extension*** | **N/A**
+Lock a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
+Unlock a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
+Live migrate a server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks` *(Note: vNext task action is called `MOVE`)*
+Create a server backup | `POST /{project}/servers/{id}/action` ***Extension*** | **N/A** *(Note: This is what Heat is for.)*
+Reset server state | `POST /{project}/servers/{id}/action` ***Extension*** | **N/A**
+Evacuate server | `POST /{project}/servers/{id}/action` ***Extension*** | **N/A** *(Note: This is an operator-level action)*
+Add security group to a server | `POST /{project}/servers/{id}/action` ***Extension*** | **N/A** *(Note: This is what Neutron is for.)*
+Remove security group to a server | `POST /{project}/servers/{id}/action` ***Extension*** | **N/A** *(Note: This is what Neutron is for.)*
+Add floating IP address to a server | `POST /{project}/servers/{id}/action` ***Extension*** | **N/A** *(Note: This is what Neutron is for.)*
+View the server's console output | `POST /{project}/servers/{id}/action` ***Extension*** | `GET /servers/{id}/console_log`
+Get a URI to grab a console for a server | `POST /{project}/servers/{id}/action` ***Extension*** | `GET /servers/{id}/consoles/{type}`
+Force delete a server | `POST /{project}/servers/{id}/action` ***Extension*** | **N/A** *(Note: The archival of terminated servers is an operator-level action)*
+Restore a deleted server | `POST /{project}/servers/{id}/action` ***Extension*** | `POST /servers/{id}/tasks`
 
 ### Flavors (Server Types in vNext)
 
@@ -47,7 +68,9 @@ Purpose                 | v2/3 call               | vNext call
 ------------------------|-------------------------|----------------------
 Retrieve a list of flavors | `GET /{project}/flavors` | `GET /server_types`
 Retrieve a flavor | `GET /{project}/flavors/{id}` | `GET /server_types/{id}`
-Create a new flavor | `POST /{project}/flavors` *(**Extension**)* | `POST /server_types`
-List projects with access to a flavor | `GET /{project}/flavors/{id}/os-flavor-access`  *(**Extension**)* | `GET /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
-Add access to flavor | `POST /{project}/flavors/{id}/action`  *(**Extension**)* | `POST|PATCH /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)* *TODO:* `PATCH`
-Delete access to flavor | `DELETE /{project}/flavors/{id}/action`  *(**Extension**)* | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
+Create a new flavor | `POST /{project}/flavors` ***Extension*** | `POST /server_types`
+Delete a flavor | `DELETE /{project}/flavors/{id}` ***Extension*** | *TODO:* `DELETE /server_types/{id}`
+List projects with access to a flavor | `GET /{project}/flavors/{id}/os-flavor-access`  ***Extension*** | `GET /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
+Add access to flavor | `POST /{project}/flavors/{id}/action`  ***Extension*** | `POST|PATCH /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)* *TODO:* `PATCH`
+Delete access to flavor | `DELETE /{project}/flavors/{id}/action`  ***Extension*** | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
+List a flavor's extra specs | `GET /{project}/flavors/{id}/os-extra-specs` ***Extension*** | **N/A** *(Note: vNext server types do not have key/value pairs, but do have tags)*
