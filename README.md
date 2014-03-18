@@ -19,9 +19,6 @@ way to see differences between them.
 
 Purpose                 | v2 call                 | v3 call                 | vNext call
 ------------------------|-------------------------|-------------------------|----------------------
-Retrieve a project's    | GET                     | GET                     | GET
-servers                 | /{project}/servers      | /{project}/servers      | /projects/{project}/servers
-------------------------|-------------------------|-------------------------|----------------------
-Retrieve a server       | GET                     | GET                     | GET
-                        | /{project}/servers/{id} | /{project}/servers/{id} | /servers/{id}
-------------------------|-------------------------|-------------------------|----------------------
+Servers
+Retrieve a project's servers | GET /{project}/servers | GET /{project}/servers | GET /projects/{project}/servers
+Retrieve a server | GET /{project}/servers/{id} | GET /{project}/servers/{id} | GET /servers/{id}
