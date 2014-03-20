@@ -77,3 +77,35 @@ List projects with access to a flavor | `GET /{project}/flavors/{id}/os-flavor-a
 Add access to flavor | `POST /{project}/flavors/{id}/action`  ***Extension*** | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)* *TODO:* `PATCH /server_types/{id}` for changing shares
 Delete access to flavor | `DELETE /{project}/flavors/{id}/action`  ***Extension*** | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
 List a flavor's extra specs | `GET /{project}/flavors/{id}/os-extra-specs` ***Extension*** | **N/A** *(Note: vNext server types do not have key/value pairs, but do have tags)*
+
+## Operator API Calls
+
+It won't take long for the reader to notice that the proposed vNext Compute API
+has no API calls that are intended for operators or deployers of clouds. For
+example, all of these API extensions in the v2/v3 API have no corresponding
+API call in the proposed vNext API:
+
+ * `/os-hosts`: Bare metal compute nodes that run OpenStack services like nova-compute or nova-network
+ * `/os-cells`: Semi-autonomous Nova installations that share certain database and message queue services
+ * `/os-aggregates`: Groups of compute nodes that advertise a particular hypervisor or capabilities
+ * `/os-agents`: Guest agents that live in server instances for use by Nova
+ * `/os-baremetal-nodes`: Bare metal compute nodes that are treated like regular cloud resources for users
+ * `/os-hypervisors`: The hypervisors themselves
+ * `/os-services`: OpenStack service endpoints
+
+Does the fact that the proposed vNext Compute API lacks the above resources and
+calls mean that those resources are not important? No, of course not. It's just
+that the above resources and calls are not something that we feel should be exposed
+in the same public Compute API that is used by regular and elevated (administrative)
+users of cloud resources.
+
+Should there be a separate RESTful "Operators Compute API" that contains some or all of the
+above? Perhaps. Or perhaps not. But we don't feel that these calls belong in the
+same API as the one used by consumers/users of cloud resources.
+
+Maybe an entirely separate Operator API -- possibly one based on something other than
+HTTP -- would be A Good Thing for the long-term modularity and architectural soundness
+of Nova (and other OpenStack projects). Separating out operator-level interfaces from
+consumer-level interfaces may force some needed cleanup and clarity of internal
+Nova programming interfaces, allowing an operator-level API to work directly with
+more internal interfaces. Something to think about...
