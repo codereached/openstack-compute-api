@@ -1644,13 +1644,11 @@ The *visibility* attribute can be one of the following:
 }
 ```
 
-## PATCH /server_types/{id}
+## /server_types/{id}
+
+### PATCH
 
 Modify a server type by its *id*.
-
-+ Parameters
-    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server type
 
 > **Note**: The *shared* and *tags* attributes of the server type may not
 > be specified in the request payload. You may add or remove tags and
@@ -1660,6 +1658,10 @@ Modify a server type by its *id*.
 > regular users to create server types with a visibility of `PUBLIC`, and
 > if a regular user tries to modify a private server type to a public one,
 > the API shall return a `403 Forbidden`
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
 
 + Request (application/json)
 
@@ -1680,7 +1682,7 @@ Modify a server type by its *id*.
 
 + Response 204
 
-## GET /server_types/{id}
+### GET
 
 Retrieve a server type by its *id*.
 
@@ -1689,7 +1691,7 @@ Retrieve a server type by its *id*.
       for the server type
 
 + Response 200 (application/json)
-    
+
 ```json
 {
     "description": "General purpose low-CPU, low-memory, "
@@ -1727,7 +1729,7 @@ Retrieve a server type by its *name*.
     + name (string, `m1.micro`) ... A unique name identifier of the server type
 
 + Response 200 (application/json)
-    
+
 ```json
 {
     "description": "General purpose low-CPU, low-memory, "
@@ -2401,7 +2403,7 @@ Retrieve a server's state by its *id*.
 Retrieve a server by its *id*.
 
 + Response 200 (application/json)
-    
+
 ```json
 {
     "block_devices": [
@@ -2760,7 +2762,7 @@ Retrieve some or part of a server console log.
       return.
 
 + Response 200 (plain/text)
-    
+
 ```
 Linux version 2.6.21.7-2.ec2.v1.2.fc8xen (root@domU-12-34-56-0A-78-01) (gcc version 4.1.2 20070925 (Red Hat 4.1.2-33)) #1 SMP Fri Nov 20 19:22:36 EST 2009
 BIOS-provided physical RAM map:
@@ -2780,11 +2782,11 @@ Retrieve a URI where a VNC, RDP or Spice console can be connected to.
 + Parameters
     + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server.
-    + type (string, [`novnc`, `xvpvnc`, `rdp`, `spice`]) ... The code for which
-      type of console to return a URI for.
+    + type (string, `novnc`) ... The code for which
+      type of console to return a URI for. Acceptable values: [`novnc`, `xvpvnc`, `rdp`, `spice`].
 
 + Response 200 (application/json)
-    
+
 ```json
 {
     "uri": "http://cloud.example.com:6080/token=12fad949-b355-4f3b-983d-cbe5f59703e6"
