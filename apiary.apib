@@ -1882,7 +1882,7 @@ The *visibility* attribute can be one of the following:
 ```
 
 + Response 201 (application/json)
-    
+
 ```json
 {
     "description": "A good enough server type",
@@ -1916,6 +1916,42 @@ The *visibility* attribute can be one of the following:
     }
 }
 ```
+
+## PATCH /server_types/{id}
+
+Modify a server type by its *id*.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
+
+> **Note**: The *shared* and *tags* attributes of the server type may not
+> be specified in the request payload. You may add or remove tags and
+> sharing properties using the separate `tags` and `shared` collections.
+
+> **Note**: Many deployments of OpenStack Compute will choose not to allow
+> regular users to create server types with a visibility of `PUBLIC`, and
+> if a regular user tries to modify a private server type to a public one,
+> the API shall return a `403 Forbidden`
+
++ Request (application/json)
+
+```json
+{
+    "description": "A good enough server type",
+    "name": "good.enough",
+    "spec": {
+        "memory_mb": 1024,
+        "root_disk_gb": 8,
+        "cpu_units": 2,
+        "rxtx_factor": 1.0,
+        "swap_mb": 2048
+    },
+    "visibility": "PRIVATE"
+}
+```
+
++ Response 204
 
 ## GET /server_types/{id}
 
