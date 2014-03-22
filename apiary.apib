@@ -758,28 +758,6 @@ request/response contract.
                             "PRIVATE"
                         ]
                     },
-                    "share": {
-                        "type": "object",
-                        "properties": {
-                            "user_id": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                },
-                                "description": "Zero or more UUIDs of users that this "
-                                               "server type is shared with.",
-                            },
-                            "project_id": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                },
-                                "description": "Zero or more UUIDs of projects that this "
-                                               "server type is shared with.",
-                            }
-                        },
-                        "additionalProperties": false
-                    },
                     "spec": {
                         "type": "object",
                         "properties": {
@@ -820,10 +798,6 @@ request/response contract.
                                 "minimum": 0,
                             }
                         }
-                    },
-                    "tags": {
-                        "type": "array",
-                        "items": { "type": "string" }
                     }
                }
            }
