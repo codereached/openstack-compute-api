@@ -392,7 +392,7 @@ Compute API as well as expected request and resource structures.
 Returns a list of discoverable JSON-Schema documents for all objects in the
 API.
 
-+ Response (application/json)
++ Response 200 (application/json)
 
 ```json
 [
@@ -448,7 +448,7 @@ API.
 Returns a JSON-Schema document describing the server type object model and
 request/response contract.
 
-+ Response (application/json)
++ Response 200 (application/json)
 
 ```json
 {
@@ -759,7 +759,7 @@ request/response contract.
 Returns a JSON-Schema document describing the server task object model and
 request/response contract.
 
-+ Response (application/json)
++ Response 200 (application/json)
 
 ```json
 {
@@ -941,7 +941,7 @@ request/response contract.
 Returns a JSON-Schema document describing the server task item object model
 and request/response contract.
 
-+ Response (application/json)
++ Response 200 (application/json)
 
 ```json
 {
@@ -1081,7 +1081,7 @@ and request/response contract.
 Returns a JSON-Schema document describing the server object model
 and request/response contract.
 
-+ Response (application/json)
++ Response 200 (application/json)
 
 ```json
 {
@@ -2780,7 +2780,7 @@ Retrieve a URI where a VNC, RDP or Spice console can be connected to.
 + Parameters
     + server (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server.
-    + type (string, one of `novnc`, `xvpvnc`, `rdp` or `spice`) ... The code for which
+    + type (string, [`novnc`, `xvpvnc`, `rdp`, `spice`]) ... The code for which
       type of console to return a URI for.
 
 + Response 200 (application/json)
