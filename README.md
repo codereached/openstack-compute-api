@@ -72,6 +72,7 @@ Purpose                 | v2/3 call               | vNext call
 Retrieve a list of flavors | `GET /{project}/flavors` | `GET /server_types`
 Retrieve a flavor | `GET /{project}/flavors/{id}` | `GET /server_types/{id}`
 Create a new flavor | `POST /{project}/flavors` ***Extension*** | `POST /server_types`
+Update a flavor | **N/A** | `PATCH /server_types/{id}`
 Delete a flavor | `DELETE /{project}/flavors/{id}` ***Extension*** | *TODO:* `DELETE /server_types/{id}`
 List projects with access to a flavor | `GET /{project}/flavors/{id}/os-flavor-access`  ***Extension*** | `GET /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
 Add access to flavor | `POST /{project}/flavors/{id}/action`  ***Extension*** | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)* *TODO:* `PATCH /server_types/{id}` for changing shares
