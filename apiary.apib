@@ -266,47 +266,6 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 }
             }
         },
-        "rel/server_group": {
-            "href-template": "/server_groups/{server_group_id}",
-            "href-vars": {
-                "server_group_id": "param/server_group_id"
-            },
-            "hints": {
-                "allow": ["GET"],
-                "formats": {
-                    "application/json": {}
-                }
-            }
-        },
-        "rel/project_server_group": {
-            "href-template": "/project/{project_id}/server_groups/{server_group_slug}",
-            "href-vars": {
-                "project_id": "param/project_id",
-                "server_group_slug": "param/server_group_slug"
-            },
-            "hints": {
-                "allow": ["GET"],
-                "formats": {
-                    "application/json": {}
-                }
-            }
-        },
-        "rel/project_server_groups": {
-            "href-template": "/project/{project_id}/server_groups"
-                             "?{limit,marker,tag}",
-            "href-vars": {
-                "project_id": "param/project_id",
-                "limit": "param/limit",
-                "marker": "param/marker",
-                "tag": "param/tag"
-            },
-            "hints": {
-                "allow": ["GET", "POST"],
-                "formats": {
-                    "application/json": {}
-                }
-            }
-        },
         "rel/server_task": {
             "href-template": "/server_tasks/{server_task_id}",
             "href-vars": {
@@ -444,17 +403,6 @@ API.
         "_links": {
             "rel/schema": {
                 "href": "/schemas/server_type"
-            }
-        }
-    },
-    {
-        "type": "server_group",
-        "description": "A server group is a *user-defined* collection "
-                       "of servers that provides defaults for servers "
-                       "launched in the group.",
-        "_links": {
-            "rel/schema": {
-                "href": "/schemas/server_group"
             }
         }
     },
@@ -803,191 +751,6 @@ request/response contract.
            }
         }
     ]
-}
-```
-
-## GET /schemas/server_group
-
-Returns a JSON-Schema document describing the server group object model and
-request/response contract.
-
-+ Response (application/json)
-
-```json
-{
-    "type": "object",
-    "title": "Server Group",
-    "description": "A server group is a *user-defined* collection of servers "
-                   "that provides defaults for servers launched in the group.",
-    "properties": {
-        "id": {
-            "type": "string",
-            "description": "UUID identifier of the server group.",
-            "required": true,
-            "maxLength": "36",
-            "minLength": "32"
-        },
-        "name": {
-            "type": "string",
-            "description": "The short name for the server group.",
-            "required": true
-        },
-        "description": {
-            "type": "string"
-        },
-        "created_by": {
-            "type": "string",
-            "description": "UUID identifier of user that created the server "
-                           "group.",
-            "required": true,
-            "maxLength": "36",
-            "minLength": "32"
-        },
-        "project_id": {
-            "type": "string",
-            "description": "UUID identifier of project that owns the server "
-                           "group.",
-            "required": true,
-            "maxLength": "36",
-            "minLength": "32"
-        },
-        "defaults": {
-            "type": "object",
-            "properties": {
-                "template_id": {
-                    "type": "string",
-                    "description": "UUID identifier of the server template "
-                                   "that shall be used by default when "
-                                   "launching a server in the server group.",
-                    "required": true,
-                    "maxLength": "36",
-                    "minLength": "32"
-                },
-                "type_id": {
-                    "type": "string",
-                    "description": "UUID identifier of the server type "
-                                   "that shall be used by default when "
-                                   "launching a server in the server group.",
-                    "required": true,
-                    "maxLength": "36",
-                    "minLength": "32"
-                },
-                "hostname_pattern": {
-                    "type": "string",
-                    "description": "A regex expression that may be used to "
-                                   "define hostnames for multiple servers "
-                                   "launched in this group. The "
-                                   "`%(rand_name)d` symbol is interpolated "
-                                   "as a random number. You can limit the "
-                                   "number of digits by specifying a length, "
-                                   "like so: `%(rand_num)5d`."
-                }
-            }
-        },
-        "tags": {
-            "type": "array",
-            "items": { "type": "string" }
-        }
-    },
-    "links": [
-        {
-           "title": "List server groups",
-           "rel": "project_server_groups",
-           "href": "/projects/{project}/server_groups",
-           "schema": {
-               "type": "object",
-               "properties": {
-                    "project": {
-                        "type": "string",
-                        "description": "UUID identifier of project that owns "
-                                       "the server group.",
-                        "required": true,
-                        "maxLength": "36",
-                        "minLength": "32"
-                    },
-                    "limit": {
-                        "type": "integer",
-                        "description": "Maximum Number of items to return."
-                    },
-                    "marker": {
-                        "type": "string",
-                        "description": "UUID of last record on previous page.",
-                        "maxLength": "36",
-                        "minLength": "32"
-                    },
-                    "tag": {
-                        "type": "array",
-                        "description": "Zero or more string tags to match "
-                                       "server groups in an OR fashion.",
-                        "items": {"type": "string"}
-                    }
-               }
-           }
-        },
-        {
-           "title": "Create a new server group",
-           "rel": "project_server_groups",
-           "href": "/projects/{project}/server_groups",
-           "method": "POST",
-           "schema": {
-               "type": "object",
-               "properties": {
-                    "project": {
-                        "type": "string",
-                        "description": "UUID identifier of project that owns "
-                                       "the server group.",
-                        "required": true,
-                        "maxLength": "36",
-                        "minLength": "32"
-                    },
-                    "name": {
-                        "type": "string",
-                        "description": "The short name for the server group.",
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "defaults": {
-                        "type": "object",
-                        "properties": {
-                            "template_id": {
-                                "type": "string",
-                                "description": "UUID identifier of the server template "
-                                               "that shall be used by default when "
-                                               "launching a server in the server group.",
-                                "required": true,
-                                "maxLength": "36",
-                                "minLength": "32"
-                            },
-                            "type_id": {
-                                "type": "string",
-                                "description": "UUID identifier of the server type "
-                                               "that shall be used by default when "
-                                               "launching a server in the server group.",
-                                "required": true,
-                                "maxLength": "36",
-                                "minLength": "32"
-                            },
-                            "hostname_pattern": {
-                                "type": "string",
-                                "description": "A regex expression that may be used to "
-                                               "define hostnames for multiple servers "
-                                               "launched in this group. The "
-                                               "`%(rand_name)d` symbol is interpolated "
-                                               "as a random number. You can limit the "
-                                               "number of digits by specifying a length, "
-                                               "like so: `%(rand_num)5d`."
-                            }
-                        }
-                    },
-                    "tags": {
-                        "type": "array",
-                        "items": { "type": "string" }
-                    }
-               }
-           }
-        }
-    }
 }
 ```
 
@@ -1363,13 +1126,6 @@ and request/response contract.
             "required": true,
             "format": "datetime"
         },
-        "group_id": {
-            "type": "string",
-            "description": "Optional UUID identifier of the server group this "
-                           "server belongs to."
-            "maxLength": "36",
-            "minLength": "32"
-        },
         "project_id": {
             "type": "string",
             "description": "UUID identifier of project that owns the server."
@@ -1670,18 +1426,21 @@ and request/response contract.
                     "defaults": {
                         "type": "object",
                         "properties": {
+                            "hostname_pattern": {
+                                "type": "string",
+                                "description": "A regex expression that may be used to "
+                                               "define hostnames for multiple servers "
+                                               "launched in this request. The "
+                                               "`%(rand_name)d` symbol is interpolated "
+                                               "as a random number. You can limit the "
+                                               "number of digits by specifying a length, "
+                                               "like so: `%(rand_num)5d`."
+                            },
                             "keypair_id": {
                                 "type": "string",
                                 "description": "UUID identifier of the keypair to use by default "
                                                "for servers created with this request.",
                                 "required": true,
-                                "maxLength": "36",
-                                "minLength": "32"
-                            },
-                            "group_id": {
-                                "type": "string",
-                                "description": "Optional UUID identifier of the server "
-                                               "group servers created with this request should be in.",
                                 "maxLength": "36",
                                 "minLength": "32"
                             },
@@ -1723,12 +1482,6 @@ and request/response contract.
                                 "keypair_id": {
                                     "type": "string",
                                     "description": "Optional UUID identifier of the keypair to use for this server.",
-                                    "maxLength": "36",
-                                    "minLength": "32"
-                                },
-                                "group_id": {
-                                    "type": "string",
-                                    "description": "Optional UUID identifier of the server group this server should be in.",
                                     "maxLength": "36",
                                     "minLength": "32"
                                 },
@@ -2088,240 +1841,6 @@ Retrieve a collection of server types.
 }
 ```
 
-# Group Server Group
-
-A server group is a *user-defined* collection of servers that provides defaults
-for servers launched in the group.
-
-## POST /projects/{project}/server_groups
-
-Create a new server group within a project.
-
-A server group has a required *name* and an optional *description*, both string
-values. The name attribute is "slugified" on creation and can be used to
-retrieve the server group by an easy-to-remember name instead of a UUID (see
-below for the `GET /projects/{project}/server_groups/{slug}` call signature).
-
-The *defaults* attribute is a dictionary of attributes that are used as default
-values when launching servers in the group. Possible keys in the defaults
-dictionary include:
-
- - `defaults.template_id` (string, UUID) ... The UUID of the server template to
-   use as a default when launching servers in this group.
- - `defaults.type_id` (string, UUID) ... The UUID of the server type to use
-   by default when launching servers in this group.
- - `defaults.hostname_pattern` (string, regex) ... A regex expression that may
-   be used to define hostnames for multiple servers launched in this group. The
-   `%(rand_name)d` symbol is interpolated as a random number. You can limit the
-   number of digits by specifying a length, like so: `%(rand_num)5d`.
-
-In addition to the above, a server group may be tagged with zero or more
-strings.
-
-+ Parameters
-    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the project.
-
-+ Request (application/json)
-
-```json
-{
-    "description": "Application servers running Windows Server 2008 R2",
-    "defaults": {
-        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-        "type_id": "96d639b0-a3ca-11e3-a5e2-0800200c9a66",
-        "hostname_pattern": "win-app-%(rand_num)5d"
-    },
-    "name": "Windows App servers",
-    "tags": [
-        "windows"
-    ]
-}
-```
-
-+ Response 201 (application/json)
-
-```json
-{
-    "created_by": "15383832-78c6-4bce-b491-e95de799d709",
-    "description": "Application servers running Windows Server 2008 R2",
-    "defaults": {
-        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-        "type_id": "96d639b0-a3ca-11e3-a5e2-0800200c9a66",
-        "hostname_pattern": "win-app-%(rand_num)5d"
-    },
-    "id": "5f634509-ee40-4406-9c45-e5f343f01f62",
-    "name": "Windows App servers",
-    "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-    "slug": "windows-app-servers",
-    "tags": [
-        "windows"
-    ],
-    "_links":  {
-        "self": {
-            "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
-        },
-        "describedby": {
-            "href": "/schemas/server_group"
-        }
-    }
-}
-```
-
-## GET /server_groups/{id}
-
-Retrieve a server group by its *id*.
-
-+ Parameters
-    + id (string, `5f634509-ee40-4406-9c45-e5f343f01f62`) ... A UUID identifier
-      for the server group
-
-+ Response 200 (application/json)
-    
-```json
-{
-    "created_by": "15383832-78c6-4bce-b491-e95de799d709",
-    "description": "Application servers running Windows Server 2008 R2",
-    "defaults": {
-        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-        "type_id": "96d639b0-a3ca-11e3-a5e2-0800200c9a66",
-        "hostname_pattern": "win-app-%(rand_num)5d"
-    },
-    "id": "5f634509-ee40-4406-9c45-e5f343f01f62",
-    "name": "Windows App servers",
-    "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-    "slug": "windows-app-servers",
-    "tags": [
-        "windows"
-    ],
-    "_links":  {
-        "self": {
-            "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
-        },
-        "describedby": {
-            "href": "/schemas/server_group"
-        }
-    }
-}
-```
-
-## GET /projects/{project}/server_groups/{slug}
-
-Retrieve a server group within a *project* by its *slug*.
-
-+ Parameters
-    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the project.
-    + slug (string, `windows-app-servers`) ... A slugified name of the server group
-
-+ Response 200 (application/json)
-    
-```json
-{
-    "created_by": "15383832-78c6-4bce-b491-e95de799d709",
-    "description": "Application servers running Windows Server 2008 R2",
-    "defaults": {
-        "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-        "type_id": "96d639b0-a3ca-11e3-a5e2-0800200c9a66",
-        "hostname_pattern": "win-app-%(rand_num)5d"
-    },
-    "id": "5f634509-ee40-4406-9c45-e5f343f01f62",
-    "name": "Windows App servers",
-    "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-    "slug": "windows-app-servers",
-    "tags": [
-        "windows"
-    ],
-    "_links":  {
-        "self": {
-            "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
-        },
-        "describedby": {
-            "href": "/schemas/server_group"
-        }
-    }
-}
-```
-
-## GET /projects/{project}/server_groups{?limit,marker,tag}
-
-Retrieve a collection of server groups.
-
-+ Parameters
-    + project (string, `a7728150-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the project.
-    + limit = `20` (optional, number) ... Maximum number of results to return
-    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
-      identifier of the last record on the previous page of results.
-    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
-      server groups with any matching tag.
-
-+ Response 200 (application/json)
-
-```json
-{
-    "server_groups": [
-        {
-            "created_by": "15383832-78c6-4bce-b491-e95de799d709",
-            "description": "Application servers running Windows Server 2008 R2",
-            "defaults": {
-                "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
-                "type_id": "96d639b0-a3ca-11e3-a5e2-0800200c9a66",
-                "hostname_pattern": "win-app-%(rand_num)5d"
-            },
-            "id": "5f634509-ee40-4406-9c45-e5f343f01f62",
-            "name": "Windows App servers",
-            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-            "slug": "windows-app-servers",
-            "tags": [
-                "windows"
-            ],
-            "_links":  {
-                "self": {
-                    "href": "/server_groups/5f634509-ee40-4406-9c45-e5f343f01f62"
-                },
-                "describedby": {
-                    "href": "/schemas/server_group"
-                }
-            }
-        },
-        {
-            "created_by": "15383832-78c6-4bce-b491-e95de799d709",
-            "description": "Database servers running PostgreSQL 9.1",
-            "defaults": {
-                "template_id": "af2eda95-9a35-49c6-a90e-0fdd60686309",
-                "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
-                "hostname_pattern": "pgdb-%(rand_num)1d"
-            },
-            "id": "b84cb239-e3a8-49c4-b601-90ed8423cb93",
-            "name": "PostgreSQL servers",
-            "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-            "slug": "postgresql-servers",
-            "tags": [
-                "database",
-                "postgresql"
-            ],
-            "_links":  {
-                "self": {
-                    "href": "/server_groups/b84cb239-e3a8-49c4-b601-90ed8423cb93"
-                },
-                "describedby": {
-                    "href": "/schemas/server_group"
-                }
-            }
-        },
-    ]
-    "_links": {
-        "self": {
-            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/server_groups?limit=2"
-        },
-        "next": {
-            "href": "/projects/a7728150-a34f-11e3-a5e2-0800200c9a66/server_groups?limit=2&marker=1593e080-a354-11e3-a5e2-0800200c9a66"
-        }
-    }
-}
-```
-
 # Group Server Task
 
 A server task is a related set of actions that are or have been executed
@@ -2675,8 +2194,6 @@ OpenStack Compute API:
 
  - `block_devices` (list of dicts) ... A list of dictionaries containing
    information about the block devices attached to the server.
- - `group_id` (string or null, `53626cb0-a34f-11e3-a5e2-0800200c9a66`) ... The
-   UUID of the server group this server belongs to, or null.
  - `hostname` (string, `app-server-1`) ... This is the hostname of
    the server. It must be unique among all servers within a project.
  - `id` (string, `53626cb0-a34f-11e3-a5e2-0800200c9a66`) ... The UUID of the
@@ -2769,9 +2286,15 @@ Create one or more servers in a project.
 There are two main sections to the request body: *defaults* and *servers*.
 
 The defaults section is used to set the default attributes of servers when
-creating more than one server. Instead of specifying the same server group
-or server type for each server you create, you can specify this once in the
+creating more than one server. Instead of specifying the same server type,
+keypair or region for each server you create, you can specify this once in the
 defaults section.
+
+Within the defaults section is a special key called `hostname_pattern`. 
+This field is a regex expression that may be used to define hostnames
+for multiple servers launched in this request. The `%(rand_name)d` symbol
+is interpolated as a random number. You can limit the number of digits by
+specifying a length like so: `%(rand_num)5d`.
 
 The servers section is a list of dictionaries, one per server you want to
 create. Attributes that *must* be unique for each server -- such as the
@@ -2800,7 +2323,7 @@ attributes about each server that was launched:
 ```json
 {
     "defaults": {
-        "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
+        "hostname_pattern": "app-server-%{rand_num)5d",
         "keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567",
         "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
         "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
@@ -2891,7 +2414,6 @@ Retrieve a server by its *id*.
             "device": "/dev/sdb"
         }
     ],
-    "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
     "hostname": "example-server-1",
     "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
     "launch_keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567", 
@@ -2973,7 +2495,6 @@ Retrieve a server by its *project* and *hostname*.
             "device": "/dev/sdb"
         }
     ],
-    "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
     "hostname": "example-server-1",
     "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
     "launch_keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567", 
@@ -3059,7 +2580,6 @@ about the servers in one of their projects.
 {
     "servers": [
         {
-            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
             "hostname": "example-server-1",
             "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
             "launched_at": "2014-03-02T23:20:19",
@@ -3088,7 +2608,6 @@ about the servers in one of their projects.
             }
         },
         {
-            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
             "hostname": "example-server-2",
             "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0"
             "launched_at": "2014-03-03T03:20:19",
@@ -3163,7 +2682,6 @@ all server records that meet the parameterized filter criteria.
 {
     "servers": [
         {
-            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
             "hostname": "example-server-1",
             "id": "53626cb0-a34f-11e3-a5e2-0800200c9a66",
             "launched_at": "2014-03-02T23:20:19",
@@ -3192,7 +2710,6 @@ all server records that meet the parameterized filter criteria.
             }
         },
         {
-            "group_id": "bd0bf800-a356-11e3-a5e2-0800200c9a66",
             "hostname": "example-server-2",
             "id": "3699f74d-af95-406d-b38e-d2b86f84a9d0"
             "launched_at": "2014-03-03T03:20:19",
