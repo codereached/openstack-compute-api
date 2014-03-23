@@ -301,7 +301,7 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
                 "server_id": "param/server_id"
             },
             "hints": {
-                "allow": ["GET", "HEAD"],
+                "allow": ["GET", "HEAD", "PATCH"],
                 "formats": {
                     "application/json": {}
                 }
@@ -1403,7 +1403,38 @@ and request/response contract.
                         "description": "Filter servers by UUID of user who launched it.",
                         "maxLength": "36",
                         "minLength": "32"
+                    }
+               }
+           }
+        },
+        {
+           "title": "Modify a server",
+           "rel": "server",
+           "href": "/servers/{id}",
+           "method": "PATCH",
+           "schema": {
+               "type": "object",
+               "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "UUID identifier of the server to update.",
+                        "required": true,
+                        "maxLength": "36",
+                        "minLength": "32"
                     },
+                    "project_id": {
+                        "type": "string",
+                        "description": "If changing ownership of this server from one "
+                                       "project to another, this field would be set "
+                                       "to the UUID identifier of the new owning project.",
+                        "maxLength": "36",
+                        "minLength": "32"
+                    },
+                    "hostname": {
+                        "type": "string",
+                        "description": "This is the hostname of the server. It must be "
+                                       "unique among all servers within a project."
+                    }
                }
            }
         },
@@ -2387,6 +2418,26 @@ attributes about each server that was launched:
 + Parameters
     + id (string, `53626cb0-a34f-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server
+
+### PATCH
+
+Update a server's ownership or hostname.
+
+> **Note**: A server's ownership may be transferred from one project to another
+> using this call. The new owning project's ID should be the project_id attribute
+> in the request payload.
+
++ Request (application/json)
+
+```json
+{
+    "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
+    "hostname": "new-example-server-2"
+}
+
+```
+
++ Response 204
 
 ### HEAD
 

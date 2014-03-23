@@ -25,7 +25,7 @@ Retrieve a project's servers | `GET /{project}/servers` | `GET /projects/{projec
 Retrieve a server | `GET /{project}/servers/{id}` | `GET /servers/{id}`
 Retrieve a server's details | `GET /{project}/servers/{id}/detail` | N/A
 Launch one or more servers | `POST /{project}/servers` | `POST /projects/{project/servers`
-Update a server | `PUT /{project}/servers/{id}` | *TODO:* `PATCH /servers/{id}`
+Update a server | `PUT /{project}/servers/{id}` | `PATCH /servers/{id}`
 Terminate a server | `DELETE /{project}/servers/{id}` | `POST /servers/{id}/tasks`
 Get a server's diagnostics | `GET /{project}/servers/{id}` ***Extension*** | *TODO:* `GET /servers/{id}/diagnostics`
 
