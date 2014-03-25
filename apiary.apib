@@ -1856,6 +1856,77 @@ Retrieve a server type by its *name*.
 }
 ```
 
+### /server_types/{id}/tags
+
+#### GET
+
+Retrieve a server type's collection of tags by the server's *id*.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
+
++ Response 200 (application/json)
+
+```json
+[
+    "general-purpose"
+]
+```
+
+#### PUT
+
+Replaces a server type's collection of tags.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
+
++ Request (application/json)
+
+```json
+[
+    "general-purpose",
+    "generic"
+]
+```
+
++ Response 204 (application/json)
+
+#### DELETE
+
+Deletes all of a server type's collection of tags.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
+
++ Response 204 (application/json)
+
+### /server_types/{id}/tags/{tag}
+
+#### PUT
+
+Tag a server type with a specific string.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
+    + `tag` (string, `general-purpose` ... The string to tag the resource with
+
++ Response 204 (application/json)
+
+#### DELETE
+
+Delete a tag from a server type.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
+    + `tag` (string, `general-purpose` ... The string to tag the resource with
+
++ Response 204 (application/json)
+
 ## GET /server_types{?limit,marker,tag}
 
 Retrieve a collection of server types.
