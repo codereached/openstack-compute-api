@@ -505,10 +505,10 @@ request/response contract.
             ],
             "required": true
         },
-        "share": {
+        "shares": {
             "type": "object",
             "properties": {
-                "user_id": {
+                "users": {
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -516,7 +516,7 @@ request/response contract.
                     "description": "Zero or more UUIDs of users that this "
                                    "server type is shared with.",
                 },
-                "project_id": {
+                "projects": {
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -625,10 +625,10 @@ request/response contract.
                             "PRIVATE"
                         ]
                     },
-                    "share": {
+                    "shares": {
                         "type": "object",
                         "properties": {
-                            "user_id": {
+                            "users": {
                                 "type": "array",
                                 "items": {
                                     "type": "string"
@@ -636,7 +636,7 @@ request/response contract.
                                 "description": "Zero or more UUIDs of users that this "
                                                "server type is shared with.",
                             },
-                            "project_id": {
+                            "projects": {
                                 "type": "array",
                                 "items": {
                                     "type": "string"
@@ -1675,6 +1675,14 @@ The *visibility* attribute can be one of the following:
  - `PRIVATE` ... The creating user and any user or project they share the
    type with can see this type when listing server types.
 
+When the visibility of a server type is `PRIVATE`, the creating user may
+share the server type with a set of users and projects. The `shares` attribute
+of a server type has two components: `users` and `projects`. The `users`
+component is a list of user UUIDs that the server type is shared with. The
+`projects` component is a similar list of project UUIDs that the server type
+is shared with. The list of user UUIDs shall be checked **first** when
+determining access to a server type.
+
 > **Note**: Many deployments of OpenStack Compute will choose not to allow
 > regular users to create server types with a visibility of `PUBLIC`, and
 > if a regular user tries to issue a create of a publicly-visible server
@@ -1686,12 +1694,12 @@ The *visibility* attribute can be one of the following:
 {
     "description": "A good enough server type",
     "name": "good.enough",
-    "share": {
-        "user_id": [
+    "shares": {
+        "users": [
             "781247cf-7bec-4e84-86ea-3cbcee48ae6d",
             "60536efb-2e6e-4efc-9d39-fe8113292e52"
         ],
-        "project_id": [
+        "projects": [
             "fd2ab3c0-d822-437f-b956-9e60e7d0fb69"
         ]
     },
@@ -1702,6 +1710,7 @@ The *visibility* attribute can be one of the following:
         "rxtx_factor": 1.0,
         "swap_mb": 2048
     },
+    "tags": [],
     "visibility": "PRIVATE"
 }
 ```
@@ -1713,12 +1722,12 @@ The *visibility* attribute can be one of the following:
     "description": "A good enough server type",
     "id": "7220d0e6-b5c6-451e-b611-27254acf2a77",
     "name": "good.enough",
-    "share": {
-        "user_id": [
+    "shares": {
+        "users": [
             "781247cf-7bec-4e84-86ea-3cbcee48ae6d",
             "60536efb-2e6e-4efc-9d39-fe8113292e52"
         ],
-        "project_id": [
+        "projects": [
             "fd2ab3c0-d822-437f-b956-9e60e7d0fb69"
         ]
     },
@@ -1735,6 +1744,9 @@ The *visibility* attribute can be one of the following:
         "self": {
             "href": "/server_types/7220d0e6-b5c6-451e-b611-27254acf2a77"
         },
+        "tags": {
+            "href": "/server_types/7220d0e6-b5c6-451e-b611-27254acf2a77/tags"
+        },
         "describedby": {
             "href": "/schemas/server_type"
         }
@@ -1748,9 +1760,9 @@ The *visibility* attribute can be one of the following:
 
 Modify a server type by its *id*.
 
-> **Note**: The *shared* and *tags* attributes of the server type may not
+> **Note**: The *shares* and *tags* attributes of the server type may not
 > be specified in the request payload. You may add or remove tags and
-> sharing properties using the separate `tags` and `shared` collections.
+> sharing properties using the separate `tags` and `shares` collections.
 
 > **Note**: Many deployments of OpenStack Compute will choose not to allow
 > regular users to create server types with a visibility of `PUBLIC`, and
@@ -1796,7 +1808,7 @@ Retrieve a server type by its *id*.
                    "small-root-disk type of server.",
     "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
     "name": "m1.micro",
-    "share": {},
+    "shares": {},
     "spec": {
         "memory_mb": 128,
         "root_disk_gb": 8,
@@ -1834,7 +1846,7 @@ Retrieve a server type by its *name*.
                    "small-root-disk type of server.",
     "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
     "name": "m1.micro",
-    "share": {},
+    "shares": {},
     "spec": {
         "memory_mb": 128,
         "root_disk_gb": 8,
@@ -1953,7 +1965,7 @@ Retrieve a collection of server types.
                            "small-root-disk type of server.",
             "id": "7a6aba30-a3c0-11e3-a5e2-0800200c9a66",
             "name": "m1.micro",
-            "share": {},
+            "shares": {},
             "spec": {
                 "memory_mb": 128,
                 "root_disk_gb": 8,
@@ -1979,7 +1991,7 @@ Retrieve a collection of server types.
                            "small-root-disk type of server.",
             "id": "1593e080-a354-11e3-a5e2-0800200c9a66",
             "name": "c1.xlarge",
-            "share": {},
+            "shares": {},
             "spec": {
                 "memory_mb": 32768,
                 "root_disk_gb": 8,
