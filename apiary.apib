@@ -1871,13 +1871,15 @@ Retrieve a server type by its *name*.
 
 ### /server_types/{id}/tags
 
-#### GET
-
-Retrieve a server type's collection of tags by the server's *id*.
+Operations on the collection of tags for a server type.
 
 + Parameters
     + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server type
+
+#### GET
+
+Retrieve a server type's collection of tags by the server's *id*.
 
 + Response 200 (application/json)
 
@@ -1890,10 +1892,6 @@ Retrieve a server type's collection of tags by the server's *id*.
 #### PUT
 
 Replaces a server type's collection of tags.
-
-+ Parameters
-    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server type
 
 + Request (application/json)
 
@@ -1910,22 +1908,20 @@ Replaces a server type's collection of tags.
 
 Deletes all of a server type's collection of tags.
 
-+ Parameters
-    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server type
-
 + Response 204 (application/json)
 
 ### /server_types/{id}/tags/{tag}
 
-#### PUT
-
-Tag a server type with a specific string.
+Operations on individual tags on a server type.
 
 + Parameters
     + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server type
     + `tag` (string, `general-purpose` ... The string to tag the resource with
+
+#### PUT
+
+Tag a server type with a specific string.
 
 + Response 204 (application/json)
 
@@ -1933,10 +1929,101 @@ Tag a server type with a specific string.
 
 Delete a tag from a server type.
 
++ Response 204 (application/json)
+
+### /server_types/{id}/shares
+
+Operations on the collection of entities that may use a server type.
+
 + Parameters
     + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
       for the server type
-    + `tag` (string, `general-purpose` ... The string to tag the resource with
+
+#### GET
+
+Retrieve the collection of entities that may use a server type by it's *id*.
+
++ Response 200 (application/json)
+
+```json
+{
+    "users": [
+        "781247cf-7bec-4e84-86ea-3cbcee48ae6d",
+        "60536efb-2e6e-4efc-9d39-fe8113292e52"
+    ],
+    "projects": [
+        "fd2ab3c0-d822-437f-b956-9e60e7d0fb69"
+    ]
+}
+```
+
+#### PUT
+
+Replaces the collection of entities that may use a server type.
+
++ Request (application/json)
+
+```json
+{
+    "users": [
+        "60536efb-2e6e-4efc-9d39-fe8113292e52"
+    ],
+    "projects": [
+    ]
+}
+```
+
++ Response 204 (application/json)
+
+#### DELETE
+
+Deletes the entire collection of entities that may use a server type.
+This action makes the original creator of the server type the only
+normal user of the Compute API that may use the server type.
+
++ Response 204 (application/json)
+
+### /server_types/{id}/shares/users/{user}
+
+Operations to add or remove access to a server type for a specific user.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
+    + `user` (string, `60536efb-2e6e-4efc-9d39-fe8113292e52` ... UUID identifier
+      for the user to modify access to this server type
+
+#### PUT
+
+Enable access to a server type to a particular user.
+
++ Response 204 (application/json)
+
+#### DELETE
+
+Remove access to a server type from a particular user. 
+
++ Response 204 (application/json)
+
+### /server_types/{id}/shares/projects/{project}
+
+Operations to add or remove access to a server type for a specific project.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
+    + `user` (string, `60536efb-2e6e-4efc-9d39-fe8113292e52` ... UUID identifier
+      for the project to modify access to this server type
+
+#### PUT
+
+Enable access to a server type to a particular project.
+
++ Response 204 (application/json)
+
+#### DELETE
+
+Remove access to a server type from a particular project. 
 
 + Response 204 (application/json)
 
