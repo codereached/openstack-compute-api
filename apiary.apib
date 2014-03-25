@@ -439,7 +439,29 @@ API.
                 "href": "/schemas/server"
             }
         }
-    }
+    },
+    {
+        "type": "tag",
+        "description": "A tag is a simple string that can be used to "
+                       "categorize a resource. Many resource types in "
+                       "the API can be tagged."
+        "_links": {
+            "rel/schema": {
+                "href": "/schemas/tag"
+            }
+        }
+    },
+    {
+        "type": "property",
+        "description": "A property is a simple key/value pair that can be "
+                       "used by users to describe a resource. Many resource "
+                       "types in the API have a collection of properties."
+        "_links": {
+            "rel/schema": {
+                "href": "/schemas/property"
+            }
+        }
+    },
 ]
 ```
 
@@ -1547,6 +1569,50 @@ and request/response contract.
     }
 }
 ```
+
+## GET /schemas/tag
+
+Returns a JSON-Schema document describing the tag object model.
+
++ Response 200 (application/json)
+
+```json
+{
+    "type": "string",
+    "description": "A tag is a simple string that can be used to "
+                   "categorize a resource. Many resource types in "
+                   "the API can be tagged."",
+    "maxLength": "50",
+    "minLength": "1"
+}
+```
+
+## GET /schemas/property
+
+Returns a JSON-Schema document describing the property object model.
+
++ Response 200 (application/json)
+
+```json
+{
+    "type": "object",
+    "title": "Property",
+    "description": "A property is a simple key/value pair that can be "
+                   "used by users to describe a resource. Many resource "
+                   "types in the API have a collection of properties.",
+    "properties": {
+        "key": {
+            "type": "string",
+            "description": "The key of the key/value pair.",
+            "maxLength": "50",
+            "minLength": "1"
+        },
+        "value": {
+            "type": "string",
+            "description": "The value of the key/value pair.",
+        }
+    }
+}
 
 # Group Project
 
