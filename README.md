@@ -110,3 +110,36 @@ of Nova (and other OpenStack projects). Separating out operator-level interfaces
 consumer-level interfaces may force some needed cleanup and clarity of internal
 Nova programming interfaces, allowing an operator-level API to work directly with
 more internal interfaces. Something to think about...
+
+## What Happened to Availability Zones?
+
+Personally, I feel it is a mistake to continue to use the Amazon concept
+of an availability zone in OpenStack, as it brings with it the
+connotation from AWS EC2 that each zone is an independent failure
+domain. This characteristic of EC2 availability zones is not enforced in
+OpenStack Nova or Cinder, and therefore creates a false expectation for
+Nova users.
+
+In addition to the above problem with incongruent expectations, the
+other problem with Nova's use of the EC2 availability zone concept is
+that availability zones are not hierarchical -- due to the fact that EC2
+AZs are independent failure domains. Not having the possibility of
+structuring AZs hierarchically limits the ways in which Nova may be
+deployed -- just see the cells API for the manifestation of this
+problem.
+
+In this proposed next version of the Nova API, I have dropped the concept
+of an EC2 availability zone and introduced the concept of a generic
+container structure that can be infinitely hierarchical in nature, including
+overlapping hierarchies.
+
+This generic container is called a **placement** in the proposed vNext API.
+
+A placement may have zero or more child placements. Multiple placements may
+exist that have no parent placement -- in other words, there may be multiple
+"root" placements; there is not a single massive hierarchy of placements.
+
+When a user of the vNext Compute API launches one or more servers (using
+the `POST /projects/{project/servers` API call), the user may specify a
+placement ID in the request payload. The launched servers will be scheduled
+to run in that placement or any of the placement's child placements.

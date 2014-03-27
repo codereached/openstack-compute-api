@@ -1185,9 +1185,9 @@ and request/response contract.
                 "ERROR"
             ]
         },
-        "region_id": {
+        "placement_id": {
             "type": "string",
-            "description": "UUID identifier of the region this server "
+            "description": "UUID identifier of the placement this server "
                            "lives in.",
             "required": true,
             "maxLength": "36",
@@ -1497,9 +1497,9 @@ and request/response contract.
                                 "maxLength": "36",
                                 "minLength": "32"
                             },
-                            "region_id": {
+                            "placement_id": {
                                 "type": "string",
-                                "description": "Optional UUID identifier of the region "
+                                "description": "Optional UUID identifier of the placement "
                                                "servers created with this request should be in.",
                                 "maxLength": "36",
                                 "minLength": "32"
@@ -1538,9 +1538,9 @@ and request/response contract.
                                     "maxLength": "36",
                                     "minLength": "32"
                                 },
-                                "region_id": {
+                                "placement_id": {
                                     "type": "string",
-                                    "description": "Optional UUID identifier of the region this server should be in.",
+                                    "description": "Optional UUID identifier of the placement this server should be in.",
                                     "maxLength": "36",
                                     "minLength": "32"
                                 },
@@ -2478,8 +2478,8 @@ OpenStack Compute API:
    network interfaces on the server.
  - `power_state` (string, `RUNNING`) ... The power state of the server. See
    possible values below.
- - `region_id` (string, `ecfadb0e-ac9d-483c-9ad0-c8d8f90654a9`) ... The UUID of
-   the generic region that contains this server.
+ - `placement_id` (string, `ecfadb0e-ac9d-483c-9ad0-c8d8f90654a9`) ... The UUID of
+   the placement that contains this server.
  - `spec.memory_mb` (number, `2048`) ... Amount of RAM in megabytes that the
    server is allocated.
  - `spec.root_disk_gb` (number, `8`) ... Amount of disk space in gigabytes
@@ -2536,12 +2536,12 @@ which is a string with one of the following values:
 > OpenStack Image and OpenStack Block Storage APIs (images/ and volumes/
 > respectively).
 
-> **A note about the region**: Each server lives in a generic container signified
-> by the *region_id* attribute. Unlike the old v2/v3 Compute API, there is no
+> **A note about the placement**: Each server lives in a generic container signified
+> by the *placement_id* attribute. Unlike the old v2/v3 Compute API, there is no
 > concept of an EC2 Availability Zone built into the vNext Compute API. Instead
-> of the concept of an availability zone, the concept of a generic region
-> container is introduced. Regions may or may not have other regions as children.
-> What SLA or failure boundaries are defined for a region is left entirely up to
+> of the concept of an availability zone, the concept of a generic container called
+> a placement is introduced. Placements may or may not have other placements as children.
+> What SLA or failure boundaries are defined for a placement is left entirely up to
 > the deployer of the OpenStack Compute service.
 
 > **Note**: There is no DELETE operation against a server in the Compute API.
@@ -2557,7 +2557,7 @@ There are two main sections to the request body: *defaults* and *servers*.
 
 The defaults section is used to set the default attributes of servers when
 creating more than one server. Instead of specifying the same server type,
-keypair or region for each server you create, you can specify this once in the
+keypair or placement for each server you create, you can specify this once in the
 defaults section.
 
 Within the defaults section is a special key called `hostname_pattern`. 
@@ -2595,7 +2595,7 @@ attributes about each server that was launched:
     "defaults": {
         "hostname_pattern": "app-server-%{rand_num)5d",
         "keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567",
-        "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+        "placement_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
         "template_id": "fe48b370-a352-11e3-a5e2-0800200c9a66",
         "type_id": "1593e080-a354-11e3-a5e2-0800200c9a66",
         "user_data": "IyEvYmluL3NoCmVjaG8gPT09PT09PT09IEhFTExPID09PT09"
@@ -2735,7 +2735,7 @@ Retrieve a server by its *id*.
     "properties": {
         "role": "appserver",
     },
-    "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+    "placement_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
     "spec": {
         "memory_mb": 32768,
         "root_disk_gb": 8,
@@ -2816,7 +2816,7 @@ Retrieve a server by its *project* and *hostname*.
     "properties": {
         "role": "appserver",
     },
-    "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+    "placement_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
     "spec": {
         "memory_mb": 32768,
         "root_disk_gb": 8,
@@ -2876,7 +2876,7 @@ about the servers in one of their projects.
             "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
             "power_state": "RUNNING",
             "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+            "placement_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
             "spec": {
                 "memory_mb": 32768,
                 "root_disk_gb": 8,
@@ -2904,7 +2904,7 @@ about the servers in one of their projects.
             "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
             "power_state": "RUNNING",
             "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+            "placement_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
             "spec": {
                 "memory_mb": 32768,
                 "root_disk_gb": 8,
@@ -2978,7 +2978,7 @@ all server records that meet the parameterized filter criteria.
             "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
             "power_state": "RUNNING",
             "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+            "placement_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
             "spec": {
                 "memory_mb": 32768,
                 "root_disk_gb": 8,
@@ -3006,7 +3006,7 @@ all server records that meet the parameterized filter criteria.
             "launched_by": "c54b5b30-a353-11e3-a5e2-0800200c9a66",
             "power_state": "RUNNING",
             "project_id": "a7728150-a34f-11e3-a5e2-0800200c9a66",
-            "region_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
+            "placement_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
             "spec": {
                 "memory_mb": 32768,
                 "root_disk_gb": 8,
