@@ -217,11 +217,12 @@ Retrieve a JSON Home document that describes the OpenStack Compute API.
         },
         "rel/placements": {
             "href-template": "/placements"
-                             "?{limit,marker,tag}",
+                             "?{limit,marker,tag,parent_placement}",
             "href-vars": {
                 "limit": "param/limit",
                 "marker": "param/marker",
-                "tag": "param/tag"
+                "tag": "param/tag",
+                "parent_placement": "param/parent_placement"
             },
             "hints": {
                 "allow": ["GET"],
@@ -554,6 +555,13 @@ request/response contract.
                         "description": "Zero or more string tags to match "
                                        "server types in an OR fashion.",
                         "items": {"type": "string"}
+                    },
+                    "parent_placement": {
+                        "type": "string",
+                        "description": "UUID identifier of parent placement "
+                                       "to filter results by.",
+                        "maxLength": "36",
+                        "minLength": "32"
                     }
                }
            }
