@@ -514,7 +514,7 @@ request/response contract.
         },
         "name": {
             "type": "string",
-            "description": "The short name for the placement.",
+            "description": "A short name for the placement.",
             "required": true
         },
         "description": {
@@ -1715,6 +1715,86 @@ Returns a JSON-Schema document describing the property object model.
         "value": {
             "type": "string",
             "description": "The value of the key/value pair.",
+        }
+    }
+}
+```
+
+# Group Placement
+
+A placement is a generic container of compute resources. It may have zero
+or more child placements.
+
+> **Note**: A placement does *NOT* demarcate any *implicit* independent failure
+> domain in the way that an AWS EC2 availability zone has an implicit guarantee
+> that resources in that EC2 availability zone are running on hardware that does
+> not share network or compute gear with another EC2 availability zone. It is up
+> to the deployer to decide whether a particular placement should advertise itself
+> as a being an independent failure domain from another placement.
+
+## GET /placements{?limit,marker,tag,parent_placement}
+
+Retrieve a collection of placements.
+
++ Parameters
+    + limit = `20` (optional, number) ... Maximum number of results to return
+    + marker (optional, string, `1593e080-a354-11e3-a5e2-0800200c9a66`) ... A UUID
+      identifier of the last record on the previous page of results.
+    + tag (optional, multiple string, `general-purpose`) ... Filters the results on
+      placements with any matching tag.
+
++ Response 200 (application/json)
+
+```json
+{
+    "placements": [
+        {
+            "description": "Networking and compute resources on high-end hardware.",
+            "id": "1b537672-ab41-44b8-864d-f6d11945c645",
+            "name": "gold",
+            "parent_placement_id": null,
+            "tags": [
+                "high-io",
+            ],
+            "_links": {
+                "self": {
+                    "href": "/placements/1b537672-ab41-44b8-864d-f6d11945c645"
+                },
+                "children": {
+                    "href": "/placements/parent_placement=1b537672-ab41-44b8-864d-f6d11945c645"
+                },
+                "describedby": {
+                    "href": "/schemas/placement"
+                }
+            }
+        },
+        {
+            "description": "US Government compute resources",
+            "id": "c1bf4356-d408-4623-9fb9-f244e248e2e3",
+            "name": "us-gov",
+            "parent_placement_id": null,
+            "tags": [
+                "secure",
+            ],
+            "_links": {
+                "self": {
+                    "href": "/placements/c1bf4356-d408-4623-9fb9-f244e248e2e3"
+                },
+                "children": {
+                    "href": "/placements/parent_placement=c1bf4356-d408-4623-9fb9-f244e248e2e3"
+                },
+                "describedby": {
+                    "href": "/schemas/placement"
+                }
+            }
+        }
+    ],
+    "_links": {
+        "self": {
+            "href": "/placements?limit=2"
+        },
+        "next": {
+            "href": "/placements?limit=2&marker=1593e080-a354-11e3-a5e2-0800200c9a66"
         }
     }
 }
