@@ -527,6 +527,24 @@ request/response contract.
             "maxLength": "36",
             "minLength": "32"
         },
+        "properties": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "String key for the custom property.",
+                        "required": true
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "String value for the custom property.",
+                        "required": true
+                    }
+                }
+            }
+        },
         "tags": {
             "type": "array",
             "items": { "type": "string" }
@@ -1753,6 +1771,7 @@ Retrieve a collection of placements.
             "id": "1b537672-ab41-44b8-864d-f6d11945c645",
             "name": "gold",
             "parent_placement_id": null,
+            "properties": {},
             "tags": [
                 "high-io",
             ],
@@ -1773,6 +1792,7 @@ Retrieve a collection of placements.
             "id": "c1bf4356-d408-4623-9fb9-f244e248e2e3",
             "name": "us-gov",
             "parent_placement_id": null,
+            "properties": {},
             "tags": [
                 "secure",
             ],
