@@ -1961,6 +1961,10 @@ determining access to a server type.
 
 ## /server_types/{id}
 
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server type
+
 ### PATCH
 
 Modify a server type by its *id*.
@@ -1973,10 +1977,6 @@ Modify a server type by its *id*.
 > regular users to create server types with a visibility of `PUBLIC`, and
 > if a regular user tries to modify a private server type to a public one,
 > the API shall return a `403 Forbidden`
-
-+ Parameters
-    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server type
 
 + Request (application/json)
 
@@ -2000,10 +2000,6 @@ Modify a server type by its *id*.
 ### GET
 
 Retrieve a server type by its *id*.
-
-+ Parameters
-    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
-      for the server type
 
 + Response 200 (application/json)
 
@@ -2035,6 +2031,12 @@ Retrieve a server type by its *id*.
     }
 }
 ```
+
+### DELETE
+
+Permanently delete a server type by its *id*.
+
++ Response 204 (application/json)
 
 ## GET /server_types/{name}
 
