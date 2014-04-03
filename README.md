@@ -80,6 +80,10 @@ Replace set of accessing users/projects for flavor | **N/A** | `PUT /server_type
 Delete access to flavor | `DELETE /{project}/flavors/{id}/action`  ***Extension*** | `DELETE /server_types/{id}/shares/users/{user}` and `DELETE /server_types/{id}/shares/projects/{project}`
 Delete *all* access to a flavor | **N/A** | `DELETE /servers_types/{id}/shares`
 List a flavor's extra specs | `GET /{project}/flavors/{id}/os-extra-specs` ***Extension*** | **N/A** *(Note: vNext server types do not have key/value pairs, but do have tags)*
+List a flavor's tags | **N/A** | `GET /server_types/{id}/tags`
+Replace a flavor's collection of tags | **N/A** | `PUT /server_tags/{id}/tags`
+Tag a flavor | **N/A** | `PUT /server_tags/{id}/tags/{tag}`
+Untag a flavor | **N/A** | `DELETE /server_tags/{id}/tags/{tag}`
 
 ## Operator API Calls
 
