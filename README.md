@@ -74,9 +74,11 @@ Retrieve a flavor | `GET /{project}/flavors/{id}` | `GET /server_types/{id}`
 Create a new flavor | `POST /{project}/flavors` ***Extension*** | `POST /server_types`
 Update a flavor | **N/A** | `PATCH /server_types/{id}`
 Delete a flavor | `DELETE /{project}/flavors/{id}` ***Extension*** | *TODO:* `DELETE /server_types/{id}`
-List projects with access to a flavor | `GET /{project}/flavors/{id}/os-flavor-access`  ***Extension*** | `GET /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
-Add access to flavor | `POST /{project}/flavors/{id}/action`  ***Extension*** | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)* *TODO:* `PATCH /server_types/{id}` for changing shares
-Delete access to flavor | `DELETE /{project}/flavors/{id}/action`  ***Extension*** | `POST /server_types/{id}` *(Note: A `share` property lists users or projects that can see the server type)*
+List projects with access to a flavor | `GET /{project}/flavors/{id}/os-flavor-access`  ***Extension*** | `GET /server_types/{id}/shares` *(Note: vNext server types may be shared with projects as well as individual users)*
+Add access to flavor | `POST /{project}/flavors/{id}/action`  ***Extension*** | `PUT /server_types/{id}/shares/users/{user}` and `PUT /server_types/{id}/shares/projects/{project}`
+Replace set of accessing users/projects for flavor | *N/A* | `PUT /server_types/{id}/shares`
+Delete access to flavor | `DELETE /{project}/flavors/{id}/action`  ***Extension*** | `DELETE /server_types/{id}/shares/users/{user}` and `DELETE /server_types/{id}/shares/projects/{project}`
+Delete *all* access to a flavor | *N/A* | `DELETE /servers_types/{id}/shares`
 List a flavor's extra specs | `GET /{project}/flavors/{id}/os-extra-specs` ***Extension*** | **N/A** *(Note: vNext server types do not have key/value pairs, but do have tags)*
 
 ## Operator API Calls
