@@ -28,6 +28,10 @@ Launch one or more servers | `POST /{project}/servers` | `POST /projects/{projec
 Update a server | `PUT /{project}/servers/{id}` | `PATCH /servers/{id}`
 Terminate a server | `DELETE /{project}/servers/{id}` | `POST /servers/{id}/tasks`
 Get a server's diagnostics | `GET /{project}/servers/{id}` ***Extension*** | *TODO:* `GET /servers/{id}/diagnostics`
+List a server's tags | **N/A** | `GET /servers/{id}/tags`
+Replace a server's collection of tags | **N/A** | `PUT /server/{id}/tags`
+Tag a server | **N/A** | `PUT /server/{id}/tags/{tag}`
+Untag a server | **N/A** | `DELETE /server/{id}/tags/{tag}`
 
 ## Server Actions (Tasks in vNext)
 
@@ -81,9 +85,9 @@ Delete access to flavor | `DELETE /{project}/flavors/{id}/action`  ***Extension*
 Delete *all* access to a flavor | **N/A** | `DELETE /servers_types/{id}/shares`
 List a flavor's extra specs | `GET /{project}/flavors/{id}/os-extra-specs` ***Extension*** | **N/A** *(Note: vNext server types do not have key/value pairs, but do have tags)*
 List a flavor's tags | **N/A** | `GET /server_types/{id}/tags`
-Replace a flavor's collection of tags | **N/A** | `PUT /server_tags/{id}/tags`
-Tag a flavor | **N/A** | `PUT /server_tags/{id}/tags/{tag}`
-Untag a flavor | **N/A** | `DELETE /server_tags/{id}/tags/{tag}`
+Replace a flavor's collection of tags | **N/A** | `PUT /server_types/{id}/tags`
+Tag a flavor | **N/A** | `PUT /server_types/{id}/tags/{tag}`
+Untag a flavor | **N/A** | `DELETE /server_types/{id}/tags/{tag}`
 
 ## Operator API Calls
 

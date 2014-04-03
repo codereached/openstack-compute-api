@@ -3050,6 +3050,68 @@ Retrieve a server by its *project* and *hostname*.
 }
 ```
 
+### /servers/{id}/tags
+
+Operations on the collection of tags for a server.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server
+
+#### GET
+
+Retrieve a server's collection of tags by the server's *id*.
+
++ Response 200 (application/json)
+
+```json
+[
+    "general-purpose"
+]
+```
+
+#### PUT
+
+Replaces a server's collection of tags.
+
++ Request (application/json)
+
+```json
+[
+    "general-purpose",
+    "generic"
+]
+```
+
++ Response 204 (application/json)
+
+#### DELETE
+
+Deletes all of a server's collection of tags.
+
++ Response 204 (application/json)
+
+### /servers/{id}/tags/{tag}
+
+Operations on individual tags on a server.
+
++ Parameters
+    + id (string, `7a6aba30-a3c0-11e3-a5e2-0800200c9a66`) ... A UUID identifier
+      for the server
+    + `tag` (string, `general-purpose` ... The string to tag the resource with
+
+#### PUT
+
+Tag a server with a specific string.
+
++ Response 204 (application/json)
+
+#### DELETE
+
+Delete a tag from a server.
+
++ Response 204 (application/json)
+
 ## GET /projects/{project}/servers{?limit,marker,since,virt_state,power_state,launched_by}
 
 Retrieve a collection of servers in a specific *project*. This is the
