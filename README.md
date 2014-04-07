@@ -89,6 +89,13 @@ Replace a flavor's collection of tags | **N/A** | `PUT /server_types/{id}/tags`
 Tag a flavor | **N/A** | `PUT /server_types/{id}/tags/{tag}`
 Untag a flavor | **N/A** | `DELETE /server_types/{id}/tags/{tag}`
 
+### Scheduler Hints
+
+Purpose                 | v2/3 call               | vNext call
+------------------------|-------------------------|----------------------
+Launch a server "near" another server | `POST /{project}/servers` ***Extension*** (need to use the `os:scheduler_hints.near` payload | `POST /projects/{project}/servers` (Not an extension. There is an `affinity` section in the `defaults` and `servers` section of the request payload
+Launch a server on a specific hypervisor | `POST /{project}/servers` ***Extension*** (need to use `os:scheduler_hints.hypervisor` payload | **N/A** *(Note: The hypervisor should not be exposed to the user of a cloud)*
+
 ## Operator API Calls
 
 It won't take long for the reader to notice that the proposed vNext Compute API

@@ -1601,7 +1601,52 @@ and request/response contract.
                     },
                     "defaults": {
                         "type": "object",
+                        "description": "A collection of instructions to help Nova place "
+                                       "new server instances close to or away from other "
+                                       "resources.",
                         "properties": {
+                            "affinity": {
+                                "type": "object",
+                                "properties": {
+                                    "near": {
+                                        "type": "object",
+                                        "properties": {
+                                            "server_ids": {
+                                                "type": "array",
+                                                "description": "List of UUIDs that Nova uses to look up servers "
+                                                               "that new servers should be placed near.",
+                                                "items": {"type": "string"}
+                                            },
+                                            "server_tags": {
+                                                "type": "array",
+                                                "description": "List of tags that Nova uses to look up servers "
+                                                               "that new servers should be placed near.",
+                                                "items": {"type": "string"}
+                                            }
+                                        },
+                                        "additionalProperties": false
+                                    },
+                                    "not_near": {
+                                        "type": "object",
+                                        "properties": {
+                                            "server_ids": {
+                                                "type": "array",
+                                                "description": "List of UUIDs that Nova uses to look up servers "
+                                                               "that new servers should NOT be placed near.",
+                                                "items": {"type": "string"}
+                                            },
+                                            "server_tags": {
+                                                "type": "array",
+                                                "description": "List of tags that Nova uses to look up servers "
+                                                               "that new servers should NOT be placed near.",
+                                                "items": {"type": "string"}
+                                            }
+                                        },
+                                        "additionalProperties": false
+                                    }
+                                },
+                                "additionalProperties": false
+                            },
                             "hostname_pattern": {
                                 "type": "string",
                                 "description": "A regex expression that may be used to "
@@ -1655,6 +1700,11 @@ and request/response contract.
                         "items": {
                             "type": "object",
                             "properties": {
+                                "hostname_pattern": {
+                                    "type": "string",
+                                    "description": "Override any generated (from hostname_pattern) hostname "
+                                                   "for this server."
+                                },
                                 "keypair_id": {
                                     "type": "string",
                                     "description": "Optional UUID identifier of the keypair to use for this server.",
@@ -2773,6 +2823,16 @@ for multiple servers launched in this request. The `%(rand_name)d` symbol
 is interpolated as a random number. You can limit the number of digits by
 specifying a length like so: `%(rand_num)5d`.
 
+Also in the defaults section is an `affinity` mapping that contains
+instructions for Nova to take into account when determining which host
+should house a server instance. The `affinity` section contains two elements,
+`near` and `not_near`, each of which have two optional elements, `server_tags`
+and `server_ids` which are lists of tags or server UUIDs to place the requested
+servers near or not near.
+
+> **Note**: This feature was called the "scheduler hints" API extensions
+> in the v2/v3 Nova API.
+
 The servers section is a list of dictionaries, one per server you want to
 create. Attributes that *must* be unique for each server -- such as the
 server's *hostname* attribute, can be set here, along with overrides for
@@ -2800,6 +2860,16 @@ attributes about each server that was launched:
 ```json
 {
     "defaults": {
+        "affinity": {
+            "near": {
+                "server_ids": [],
+                "server_tags": ["general"]
+            },
+            "not_near": {
+                "server_ids": ["11719417-a465-45ff-96a8-dd843e70c67a"],
+                "server_tags": []
+            }
+        },
         "hostname_pattern": "app-server-%{rand_num)5d",
         "keypair_id": "cffd003d-ca59-4be6-856e-054a98ac3567",
         "placement_id": "12aed151-2431-4bd5-8be5-7c050c4f3254",
