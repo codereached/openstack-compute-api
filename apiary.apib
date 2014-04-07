@@ -152,6 +152,7 @@ A `400 Bad Request` shall be returned under the following conditions:
  - The payload of a request contained invalid or improper input
  - The payload of a request contained references to non-existing entities
  - The request would have created a duplicate resource
+ - The server does not implement the requested functionality
 
 #### 401 Unauthorized
 
@@ -171,11 +172,6 @@ A `404 Not Found` shall be returned when any of the following conditions occur:
  - The requested URL was valid, but the entity does not exist
  - The requested URL was valid, but the entity was not owned or shared with the
    requesting user
-
-#### 501 Not Implemented
-
-A `501 Not Implemented` shall be returned when the OpenStack Compute service
-does not provide the facility requested.
 
 # Group OpenStack Compute API Root
 
