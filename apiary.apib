@@ -1700,6 +1700,48 @@ and request/response contract.
                         "items": {
                             "type": "object",
                             "properties": {
+                                "affinity": {
+                                    "type": "object",
+                                    "properties": {
+                                        "near": {
+                                            "type": "object",
+                                            "properties": {
+                                                "server_ids": {
+                                                    "type": "array",
+                                                    "description": "List of UUIDs that Nova uses to look up servers "
+                                                                   "that this server should be placed near.",
+                                                    "items": {"type": "string"}
+                                                },
+                                                "server_tags": {
+                                                    "type": "array",
+                                                    "description": "List of tags that Nova uses to look up servers "
+                                                                   "that this server should be placed near.",
+                                                    "items": {"type": "string"}
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        },
+                                        "not_near": {
+                                            "type": "object",
+                                            "properties": {
+                                                "server_ids": {
+                                                    "type": "array",
+                                                    "description": "List of UUIDs that Nova uses to look up servers "
+                                                                   "that this server should NOT be placed near.",
+                                                    "items": {"type": "string"}
+                                                },
+                                                "server_tags": {
+                                                    "type": "array",
+                                                    "description": "List of tags that Nova uses to look up servers "
+                                                                   "that this server should NOT be placed near.",
+                                                    "items": {"type": "string"}
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
                                 "hostname": {
                                     "type": "string",
                                     "description": "Override any generated (from hostname_pattern) hostname "
