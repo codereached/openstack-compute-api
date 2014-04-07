@@ -93,8 +93,8 @@ Untag a flavor | **N/A** | `DELETE /server_types/{id}/tags/{tag}`
 
 Purpose                 | v2/3 call               | vNext call
 ------------------------|-------------------------|----------------------
-Launch a server "near" another server | `POST /{project}/servers` ***Extension*** (need to use the `os:scheduler_hints.near` payload | `POST /projects/{project}/servers` (Not an extension. There is an `affinity` section in the `defaults` and `servers` section of the request payload
-Launch a server on a specific hypervisor | `POST /{project}/servers` ***Extension*** (need to use `os:scheduler_hints.hypervisor` payload | **N/A** *(Note: The hypervisor should not be exposed to the user of a cloud)*
+Launch a server "near" another server | `POST /{project}/servers` ***Extension*** *(Note: need to use the `os:scheduler_hints.near` payload*) | `POST /projects/{project}/servers` *(Note: not an extension. There is an `affinity` section in the `defaults` and `servers` section of the request payload)*
+Launch a server on a specific hypervisor | `POST /{project}/servers` ***Extension*** *(Note: need to use `os:scheduler_hints.hypervisor` payload*) | **N/A** *(Note: The hypervisor should not be exposed to the user of a cloud)*
 
 ## Operator API Calls
 
