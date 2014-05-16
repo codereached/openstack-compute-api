@@ -24,7 +24,7 @@ Purpose                 | v2/3 call               | vNext call
 Retrieve a project's servers | `GET /{project}/servers` | `GET /projects/{project}/servers`
 Retrieve a server | `GET /{project}/servers/{id}` | `GET /servers/{id}`
 Retrieve a server's details | `GET /{project}/servers/{id}/detail` | N/A
-Launch one or more servers | `POST /{project}/servers` | `POST /projects/{project/servers`
+Launch one or more servers | `POST /{project}/servers` | `POST /projects/{project}/servers`
 Update a server | `PUT /{project}/servers/{id}` | `PATCH /servers/{id}`
 Terminate a server | `DELETE /{project}/servers/{id}` | `POST /servers/{id}/tasks`
 Get a server's diagnostics | `GET /{project}/servers/{id}` ***Extension*** | *TODO:* `GET /servers/{id}/diagnostics`
@@ -157,6 +157,6 @@ exist that have no parent placement -- in other words, there may be multiple
 "root" placements; there is not a single massive hierarchy of placements.
 
 When a user of the vNext Compute API launches one or more servers (using
-the `POST /projects/{project/servers` API call), the user may specify a
+the `POST /projects/{project}/servers` API call), the user may specify a
 placement ID in the request payload. The launched servers will be scheduled
 to run in that placement or any of the placement's child placements.
